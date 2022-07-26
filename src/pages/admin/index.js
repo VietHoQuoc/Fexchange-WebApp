@@ -1,12 +1,33 @@
 import React, { Fragment, useState, useEffect } from "react";
-import MetaTags from "react-meta-tags";
 import { Link, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import ManageUser from "./manageUser";
 import ManageProduct from "./manageProduct";
+import { useDispatch, useSelector } from "react-redux";
+
+import userApi from "../../utils/api/userApi";
+
 import "./admin.css";
 
 const Admin = ({ location }) => {
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await userApi.get(3);
+      setUserList([...userList, response]);
+    };
+    getData();
+  }, []);
+
+  const changeInfo = () => {
+    const getData = async () => {
+      const response = await userApi.get(3);
+      setUserList([response]);
+    };
+    getData();
+  };
+
   return (
     <Fragment>
       <header>
@@ -42,10 +63,13 @@ const Admin = ({ location }) => {
         </nav>
       </header>
       <Redirect to={process.env.PUBLIC_URL + "/admin/user"} />
-      <Route
-        path={process.env.PUBLIC_URL + "/admin/user"}
-        component={ManageUser}
-      />
+      <Route path={process.env.PUBLIC_URL + "/admin/user"}>
+        {userList.length > 0 ? (
+          <ManageUser userList={userList} changeInfo={changeInfo} />
+        ) : (
+          ""
+        )}
+      </Route>
       <Route
         path={process.env.PUBLIC_URL + "/admin/product"}
         component={ManageProduct}

@@ -14,7 +14,15 @@ const ManageProduct = () => {
           <table class="table">
             <thead>
               <tr>
-                
+                <th scope="col">ID</th>
+                <th scope="col">Category ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Goods Status</th>
+                <th scope="col">Account Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Number of exchanges</th>
+                <th scope="col">Detail</th>
               </tr>
             </thead>
             <tbody>
@@ -23,18 +31,33 @@ const ManageProduct = () => {
                 <td>Mark</td>
                 <td>Otto</td>
                 <td>@mdo</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td>@mdo</td>
               </tr>
               <tr>
                 <th scope="row">2</th>
                 <td>Jacob</td>
                 <td>Thornton</td>
                 <td>@fat</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>@mdo</td>
               </tr>
               <tr>
                 <th scope="row">3</th>
                 <td>Larry</td>
                 <td>the Bird</td>
                 <td>@twitter</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>Otto</td>
+                <td>@mdo</td>
               </tr>
             </tbody>
           </table>

@@ -44,3 +44,11 @@ body {
 .table {
   padding: 100px;
 }
+
+.data-row {
+  transition: 0.3s ease-in-out;
+}
+
+.data-row:hover {
+  background: #dadada;
+}
