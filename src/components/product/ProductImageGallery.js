@@ -102,17 +102,18 @@ const ProductImageGallery = ({ product }) => {
             product.images.map((single, key) => {
               return (
                 <div key={key}>
-                  <div className="single-image">
+                  <div className="">
                     <img
                       src={single.image}
                       className="img-fluid"
-                      alt=""
+                      alt={product.name}
                     />
                   </div>
                 </div>
               );
             })}
         </Swiper>
+
       </div>
     </Fragment>
   );

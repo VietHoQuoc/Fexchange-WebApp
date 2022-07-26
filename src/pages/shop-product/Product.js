@@ -19,13 +19,12 @@ const Product = ({ location, product }) => {
 
     axios.get(`https://fbuyexchange.azurewebsites.net/api/productposts/`+product.id)
       .then(res => {
-        setPost(res.data);
+        setPost(res.data); 
         setAccountId(product.accountId);
-        console.log(res.data.accountId)
       })
       .catch(error => console.log(error));
 
-  }, [post])
+  }, [])
   return (
     <Fragment>
       <MetaTags>

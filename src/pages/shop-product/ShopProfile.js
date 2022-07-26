@@ -38,7 +38,9 @@ function ShopProfile({ location, products }) {
                 console.log(posts);
             })
             .catch(error => console.log(error));
-    }, [posts]);
+        
+        
+    }, []);
 
     return (
         <Fragment>

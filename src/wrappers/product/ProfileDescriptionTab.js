@@ -17,7 +17,7 @@ const ProfileDescriptionTab = ({ spaceBottomClass, productFullDesc ,posts,layout
     useEffect(()=>{
         setCurrentData(posts.slice(offset, offset + pageLimit));
         setCurrentData2(postsSold.slice(offset2, offset2 + pageLimit2));
-    },[offset,offset2])
+    },[])
   return (
     <div className={`description-review-area ${spaceBottomClass}`}>
       <div className="container">
