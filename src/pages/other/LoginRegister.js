@@ -23,7 +23,7 @@ class Login extends Component {
       console.error("Unable to get tokenId from Google", response);
       return;
     } else {
-      console.log("This is token id: " + response.tokenId);
+      console.log("This is google token id: " + response.tokenId);
     }
 
     await Axios({
@@ -31,11 +31,14 @@ class Login extends Component {
       url: process.env.REACT_APP_API_URL + "/login/google",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + response.tokenId,
       },
       data: { tokenId: response.tokenId },
     }).then((res) => {
-      this.props.login(res.data); // dispatch google response data to redux
-      return res.data.token;
+      this.props.login(res.data);
+      console.log(">>this is web token id", res.data.tokenId);
+      // dispatch google response data to redux
+      return res.data.tokenId;
     });
   };
 
