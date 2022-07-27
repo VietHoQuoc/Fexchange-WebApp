@@ -114,7 +114,12 @@ const ManageUser = (props) => {
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Avatar</Form.Label>
-                <Form.Control type="email" value={form.avatar} />
+                <Form.Control
+                  id="avatar"
+                  type="text"
+                  value={form.avatar}
+                  onchange={handleFormChange}
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">

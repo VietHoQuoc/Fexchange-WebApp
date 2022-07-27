@@ -1,4 +1,4 @@
-import { get, put, remove } from "./apiCaller";
+import { get, put } from "./apiCaller";
 const adminUserApi = {
   getAll: (token) => {
     const url = "/acounts/10000/1";

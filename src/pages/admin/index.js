@@ -6,11 +6,13 @@ import ManageProduct from "./manageProduct";
 import { useSelector } from "react-redux";
 
 import userApi from "../../utils/api/userApi";
+import adminProduct from "../../utils/api/adminProduct";
 
 import "./admin.css";
 
 const Admin = ({ location }) => {
   const [userList, setUserList] = useState([]);
+  const [productList, setProductList] = useState([]);
   const user = useSelector((state) => state.authData.user);
 
   useEffect(() => {
@@ -21,11 +23,26 @@ const Admin = ({ location }) => {
     getData();
   }, []);
 
+  useEffect(() => {
+    const getProductData = async () => {
+      const response = await adminProduct.getAll(user.tokenId);
+      setProductList(response.data);
+    };
+    getProductData();
+  }, []);
+
   const changeInfo = async (obj) => {
     const success = await userApi.put(obj.id, obj, user.tokenId);
     const response = await userApi.getAll(user.tokenId);
     console.log(success);
     setUserList(response.data);
+  };
+
+  const changeProductInfo = async (obj) => {
+    const success = await adminProduct.put(obj.id, obj, user.tokenId);
+    const response = await adminProduct.getAll(user.tokenId);
+    console.log(success);
+    setProductList(response.data);
   };
 
   return (
@@ -62,7 +79,7 @@ const Admin = ({ location }) => {
           </div>
         </nav>
       </header>
-      <Redirect to={process.env.PUBLIC_URL + "/admin/user"} />
+      <Redirect to={process.env.PUBLIC_URL + "/admin/product"} />
       <Route path={process.env.PUBLIC_URL + "/admin/user"}>
         {userList.length > 0 ? (
           <ManageUser userList={userList} changeInfo={changeInfo} />
@@ -70,10 +87,16 @@ const Admin = ({ location }) => {
           ""
         )}
       </Route>
-      <Route
-        path={process.env.PUBLIC_URL + "/admin/product"}
-        component={ManageProduct}
-      />
+      <Route path={process.env.PUBLIC_URL + "/admin/product"}>
+        {productList.length > 0 ? (
+          <ManageProduct
+            productList={productList}
+            changeProductInfo={changeProductInfo}
+          />
+        ) : (
+          ""
+        )}
+      </Route>
     </Fragment>
   );
 };
