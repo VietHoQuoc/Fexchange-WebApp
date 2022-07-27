@@ -79,7 +79,7 @@ const Admin = ({ location }) => {
           </div>
         </nav>
       </header>
-      <Redirect to={process.env.PUBLIC_URL + "/admin/product"} />
+      <Redirect to={process.env.PUBLIC_URL + "/admin/user"} />
       <Route path={process.env.PUBLIC_URL + "/admin/user"}>
         {userList.length > 0 ? (
           <ManageUser userList={userList} changeInfo={changeInfo} />
