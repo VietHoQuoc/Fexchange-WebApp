@@ -78,6 +78,8 @@ const ShopListTwoColumn = lazy(() => import('./pages/shop/ShopListTwoColumn'));
 
 // product pages
 const Product = lazy(() => import('./pages/shop-product/Product'));
+const ShopProfile = lazy(() => import('./pages/shop-product/ShopProfile'));
+
 const ProductTabLeft = lazy(() =>
     import('./pages/shop-product/ProductTabLeft')
 );
@@ -437,6 +439,18 @@ const App = (props) => {
                                         '/shop-grid-standard'
                                     }
                                     component={ShopGridStandard}
+                                />
+                                <Route
+                                    path={
+                                        process.env.PUBLIC_URL +
+                                        '/shop-profile/:id'
+                                    }
+                                    render={(routeProps) => (
+                                        <ShopProfile
+                                            {...routeProps}
+                                            key={routeProps.match.params.id}
+                                        />
+                                    )}
                                 />
                                 <Route
                                     path={

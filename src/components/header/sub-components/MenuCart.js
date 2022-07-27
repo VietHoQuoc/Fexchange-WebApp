@@ -9,10 +9,10 @@ const MenuCart = ({ cartData, currency, deleteFromCart }) => {
   const { addToast } = useToasts();
   return (
     <div className="shopping-cart-content">
-      {cartData && cartData.length > 0 ? (
+      {cartData!==null && cartData.length > 0 ? (
         <Fragment>
           <ul>
-            {cartData.map((single, key) => {
+            {/* {cartData.map((single, key) => {
               const discountedPrice = getDiscountPrice(
                 single.price,
                 single.discount
@@ -71,7 +71,7 @@ const MenuCart = ({ cartData, currency, deleteFromCart }) => {
                   </div>
                 </li>
               );
-            })}
+            })} */}
           </ul>
           <div className="shopping-cart-total">
             <h4>

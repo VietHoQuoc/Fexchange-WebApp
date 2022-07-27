@@ -14,7 +14,7 @@ import {
 import { addToCart } from "../../redux/actions/cartActions";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-
+import NumberFormat from "react-number-format";
 const Wishlist = ({
   location,
   cartItems,
@@ -88,14 +88,12 @@ const Wishlist = ({
                                       wishlistItem.id
                                     }
                                   >
-                                    <img
-                                      className="img-fluid"
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        wishlistItem.image[0]
-                                      }
-                                      alt=""
-                                    />
+                                    {wishlistItem.images == null ? (
+                                      <img width="50px" height="20px" alt="default" src="../../../public/assets/img/icon-img/13.png" />
+                                    ) : (
+                                      <img width="100px" height="130px" alt="" src={wishlistItem.images[0].image} />
+
+                                    )}
                                   </Link>
                                 </td>
 
@@ -112,27 +110,12 @@ const Wishlist = ({
                                 </td>
 
                                 <td className="product-price-cart">
-                                  {discountedPrice !== null ? (
-                                    <Fragment>
-                                      <span className="amount old">
-                                        {currency.currencySymbol +
-                                          finalProductPrice}
-                                      </span>
-                                      <span className="amount">
-                                        {currency.currencySymbol +
-                                          finalDiscountedPrice}
-                                      </span>
-                                    </Fragment>
-                                  ) : (
-                                    <span className="amount">
-                                      {currency.currencySymbol +
-                                        finalProductPrice}
-                                    </span>
-                                  )}
+                                <span>{currency.currencySymbol}<NumberFormat value={wishlistItem.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+              </span>
                                 </td>
 
                                 <td className="product-wishlist-cart">
-                                  {wishlistItem.affiliateLink ? (
+                                  {wishlistItem.status==="Active" ? (
                                     <a
                                       href={wishlistItem.affiliateLink}
                                       rel="noopener noreferrer"
@@ -156,7 +139,7 @@ const Wishlist = ({
                                       }
                                       className={
                                         cartItem !== undefined &&
-                                        cartItem.quantity > 0
+                                          cartItem.quantity > 0
                                           ? "active"
                                           : ""
                                       }
@@ -171,7 +154,7 @@ const Wishlist = ({
                                       }
                                     >
                                       {cartItem !== undefined &&
-                                      cartItem.quantity > 0
+                                        cartItem.quantity > 0
                                         ? "Added"
                                         : "Add to cart"}
                                     </button>

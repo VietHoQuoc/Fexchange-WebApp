@@ -10,11 +10,15 @@ import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import ShopSidebar from '../../wrappers/product/ShopSidebar';
 import ShopTopbar from '../../wrappers/product/ShopTopbar';
 import ShopProducts from '../../wrappers/product/ShopProducts';
-
+import axios from "axios";
 const ShopGridStandard = ({location, products}) => {
     const [layout, setLayout] = useState('grid three-column');
+    //cate
     const [sortType, setSortType] = useState('');
     const [sortValue, setSortValue] = useState('');
+    //search
+    const [searchType, setSearchType]=useState('')
+    const [searchValue, setSearchValue]=useState('');
     const [filterSortType, setFilterSortType] = useState('');
     const [filterSortValue, setFilterSortValue] = useState('');
     const [offset, setOffset] = useState(0);
@@ -24,11 +28,14 @@ const ShopGridStandard = ({location, products}) => {
 
     const pageLimit = 15;
     const {pathname} = location;
-
+    const [posts, setPosts] = useState([]);
     const getLayout = (layout) => {
         setLayout(layout)
     }
-
+    const getSearchParams = (searchType, searchValue) => {
+        setSearchType(searchType)
+        setSearchValue(searchValue)
+    }
     const getSortParams = (sortType, sortValue) => {
         setSortType(sortType);
         setSortValue(sortValue);
@@ -40,12 +47,26 @@ const ShopGridStandard = ({location, products}) => {
     }
 
     useEffect(() => {
-        let sortedProducts = getSortedProducts(products, sortType, sortValue);
+              //làm sao để hàm getSortedProducts trả về sortedProducts đúng theo database
+        // let sortedProducts = getSortedProducts(posts, sortType, sortValue);
+        let searchedProducts = getSortedProducts(posts,searchType,searchValue);
+
+        let sortedProducts = getSortedProducts(searchedProducts, sortType, sortValue);
+        //flow: sẽ lấy post ứng với search và checkboxes -> sortedProducts
+        //sau đây lấy sortedProducts filter theo giá 
         const filterSortedProducts = getSortedProducts(sortedProducts, filterSortType, filterSortValue);
+
         sortedProducts = filterSortedProducts;
         setSortedProducts(sortedProducts);
         setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
-    }, [offset, products, sortType, sortValue, filterSortType, filterSortValue ]);
+
+        axios.get(`https://fbuyexchange.azurewebsites.net/api/productposts/1/19?all=true`)
+            .then(res => {
+                setPosts(res.data);
+            })
+            .catch(error => console.log(error));
+
+    }, [offset, posts, sortType, sortValue, filterSortType, filterSortValue ]);
 
     return (
         <Fragment>
@@ -66,11 +87,11 @@ const ShopGridStandard = ({location, products}) => {
                         <div className="row">
                             <div className="col-lg-3 order-2 order-lg-1">
                                 {/* shop sidebar */}
-                                <ShopSidebar products={products} getSortParams={getSortParams} sideSpaceClass="mr-30"/>
+                                <ShopSidebar getSearchParams={getSearchParams} products={posts} getSortParams={getSortParams} sideSpaceClass="mr-30"/>
                             </div>
                             <div className="col-lg-9 order-1 order-lg-2">
                                 {/* shop topbar default */}
-                                <ShopTopbar getLayout={getLayout} getFilterSortParams={getFilterSortParams} productCount={products.length} sortedProductCount={currentData.length} />
+                                <ShopTopbar getLayout={getLayout} getFilterSortParams={getFilterSortParams} productCount={sortedProducts.length} sortedProductCount={currentData.length} />
 
                                 {/* shop page content default */}
                                 <ShopProducts layout={layout} products={currentData} />
