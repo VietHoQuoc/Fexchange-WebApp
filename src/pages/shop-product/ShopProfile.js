@@ -25,7 +25,6 @@ function ShopProfile({ location, products }) {
           location.pathname.substr(14)
       )
       .then((res) => {
-        console.log("use effect run once response", res.data);
         setAccount(res.data);
       })
       .catch((error) => console.log(error));
@@ -35,8 +34,8 @@ function ShopProfile({ location, products }) {
         `https://fbuyexchange.azurewebsites.net/api/productposts/1/19?all=true`
       )
       .then((res) => {
-        console.log("use effect run once response data2", res.data);
         setPosts(res.data);
+        console.log(posts);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -141,32 +140,107 @@ function ShopProfile({ location, products }) {
                       </h4>
                     </div>
                   </div>
+
+                  <div className="col-lg-9 order-1 order-lg-2">
+                    {/* shop topbar default */}
+
+                    {/* shop page content default */}
+                    {/* <ShopProducts layout={layout} products={currentData} /> */}
+                    <ProfileDescriptionTab
+                      spaceBottomClass="pb-90"
+                      productFullDesc={"alo"}
+                      posts={posts.filter(
+                        (i) =>
+                          i.accountId ==
+                            parseInt(location.pathname.substr(14)) &&
+                          i.status === "Active"
+                      )}
+                      postsSold={posts.filter(
+                        (i) =>
+                          i.accountId ==
+                            parseInt(location.pathname.substr(14)) &&
+                          i.status === "Inactive"
+                      )}
+                      layout={layout}
+                    />
+                  </div>
                 </div>
               </div>
-
-              <div className="col-lg-9 order-1 order-lg-2">
-                {/* shop topbar default */}
-
-                {/* shop page content default */}
-                {/* <ShopProducts layout={layout} products={currentData} /> */}
-                <ProfileDescriptionTab
-                  spaceBottomClass="pb-90"
-                  productFullDesc={"alo"}
-                  posts={posts.filter(
-                    (i) =>
-                      i.accountId == parseInt(location.pathname.substr(14)) &&
-                      i.status === "Active"
-                  )}
-                  postsSold={posts.filter(
-                    (i) =>
-                      i.accountId == parseInt(location.pathname.substr(14)) &&
-                      i.status === "Inactive"
-                  )}
-                  layout={layout}
-                />
+            </div>
+            <div className="row">
+              <div class="table-responsive-sm table-borderless">
+                <table class="table">
+                  <tr>
+                    <td className="p-2 pl-5 pr-5 bg-warning">
+                      <h2>
+                        <i className="pe-7s-star mr-2 " />
+                      </h2>
+                    </td>
+                    <td className="p-2 pl-5 pr-5 bg-primary">
+                      <h2>
+                        <i className="pe-7s-note mr-2 " />
+                      </h2>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className=" bg-warning text-center">
+                      <h4>
+                        <b>6.0</b>
+                      </h4>
+                    </td>
+                    <td className=" bg-primary text-center">
+                      <h4>
+                        <b>{account.numberOfOrders}</b> sold
+                      </h4>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div className="row">
+              {/* profile in4 */}
+              <div className="col-12">
+                <h4>
+                  <i className="pe-7s-call mr-2 text-info" />
+                  {account.phone}
+                </h4>
+              </div>
+              <div className="col-12">
+                <h4>
+                  <i className="pe-7s-map-marker mr-2 text-info" />
+                  {account.address}
+                </h4>
+              </div>
+              <div className="col-12">
+                <h4>
+                  <i className="pe-7s-mail mr-2 text-info" />
+                  {account.gmail}
+                </h4>
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="col-lg-9 order-1 order-lg-2">
+          {/* shop topbar default */}
+
+          {/* shop page content default */}
+          {/* <ShopProducts layout={layout} products={currentData} /> */}
+          <ProfileDescriptionTab
+            spaceBottomClass="pb-90"
+            productFullDesc={"alo"}
+            posts={posts.filter(
+              (i) =>
+                i.accountId == parseInt(location.pathname.substr(14)) &&
+                i.status === "Active"
+            )}
+            postsSold={posts.filter(
+              (i) =>
+                i.accountId == parseInt(location.pathname.substr(14)) &&
+                i.status === "Inactive"
+            )}
+            layout={layout}
+          />
         </div>
       </LayoutOne>
     </Fragment>

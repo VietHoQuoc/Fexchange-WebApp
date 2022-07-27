@@ -24,6 +24,7 @@ const MyAccount = ({ location }) => {
 
   const callbackChangeFile = (avatar) => {
     const avatarFile = URL.createObjectURL(avatar);
+    console.log(userData.user.tokenId)
     setAvatar(avatarFile);
     setData({ ...data, avatar: avatar });
   };

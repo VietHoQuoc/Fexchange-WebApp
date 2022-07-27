@@ -24,7 +24,6 @@ const Product = ({ location, product }) => {
       .then((res) => {
         setPost(res.data);
         setAccountId(product.accountId);
-        console.log(res.data.accountId);
       })
       .catch((error) => console.log(error));
   }, []);

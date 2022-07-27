@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import MetaTags from "react-meta-tags";
@@ -15,6 +15,7 @@ import {
 } from "../../redux/actions/cartActions";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import NumberFormat from "react-number-format";
 
 const Cart = ({
   location,
@@ -28,8 +29,13 @@ const Cart = ({
   const [quantityCount] = useState(1);
   const { addToast } = useToasts();
   const { pathname } = location;
-  let cartTotalPrice = 0;
 
+  let cartTotalPrice = 0;
+  const getTotalPrice = (items) => items
+    .map((item) => item.price)
+    .reduce((acc, value) => acc + value, 0)
+
+  const result = getTotalPrice(cartItems);
   return (
     <Fragment>
       <MetaTags>
@@ -69,22 +75,22 @@ const Cart = ({
                         </thead>
                         <tbody>
                           {cartItems.map((cartItem, key) => {
-                            const discountedPrice = getDiscountPrice(
-                              cartItem.price,
-                              cartItem.discount
-                            );
-                            const finalProductPrice = (
-                              cartItem.price * currency.currencyRate
-                            ).toFixed(2);
-                            const finalDiscountedPrice = (
-                              discountedPrice * currency.currencyRate
-                            ).toFixed(2);
+                            // const discountedPrice = getDiscountPrice(
+                            //   cartItem.price,
+                            //   cartItem.discount
+                            // );
+                            // const finalProductPrice = (
+                            //   cartItem.price * currency.currencyRate
+                            // ).toFixed(2);
+                            // const finalDiscountedPrice = (
+                            //   discountedPrice * currency.currencyRate
+                            // ).toFixed(2);
 
-                            discountedPrice != null
-                              ? (cartTotalPrice +=
-                                  finalDiscountedPrice * cartItem.quantity)
-                              : (cartTotalPrice +=
-                                  finalProductPrice * cartItem.quantity);
+                            // discountedPrice != null
+                            //   ? (cartTotalPrice +=
+                            //       finalDiscountedPrice * cartItem.quantity)
+                            //   : (cartTotalPrice +=
+                            //       finalProductPrice * cartItem.quantity);
                             return (
                               <tr key={key}>
                                 <td className="product-thumbnail">
@@ -98,8 +104,7 @@ const Cart = ({
                                     <img
                                       className="img-fluid"
                                       src={
-                                        process.env.PUBLIC_URL +
-                                        cartItem.image[0]
+                                        cartItem.images[0].image
                                       }
                                       alt=""
                                     />
@@ -116,23 +121,11 @@ const Cart = ({
                                   >
                                     {cartItem.name}
                                   </Link>
-                                  {cartItem.selectedProductColor &&
-                                  cartItem.selectedProductSize ? (
-                                    <div className="cart-item-variation">
-                                      <span>
-                                        Color: {cartItem.selectedProductColor}
-                                      </span>
-                                      <span>
-                                        Size: {cartItem.selectedProductSize}
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
+
                                 </td>
 
                                 <td className="product-price-cart">
-                                  {discountedPrice !== null ? (
+                                  {/* {discountedPrice !== null ? (
                                     <Fragment>
                                       <span className="amount old">
                                         {currency.currencySymbol +
@@ -148,11 +141,13 @@ const Cart = ({
                                       {currency.currencySymbol +
                                         finalProductPrice}
                                     </span>
-                                  )}
+                                  )} */}
+                                  <span><NumberFormat value={cartItem.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+                                  </span>
                                 </td>
 
                                 <td className="product-quantity">
-                                  <div className="cart-plus-minus">
+                                  {/* <div className="cart-plus-minus">
                                     <button
                                       className="dec qtybutton"
                                       onClick={() =>
@@ -189,10 +184,10 @@ const Cart = ({
                                     >
                                       +
                                     </button>
-                                  </div>
+                                  </div> */}
                                 </td>
                                 <td className="product-subtotal">
-                                  {discountedPrice !== null
+                                  {/* {discountedPrice !== null
                                     ? currency.currencySymbol +
                                       (
                                         finalDiscountedPrice * cartItem.quantity
@@ -200,7 +195,7 @@ const Cart = ({
                                     : currency.currencySymbol +
                                       (
                                         finalProductPrice * cartItem.quantity
-                                      ).toFixed(2)}
+                                      ).toFixed(2)} */}
                                 </td>
 
                                 <td className="product-remove">
@@ -313,14 +308,17 @@ const Cart = ({
                       <h5>
                         Total products{" "}
                         <span>
-                          {currency.currencySymbol + cartTotalPrice.toFixed(2)}
+                          {/* {currency.currencySymbol + cartTotalPrice.toFixed(2)} */}
+                          {cartItems.length}
                         </span>
                       </h5>
 
                       <h4 className="grand-totall-title">
                         Grand Total{" "}
                         <span>
-                          {currency.currencySymbol + cartTotalPrice.toFixed(2)}
+                          {/* {currency.currencySymbol + cartTotalPrice.toFixed(2)} */}
+                          {result}
+
                         </span>
                       </h4>
                       <Link to={process.env.PUBLIC_URL + "/checkout"}>
