@@ -32,18 +32,22 @@ namespace FExchange.Services
         {
 
             var u = accountRepository.checkLogin(payload.Email);
-            if (u.Status != "Active") return null;
+           
             if (u == null)
             {
                 u = new Account()
                 {
                     Bean = 0,
-                    FullName = payload.GivenName + payload.FamilyName,
+                    FullName = payload.GivenName +" "+ payload.FamilyName,
                     Gmail = payload.Email,
                     Role = 2,
-                    Status = "Active"
+                    Status = "Active",
+                    Avatar = payload.Picture
                 };
+                accountRepository.create(u);
             }
+            u.Avatar = payload.Picture;
+            if (u.Status != "Active") return null;
             return u;
         }
     }

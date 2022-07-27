@@ -1,5 +1,10 @@
 ﻿namespace FExchange.Models
 {
+    public class FeedBack
+    {
+        public int Rate { get; set; }
+        public string Feedback { get; set; }
+    }
     public class User
     {
         public System.Guid id { get; set; }

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObject.Models;
 using DataAccess.IRepository;
-using DataAccess.DAO;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using DataAccess.Paging;
@@ -14,36 +13,42 @@ namespace DataAccess.Repository
 {
     public class ProductPostRepository : IProductPostRepository
     {
+        private FExchangeContext context;
+        public ProductPostRepository(FExchangeContext context)
+        {
+            this.context = context;
+        }
         public int getMax()
         {
-            return EntityDAO.Instance.context.ProductPosts.Max(x=> x.Id);
+            return context.ProductPosts.Max(x=> x.Id);
         }
         public void create(ProductPost productPost)
         {
-            EntityDAO.Instance.context.ProductPosts.Add(productPost);
-            EntityDAO.Instance.context.SaveChanges();
+            context.ProductPosts.Add(productPost);
+            context.SaveChanges();
         }
         public PagedList<ProductPost> findAll(int pageNumber, int pageSize)
         {
-            return new PagedList<ProductPost>(
-                    EntityDAO.Instance.context.ProductPosts
-                    .Include(x => x.Account)
+            var a = context.ProductPosts.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+                .Include(x => x.Account)
                     .Include(x => x.Category)
                     .Include(x => x.ExchangeDesires)
-                    .Include(x=> x.ProductImages)
-                    , pageNumber,pageSize);
+                    .Include(x => x.ProductImages);
+
+            return new PagedList<ProductPost>(
+                    a, 1,100);
         }
         public void delete(int id)
         {
             ProductPost productPost = get(id);
             productPost.Status = "Inactive";
-            EntityDAO.Instance.context.ProductPosts.Update(productPost);
-            EntityDAO.Instance.context.SaveChanges();
+            context.ProductPosts.Update(productPost);
+            context.SaveChanges();
         }
 
         public PagedList<ProductPost> findByAccountID(int accountID, int pageNumber, int pageSize)
             => new PagedList<ProductPost>(
-                EntityDAO.Instance.context.ProductPosts
+                context.ProductPosts
                     
                     .Where(x=> x.AccountId == accountID)
                     .Include(x => x.Account)
@@ -56,7 +61,7 @@ namespace DataAccess.Repository
 
         public PagedList<ProductPost> findByCategoryID(int categoryID, int pageNumber, int pageSize)
                 => new PagedList<ProductPost>(
-                EntityDAO.Instance.context.ProductPosts
+                context.ProductPosts
                     .Include(x => x.Account)
                     .Include(x => x.Category.Category1)
                     .Include(x => x.ExchangeDesires.Count)
@@ -67,7 +72,7 @@ namespace DataAccess.Repository
 
         public ProductPost get(int id)
         {
-            return EntityDAO.Instance.context.ProductPosts
+            return context.ProductPosts
                 .Include(x => x.Account)
                     .Include(x => x.Category)
                     .Include(x => x.ExchangeDesires)
@@ -78,8 +83,8 @@ namespace DataAccess.Repository
         public void update(ProductPost productPost)
         {
            
-            EntityDAO.Instance.context.ProductPosts.Update(productPost);
-            EntityDAO.Instance.context.SaveChanges();
+            context.ProductPosts.Update(productPost);
+            context.SaveChanges();
         }
     }
 }

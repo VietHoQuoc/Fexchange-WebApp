@@ -13,12 +13,13 @@ namespace BusinessObject.Models
             OrderProduct2s = new HashSet<Order>();
             OrderProducts = new HashSet<Order>();
             ProductImages = new HashSet<ProductImage>();
+            WishLists = new HashSet<WishList>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public int? Price { get; set; }
-        public DateTime? BoughDate { get; set; }
+        public DateTime? BoughtDate { get; set; }
         public string Img { get; set; }
         public int? GoodsStatus { get; set; }
         public string Description { get; set; }
@@ -32,5 +33,6 @@ namespace BusinessObject.Models
         public virtual ICollection<Order> OrderProduct2s { get; set; }
         public virtual ICollection<Order> OrderProducts { get; set; }
         public virtual ICollection<ProductImage> ProductImages { get; set; }
+        public virtual ICollection<WishList> WishLists { get; set; }
     }
 }

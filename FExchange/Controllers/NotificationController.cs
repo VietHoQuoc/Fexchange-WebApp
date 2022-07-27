@@ -16,6 +16,7 @@ using DataAccess.IRepository;
 using DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Paging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FExchange.Controllers
 {
@@ -36,6 +37,7 @@ namespace FExchange.Controllers
             Notification noti = notificationRepository.get(id);
             return mapper.Map<NotificationDTO>(noti);
         }
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
         [HttpDelete("{id}")]
         public void delete(int id)
         {
@@ -46,9 +48,12 @@ namespace FExchange.Controllers
         public void create(NotificationDTO dto)
         {
             Notification notification = mapper.Map<Notification>(dto);
+            notification.Id = 0;
+            notification.CreatedDate = DateTime.Now;
             notificationRepository.create(notification);
         }
         [HttpGet("{pageSize}/{pageNumber}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
         public List<NotificationDTO> search(int accountID,int pageSize,int pageNumber)
         {
             PagingParams p = new PagingParams()
@@ -59,11 +64,13 @@ namespace FExchange.Controllers
             List<Notification> list = notificationRepository.getNotifications(accountID, p).List;
             return list.Select(x => mapper.Map<NotificationDTO>(x)).ToList();
         }
-        [HttpPut("")]
-        public void update(NotificationDTO dto)
+        [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
+        public void update([FromRoute] int id,NotificationDTO dto)
         {
-            Notification noti = notificationRepository.get(dto.Id);
+            Notification noti = notificationRepository.get(id);
             noti.Subject = dto.Subject;
+            noti.CreatedDate = DateTime.Now;
             notificationRepository.update(noti);
         }
     }

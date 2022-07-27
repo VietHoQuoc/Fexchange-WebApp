@@ -16,6 +16,9 @@ using DataAccess.IRepository;
 using DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Paging;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
 namespace FExchange.Controllers
 {
     [Route("api/acounts")]
@@ -36,7 +39,6 @@ namespace FExchange.Controllers
         public async  Task<string> upload(IFormFile[] files)
         {
             FileInfo fileInfo;
-            
             string connectionString = "DefaultEndpointsProtocol=https;AccountName=merry;AccountKey=AOHLpp9ABjn/pEwmw6skcyzHGoujukf2KFTAkWFBt8LpSZ19cTohCv/bLXhMrRBJqHqok47dVRRk+ASt1s4qRA==;EndpointSuffix=core.windows.net";
             string containerName = "yume"; 
             var container = new BlobContainerClient(connectionString,containerName);
@@ -73,6 +75,7 @@ namespace FExchange.Controllers
         {
             
         }
+
         [HttpGet("{id}")]
         public AccountDTO get(int id)
         {
@@ -82,6 +85,7 @@ namespace FExchange.Controllers
             
             return acc;
         }
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
         [HttpDelete("{id}")]
         public void delete(int id)
         {
@@ -90,6 +94,7 @@ namespace FExchange.Controllers
             AccountRepository.update(acc);  
         }
         [HttpGet("{pageSize}/{pageNumber}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
         public List<AccountDTO> search(int? NumberOfProductPosts,int? NumberOfOrders,string? name, int pageSize,int pageNumber)
         {
             PagingParams pagingParams = new PagingParams()
@@ -98,22 +103,6 @@ namespace FExchange.Controllers
                 PageSize = pageSize,
             };
             Dictionary<int, Account> dic = new Dictionary<int, Account>();
-            if (NumberOfOrders != null)
-            {
-                List<Account> accounts = AccountRepository
-                    .findAll(x => x.Orders.Count >= NumberOfOrders && x.Status == "Active", pagingParams)
-                    .List;
-                foreach (Account account in accounts) dic.Add(account.Id, account);
-            }
-            if (NumberOfProductPosts != null)
-            {
-                    List<Account> accounts = AccountRepository
-                        .findAll(x => x.ProductPosts.Count >= NumberOfProductPosts && x.Status == "Active",pagingParams).List;
-                foreach (var account in accounts)
-                {
-                    if (!dic.ContainsKey(account.Id)) dic.Add(account.Id, account);
-                }
-            }
             if (name != null)
             {
                 List<Account> accounts = AccountRepository
@@ -121,15 +110,96 @@ namespace FExchange.Controllers
                     .List;
                 foreach (Account account in accounts) dic.Add(account.Id, account);
             }
+            else
+            {
+                if (NumberOfOrders != null && NumberOfProductPosts != null)
+                {
+                    List<Account> accounts = AccountRepository
+                        .findAll(x => x.Orders.Count >= NumberOfOrders && x.Status == "Active", pagingParams)
+                        .List;
+                    foreach (Account account in accounts) dic.Add(account.Id, account);
+
+
+                    List<Account> accounts2 = AccountRepository
+                        .findAll(x => x.ProductPosts.Count >= NumberOfProductPosts && x.Status == "Active", pagingParams).List;
+                    List<Account> accounts1 = new List<Account>();
+                    foreach (var account in accounts2)
+                    {
+                        if (dic.ContainsKey(account.Id))
+                        {
+                            accounts1.Add(account);
+                        }
+                    }
+                    dic.Clear();
+                    foreach (var account in accounts1) dic.Add(account.Id, account);
+                }
+                else
+                {
+                    if (NumberOfProductPosts != null)
+                    {
+                        List<Account> accounts = AccountRepository
+                            .findAll(x => x.ProductPosts.Count >= NumberOfProductPosts && x.Status == "Active", pagingParams).List;
+                        foreach (var account in accounts)
+                        {
+                            dic.Add(account.Id, account);
+                        }
+                        
+                       
+                    }else if (NumberOfOrders != null)
+                    {
+                        List<Account> accounts = AccountRepository
+                        .findAll(x => x.Orders.Count >= NumberOfOrders && x.Status == "Active", pagingParams)
+                        .List;
+                        foreach (Account account in accounts) dic.Add(account.Id, account);
+
+                    }
+                }
+
+
+                
+            }
+            
+
+
             return dic.Values.Select(x => mapper.Map<AccountDTO>(x)).ToList();
         }
-        [HttpPut("")]
-        public void update(AccountDTO dto)
+        [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
+        public string update([FromRoute] int id,AccountDTO dto)
         {
-            Account account = mapper.Map<Account>(dto);
+           
+            Account account = AccountRepository.findById(id);
+            Account currentAccount = GetCurrentUser();
+            if (currentAccount.Gmail != account.Gmail)
+            {
+                return "You're not allowed";
+            }
+            if (dto.FullName != null) account.FullName = dto.FullName;
+            if (dto.Gmail != null) account.Gmail = dto.Gmail;
+            if (dto.Bean != null) account.Bean = dto.Bean;
+            if (dto.Address != null) account.Address = dto.Address;
+            if (dto.Phone != null) account.Phone = dto.Phone;
+            //if (dto.Avatar != null) account.Avatar = dto.Avatar;    
             AccountRepository.update(account);
+            return "OK";
             //context.Accounts.Update(account);
             //context.SaveChanges();
+        }
+        private Account GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity != null)
+            {
+                var userClaims = identity.Claims;
+
+                return new Account
+                {
+                    FullName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
+                    Gmail = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
+                };
+            }
+            return null;
         }
     }
 }

@@ -5,28 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObject.Models;
 using DataAccess.IRepository;
-using DataAccess.DAO;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Paging;
 namespace DataAccess.Repository
 {
     public class ExchangeDesireRepository : IExchangeDesireRepository
     {
+        private FExchangeContext context;
+        public ExchangeDesireRepository(FExchangeContext context)
+        {
+            this.context = context;
+        }
         public void create(ExchangeDesire exchangeDesire)
         {
-            EntityDAO.Instance.context.ExchangeDesires.Add(exchangeDesire);
-            EntityDAO.Instance.context.SaveChanges();
+            context.ExchangeDesires.Add(exchangeDesire);
+            context.SaveChanges();
         }
 
         public void delete(int id)
         {
-            EntityDAO.Instance.context.ExchangeDesires.Remove(get(id));
-            EntityDAO.Instance.context.SaveChanges();   
+            context.ExchangeDesires.Remove(get(id));
+            context.SaveChanges();   
         }
 
         public ExchangeDesire get(int id)
         {
-            return EntityDAO.Instance.context.ExchangeDesires
+            return context.ExchangeDesires
                 .Include(x=> x.Category)
                 .Include(x=> x.Product)
                 .FirstOrDefault(d => d.Id == id);
@@ -34,23 +38,29 @@ namespace DataAccess.Repository
 
         public PagedList<ExchangeDesire> getAllByCategory(int categoryID, PagingParams p)
         {
-            return new PagedList<ExchangeDesire>(EntityDAO.Instance.context.ExchangeDesires
-                .Include(x => x.Category)
-                .Include(x => x.Product)
-                .Where(x => x.CategoryId == categoryID),
-                p.PageNumber, p.PageSize
+            var ExchangeDesires = context.ExchangeDesires
+                                        .Where(x => x.CategoryId == categoryID)
+                                        .Include(x => x.Category)
+                                        .Include(x => x.Product)
+                                        .Skip((p.PageNumber - 1) * p.PageSize)
+                                        .Take(p.PageSize);
+            return new PagedList<ExchangeDesire>(ExchangeDesires,
+                1, 100
                 );
         }
 
         public PagedList<ExchangeDesire> getAllByProduct(int productID, PagingParams p)
         {
+            var ExchangeDesires = context.ExchangeDesires
+                                        .Where(x => x.ProductId == productID)
+                                        .Include(x => x.Category)
+                                        .Include(x => x.Product)
+                                        .Skip(p.PageNumber)
+                                        .Take(p.PageSize);
             return new PagedList<ExchangeDesire>
                 (
-                    EntityDAO.Instance.context.ExchangeDesires
-                        .Include(x => x.Category)
-                        .Include(x => x.Product)
-                        .Where(x => x.CategoryId == productID),
-                    p.PageNumber, p.PageSize
+                    ExchangeDesires,
+                    1, 100
                 );
         }
     }

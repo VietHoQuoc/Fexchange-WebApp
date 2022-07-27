@@ -68,10 +68,16 @@ namespace FExchange.Controllers
                 {
                     List<Category> list = categoryRepository
                         .getAll(x => x.ProductPosts.Count >= NumberOfProductPosts, paging).List;
+                    List<Category> categories = new List<Category>();
                     foreach (var item in list)
                     {
-                        dic.Add(item.Id, item);
+                        if (dic.ContainsKey(item.Id))
+                        {
+                            categories.Add(item);
+                        }
                     }
+                    dic.Clear();
+                    foreach (var item in categories) dic.Add(item.Id, item);
                 }
                 return dic.Values.Select(x => mapper.Map<CategoryDTO>(x)).ToList();
             }
@@ -85,12 +91,13 @@ namespace FExchange.Controllers
         public void create(CategoryDTO dto)
         {
             Category category = mapper.Map<Category>(dto);
+            category.Id = 0;
             categoryRepository.create(category);
         }
-        [HttpPut("")]
-        public void update(CategoryDTO dto)
+        [HttpPut("{id}")]
+        public void update([FromRoute]int id,CategoryDTO dto)
         {
-            Category category = categoryRepository.get(dto.Id);
+            Category category = categoryRepository.get(id);
             category.Category1 = dto.Category1;
             categoryRepository.update(category);
         }

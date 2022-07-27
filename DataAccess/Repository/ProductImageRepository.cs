@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObject.Models;
 using DataAccess.IRepository;
-using DataAccess.DAO;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -14,9 +13,9 @@ namespace DataAccess.Repository
     public class ProductImageRepository : IProductImageRepository
     {
         private readonly FExchangeContext context;
-        public ProductImageRepository()
+        public ProductImageRepository(FExchangeContext context)
         {
-            context  = new FExchangeContext();
+            this.context = context;
         }
         public void create(ProductImage productImage)
         {

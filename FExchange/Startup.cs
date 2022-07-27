@@ -18,6 +18,9 @@ using DataAccess.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FExchange.Services;
+using BusinessObject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FExchange
 {
@@ -42,13 +45,49 @@ namespace FExchange
             //Tao mapper
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();  
-            services.AddScoped<IExchangeDesireRepository, ExchangeDesireRepository>();
-            services.AddScoped<INotificationRepository, NotificationRepository>();
-            services.AddScoped<IProductPostRepository, ProductPostRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IProductImageRepository, ProductImageRepository>();
+
+
+            services.AddScoped<IAccountRepository>(x =>
+                new AccountRepository(x.GetRequiredService<FExchangeContext>()));
+
+
+            services.AddScoped<ICategoryRepository>(
+                x=> new CategoryRepository(x.GetRequiredService<FExchangeContext>())); 
+
+
+            services.AddScoped<IExchangeDesireRepository>(
+                x=> new ExchangeDesireRepository(x.GetRequiredService<FExchangeContext>()));
+
+
+            services.AddScoped<INotificationRepository>(
+                x=> new NotificationRepository(x.GetRequiredService<FExchangeContext>()));
+
+
+            services.AddScoped<IProductPostRepository>(
+                x=> new ProductPostRepository(x.GetRequiredService<FExchangeContext>()));
+
+
+            services.AddScoped<IOrderRepository>(
+                x=> new OrderRepository(x.GetRequiredService<FExchangeContext>())); 
+
+
+            services.AddScoped<IProductImageRepository>(
+                x=> new ProductImageRepository(x.GetRequiredService<FExchangeContext>()));
+
+            services.AddScoped<IWishListRepository>(
+                x => new WishListRepository(x.GetRequiredService<FExchangeContext>()));
+
+            services.AddScoped<IWishListService>(
+                x => new WishListService(x.GetRequiredService<IWishListRepository>()
+                                        , x.GetRequiredService<IMapper>()));
+                
+            services.AddDbContext<FExchangeContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("Conn"))) ;
+
+            //services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<IAuthService>(x => new AuthService(x.GetRequiredService<IAccountRepository>()));
+
             services.AddCors(
                 options =>
                 {
@@ -62,6 +101,7 @@ namespace FExchange
                          
                 }
                 );
+            //string key = Configuration["AppSettings:JwtSecret"];
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 

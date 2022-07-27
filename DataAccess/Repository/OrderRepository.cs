@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObject.Models;
 using DataAccess.IRepository;
-using DataAccess.DAO;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using DataAccess.Paging;
@@ -15,14 +14,14 @@ namespace DataAccess.Repository
     public class OrderRepository : IOrderRepository
     {
         private readonly FExchangeContext context;
-        public OrderRepository()
+        public OrderRepository(FExchangeContext context)
         {
-            context = new FExchangeContext();
+            this.context = context;
         }
         public void create(Order order)
         {
-            EntityDAO.Instance.context.Orders.Add(order);
-            EntityDAO.Instance.context.SaveChanges();
+            context.Orders.Add(order);
+            context.SaveChanges();
         }
         
         public PagedList<Order> findByPrice(int minprice, int maxprice, PagingParams p)
@@ -31,7 +30,7 @@ namespace DataAccess.Repository
                 (context.Orders.Where(x => x.Price >= minprice && x.Price <= maxprice)
                     .Include(x => x.Buyer)
                     .Include(x => x.Product)
-                    .Include(x => x.Product2), p.PageNumber, p.PageSize
+                    .Include(x => x.Product2).Skip((p.PageNumber - 1) * p.PageSize).Take(p.PageSize), 1, p.PageSize
                 );
         }
 
@@ -41,7 +40,9 @@ namespace DataAccess.Repository
                 (context.Orders.Where(x => x.Rate >=rate )
                     .Include(x => x.Buyer)
                     .Include(x => x.Product)
-                    .Include(x => x.Product2), p.PageNumber, p.PageSize
+                    .Include(x => x.Product2)
+                    
+                    .Skip((p.PageNumber - 1) * p.PageSize).Take(p.PageSize), p.PageNumber, p.PageSize
                 );
         }
 
@@ -51,18 +52,23 @@ namespace DataAccess.Repository
                 (context.Orders.Where(x => x.BuyerId == userId|| x.Product.AccountId == userId)
                     .Include(x => x.Buyer)
                     .Include(x => x.Product)
-                    .Include(x => x.Product2), p.PageNumber, p.PageSize
+                    .Include(x => x.Product2).Skip((p.PageNumber - 1) * p.PageSize).Take(p.PageSize), p.PageNumber, p.PageSize
                 );
         }
 
         public Order get(int id)
         {
-            return EntityDAO.Instance.context.Orders.FirstOrDefault(x => x.Id == id);
+            return context.Orders
+                .Include(x => x.Buyer)
+                    .Include(x => x.Product)
+                    .Include(x => x.Product2)
+                    
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public void update(Order order)
         {
-            EntityDAO.Instance.context.Orders.Update(order);
+            context.Orders.Update(order);
             context.SaveChanges();
         }
     }

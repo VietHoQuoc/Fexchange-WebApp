@@ -1,4 +1,6 @@
-﻿namespace FExchange.DTOs
+﻿using System;
+
+namespace FExchange.DTOs
 {
     public class OrderDTO
     {
@@ -15,5 +17,6 @@
         public string BuyerName { get; set; }
         public string  Product1Name { get; set; }
         public string  Product2Name { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }

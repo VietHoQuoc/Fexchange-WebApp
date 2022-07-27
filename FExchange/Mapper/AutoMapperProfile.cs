@@ -1,12 +1,30 @@
 ﻿using AutoMapper;
 using BusinessObject.Models;
 using FExchange.DTOs;
+using System.Linq;
+
 namespace FExchange.Mapper
 {
     public class AutoMapperProfile: Profile
     {
         public AutoMapperProfile()
         {
+
+            //Create Wish List
+
+            CreateMap<WishList, WishListDTO>()
+                .ForMember(src => src.ProductName, act => act.MapFrom(des => des.ProductPost.Name))
+                .ForMember(src => src.AccountName, act => act.MapFrom(des => des.Account.FullName))
+                .ForMember(src => src.Status, act => act.MapFrom(des => des.ProductPost.Status))
+                .ForMember(src => src.CategoryName, act => act.MapFrom(des => des.ProductPost.Category.Category1))
+                .ForMember(src => src.Img, act =>
+                act.MapFrom(des => des.ProductPost.ProductImages.FirstOrDefault().Image))
+                .ForMember(src => src.Price, act => act.MapFrom(des => des.ProductPost.Price));
+            CreateMap<WishListDTO, WishList>();
+            //
+            CreateMap<AccountDTO, UserDTO>();
+
+
             //Account
             CreateMap<Account, AccountDTO>()
                 .ForMember(des => des.Role1, act => act.MapFrom(src => src.RoleNavigation.Role1))
@@ -25,7 +43,9 @@ namespace FExchange.Mapper
             CreateMap<ExchangeDesireDTO, ExchangeDesire>();
             //Notification
             CreateMap<Notification, NotificationDTO>()
-                .ForMember(src => src.FullName, act => act.MapFrom(des => des.Account.FullName));
+                .ForMember(src => src.FullName, act => act.MapFrom(des => des.Account.FullName))
+                .ForMember(src => src.BuyerId, act => act.MapFrom(des => des.Order.BuyerId))
+                .ForMember(src => src.Product1Id, act => act.MapFrom(des => des.Order.ProductId));
             CreateMap<NotificationDTO, Notification>();
             //Order
             CreateMap<Order, OrderDTO>()

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObject.Models;
 using DataAccess.IRepository;
-using DataAccess.DAO;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using DataAccess.Paging;
@@ -14,43 +13,51 @@ namespace DataAccess.Repository
 {
     public class AccountRepository : IAccountRepository
     {
+        private FExchangeContext context;
+        public AccountRepository(FExchangeContext context)
+        {
+            this.context = context;
+        }
         public Account checkLogin(string gmail)
         {
-            return EntityDAO.Instance.context.Accounts
+            return context.Accounts
                 .Include(x => x.Notifications)
                 .Include(x => x.ProductPosts)
                 .Include(x => x.Orders)
+                .Include(x => x.RoleNavigation)
                 .FirstOrDefault(x => x.Gmail == gmail);
         }
 
         public void create(Account account)
         {
-            EntityDAO.Instance.context.Accounts.Add(account);
-            EntityDAO.Instance.context.SaveChanges();
+            context.Accounts.Add(account);
+            context.SaveChanges();
         }
 
         public PagedList<Account> findAll(Expression<Func<Account, bool>> expression,PagingParams pagingParams)
         {
-            IEnumerable<Account> accounts= EntityDAO.Instance.context.Accounts
+            IEnumerable<Account> accounts = context.Accounts
                 .Include(x => x.Notifications)
                 .Include(x => x.ProductPosts)
                 .Include(x => x.Orders)
-                .Where(expression);
-            return new PagedList<Account>(accounts.AsQueryable(),pagingParams.PageNumber,pagingParams.PageSize);
+                .Include(x => x.RoleNavigation)
+                .Where(expression)
+                .Skip(pagingParams.PageSize * (pagingParams.PageNumber - 1))
+                 .Take(pagingParams.PageSize);
+            return new PagedList<Account>(accounts.AsQueryable(),1,100);
         }
 
         public Account findById(int id)
         {
-            return EntityDAO.Instance.context.Accounts
+            return context.Accounts
                 .Include(x => x.Notifications)
                 .Include(x => x.ProductPosts)
                 .Include(x => x.Orders)
+                .Include(x => x.RoleNavigation)
                 .FirstOrDefault(x => x.Id == id);
         } 
         public void update(Account account)
         {
-            
-            FExchangeContext context = EntityDAO.Instance.context;
             context.Update(account);
             context.SaveChanges();
         }

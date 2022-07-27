@@ -16,6 +16,7 @@ using DataAccess.IRepository;
 using DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Paging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FExchange.Controllers
 {
@@ -64,17 +65,19 @@ namespace FExchange.Controllers
             exchangeDesireRepository.delete(id);
         }
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "User")]
         public void create([FromBody]ExchangeDesireDTO dto)
         {
             ExchangeDesire exchangeDesire = mapper.Map<ExchangeDesire>(dto);
+            exchangeDesire.Id = 0;
             exchangeDesireRepository.create(exchangeDesire);
         }
-        [HttpPut]
-        public void update([FromBody]ExchangeDesireDTO dto)
+        [HttpPut("{id}")]
+        public void update([FromRoute] int id, [FromBody]ExchangeDesireDTO dto)
         {
-            ExchangeDesire exchangeDesire = exchangeDesireRepository.get(dto.Id);
-            exchangeDesire.CategoryId = dto.CategoryId;
-            exchangeDesire.ProductId = dto.ProductId;
+            ExchangeDesire exchangeDesire = exchangeDesireRepository.get(id);
+            if (dto.CategoryId!=null) exchangeDesire.CategoryId = dto.CategoryId;
+            if (dto.ProductId != null) exchangeDesire.ProductId = dto.ProductId;
         }
     }
 }

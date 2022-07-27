@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObject.Models;
 using DataAccess.IRepository;
-using DataAccess.DAO;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Paging;
 
@@ -13,22 +12,28 @@ namespace DataAccess.Repository
 {
     public class NotificationRepository : INotificationRepository
     {
+        private FExchangeContext context;
+        public NotificationRepository(FExchangeContext context)
+        {
+            this.context = context;
+        }
         public void create(Notification notification)
         {
-            EntityDAO.Instance.context.Notifications.Add(notification);
-            EntityDAO.Instance.context.SaveChanges();
+            context.Notifications.Add(notification);
+            context.SaveChanges();
         }
 
         public void delete(Notification notification)
         {
-            EntityDAO.Instance.context.Notifications.Remove(notification);
-            EntityDAO.Instance.context.SaveChanges();
+            context.Notifications.Remove(notification);
+            context.SaveChanges();
         }
 
         public Notification get(int id)
         {
-            return EntityDAO.Instance.context.Notifications
+            return context.Notifications
                 .Include(x=> x.Account)
+                .Include(x=> x.Order)
                 .FirstOrDefault(x=>x.Id == id);
         }
 
@@ -36,8 +41,9 @@ namespace DataAccess.Repository
         {
             return new PagedList<Notification>
                 (
-                EntityDAO.Instance.context.Notifications
+                context.Notifications
                 .Include(x => x.Account)
+                .Include(x => x.Order)
                 .Where(x => x.AccountId == accountID),
                 p.PageNumber, p.PageSize
                 );
@@ -45,8 +51,8 @@ namespace DataAccess.Repository
 
         public void update(Notification notification)
         {
-            EntityDAO.Instance.context.Notifications.Attach(notification);
-            EntityDAO.Instance.context.SaveChanges();
+            context.Notifications.Attach(notification);
+            context.SaveChanges();
         }
     }
 }

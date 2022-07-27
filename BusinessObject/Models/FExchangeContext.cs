@@ -27,6 +27,7 @@ namespace BusinessObject.Models
         public virtual DbSet<ProductImage> ProductImages { get; set; }
         public virtual DbSet<ProductPost> ProductPosts { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<WishList> WishLists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -47,11 +48,17 @@ namespace BusinessObject.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.Address).HasMaxLength(100);
+
+                entity.Property(e => e.Avatar).HasMaxLength(300);
+
                 entity.Property(e => e.FullName).HasMaxLength(150);
 
                 entity.Property(e => e.Gmail)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Phone).HasMaxLength(50);
 
                 entity.Property(e => e.Status).HasMaxLength(50);
 
@@ -122,12 +129,19 @@ namespace BusinessObject.Models
 
                 entity.Property(e => e.AccountId).HasColumnName("Account_ID");
 
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
                 entity.Property(e => e.Subject).HasMaxLength(500);
 
                 entity.HasOne(d => d.Account)
                     .WithMany(p => p.Notifications)
                     .HasForeignKey(d => d.AccountId)
                     .HasConstraintName("FK_Notification_Account");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.Notifications)
+                    .HasForeignKey(d => d.OrderId)
+                    .HasConstraintName("FK_Notification_Order");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -137,6 +151,10 @@ namespace BusinessObject.Models
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.BuyerId).HasColumnName("Buyer_ID");
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.FeedBack2).HasMaxLength(1000);
 
                 entity.Property(e => e.Feedback).HasMaxLength(1000);
 
@@ -209,7 +227,7 @@ namespace BusinessObject.Models
 
                 entity.Property(e => e.AccountId).HasColumnName("Account_ID");
 
-                entity.Property(e => e.BoughDate).HasColumnType("date");
+                entity.Property(e => e.BoughtDate).HasColumnType("date");
 
                 entity.Property(e => e.CategoryId).HasColumnName("Category_ID");
 
@@ -243,6 +261,29 @@ namespace BusinessObject.Models
                 entity.Property(e => e.Role1)
                     .HasMaxLength(50)
                     .HasColumnName("Role");
+            });
+
+            modelBuilder.Entity<WishList>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductPostId, e.AccountId });
+
+                entity.ToTable("WishList");
+
+                entity.Property(e => e.ProductPostId).HasColumnName("ProductPostID");
+
+                entity.Property(e => e.AccountId).HasColumnName("AccountID");
+
+                entity.HasOne(d => d.Account)
+                    .WithMany(p => p.WishLists)
+                    .HasForeignKey(d => d.AccountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WishList_Account");
+
+                entity.HasOne(d => d.ProductPost)
+                    .WithMany(p => p.WishLists)
+                    .HasForeignKey(d => d.ProductPostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WishList_Product_Post");
             });
 
             OnModelCreatingPartial(modelBuilder);

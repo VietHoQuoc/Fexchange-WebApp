@@ -25,6 +25,8 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace FExchange.Controllers
 {
@@ -34,23 +36,35 @@ namespace FExchange.Controllers
     {
         private IAuthService _authService;
         private IAccountRepository _accountRepository;
-        public LoginController(IAuthService authService,IAccountRepository accountRepository)
+        private IConfiguration configuration;
+        private IMapper mapper;
+        public LoginController(IAuthService authService,IAccountRepository accountRepository,IConfiguration config, IMapper mapper)
         {
             this._authService = authService;
             _accountRepository = accountRepository;
+            configuration = config;
+            this.mapper = mapper;
         }
         [AllowAnonymous]
         [HttpPost("google")]
-        public async Task<IActionResult> Google([FromBody] UserView userView)
+        public async Task<UserDTO> Google([FromBody] UserView u)
+
         {
             try
             {
-                SimpleLogger.Log("userView = " + userView.tokenId);
-                var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
-                var user = await _authService.Authenticate(payload);
+                //UserView u = new UserView();
+                
+                //reader.BaseStream.Position = 0;
+                //string text = json.GetRawText();
+                //string requestBody = await Request.Body.ReadAsStringAsync();
+                
+                
+                SimpleLogger.Log("userView = " + u.tokenId);
+                var payload = GoogleJsonWebSignature.ValidateAsync(u.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
+                Account user = await _authService.Authenticate(payload);
                 if (user == null)
                 {
-                    return NotFound("Bố ban m rồi con tró");
+                    return new UserDTO();
                 }
                 SimpleLogger.Log(payload.ExpirationTimeSeconds.ToString());
                 string role;
@@ -68,7 +82,7 @@ namespace FExchange.Controllers
                     new Claim(ClaimTypes.Role, role)
                 };
 
-                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppSettings.appSettings.JwtSecret));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AppSettings:JwtSecret"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var token = new JwtSecurityToken(String.Empty,
@@ -76,20 +90,47 @@ namespace FExchange.Controllers
                   claims,
                   expires: DateTime.Now.AddSeconds(55 * 60),
                   signingCredentials: creds);
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token)
-                });
+
+                AccountDTO dto = mapper.Map<AccountDTO>(user);
+                UserDTO userDTO = mapper.Map<UserDTO>(dto);
+                string tokenId = new JwtSecurityTokenHandler().WriteToken(token);
+                userDTO.tokenId = tokenId;
+                return userDTO;
             }
             catch (Exception ex)
             {
                 Helpers.SimpleLogger.Log(ex);
                 BadRequest(ex.Message);
             }
-            return BadRequest();
+            return null;
         }
+
+        [HttpPost("createTokenForTest")]
+        public string Test()
+        {
+            var claims = new[]
+              {
+                    //new Claim(JwtRegisteredClaimNames.Sub, Security.Encrypt(AppSettings.appSettings.JwtEmailEncryption,user.Gmail)),
+                    //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, "Dat"),
+                    new Claim(ClaimTypes.Email,"tqdatqn01230@gmail.com"),
+                    new Claim(ClaimTypes.Role, "User")
+                };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AppSettings:JwtSecret"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(String.Empty,
+              String.Empty,
+              claims,
+              expires: DateTime.Now.AddSeconds(55 * 60),
+              signingCredentials: creds);
+           string tokenId = new JwtSecurityTokenHandler().WriteToken(token);
+            return tokenId;
+        }
+
         [HttpGet("checkUserAuthen")]
-        [Authorize(Roles ="User")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles ="User")]
         public IActionResult checkUser()
         {
             var currentUser= GetCurrentUser();

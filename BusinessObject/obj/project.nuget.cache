@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "tbXl0MInzFeqva81aG5VUlrRWNbFcNEhvGQ/mxG44ncBz5JrTYk+ELsvKgWAB3aVbi/IN1UnhWIs06U+O7qopA==",
+  "dgSpecHash": "/VDumZG9ZbxYP+4+WETPKUUjehsxJCdjH3+7YpME1MV0bSv1RZWsI3sC8k1aqB7R+MQ5ezvo/Ej6VH9hAXCUsw==",
   "success": true,
   "projectFilePath": "C:\\Users\\acern\\source\\repos\\FExchange\\BusinessObject\\BusinessObject.csproj",
   "expectedPackageFiles": [
@@ -14,6 +14,7 @@
     "C:\\Users\\acern\\.nuget\\packages\\microsoft.entityframeworkcore.design\\5.0.17\\microsoft.entityframeworkcore.design.5.0.17.nupkg.sha512",
     "C:\\Users\\acern\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\5.0.17\\microsoft.entityframeworkcore.relational.5.0.17.nupkg.sha512",
     "C:\\Users\\acern\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\5.0.17\\microsoft.entityframeworkcore.sqlserver.5.0.17.nupkg.sha512",
+    "C:\\Users\\acern\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\5.0.17\\microsoft.entityframeworkcore.tools.5.0.17.nupkg.sha512",
     "C:\\Users\\acern\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\5.0.0\\microsoft.extensions.caching.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\acern\\.nuget\\packages\\microsoft.extensions.caching.memory\\5.0.0\\microsoft.extensions.caching.memory.5.0.0.nupkg.sha512",
     "C:\\Users\\acern\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
