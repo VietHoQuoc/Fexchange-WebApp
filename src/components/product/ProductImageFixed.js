@@ -1,13 +1,15 @@
+import { sign } from "jsonwebtoken";
 import PropTypes from "prop-types";
 import React from "react";
+import ProductGridSingle from "./ProductGridSingle";
 
 const ProductImageFixed = ({ product }) => {
   return (
     <div className="product-large-image-wrapper">
-      {product.discount || product.new ? (
+      {product.images || product.new ? (
         <div className="product-img-badges">
-          {product.discount ? (
-            <span className="pink">-{product.discount}%</span>
+          {product.images!==null ? (
+            <span className="pink">{product.images.length}</span>
           ) : (
             ""
           )}
@@ -18,9 +20,9 @@ const ProductImageFixed = ({ product }) => {
       )}
 
       <div className="product-fixed-image">
-        {product.image ? (
+        {product.images ? (
           <img
-            src={process.env.PUBLIC_URL + product.image[0]}
+            src={product.images[0].image}
             alt=""
             className="img-fluid"
           />

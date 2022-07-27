@@ -7,7 +7,7 @@ import { addToCart } from "../../redux/actions/cartActions";
 import { addToWishlist } from "../../redux/actions/wishlistActions";
 import { addToCompare } from "../../redux/actions/compareActions";
 import Rating from "./sub-components/ProductRating";
-
+import NumberFormat from "react-number-format";
 const ProductDescriptionInfo = ({
   product,
   discountedPrice,
@@ -44,16 +44,8 @@ const ProductDescriptionInfo = ({
     <div className="product-details-content ml-70">
       <h2>{product.name}</h2>
       <div className="product-details-price">
-        {discountedPrice !== null ? (
-          <Fragment>
-            <span>{currency.currencySymbol + finalDiscountedPrice}</span>{" "}
-            <span className="old">
-              {currency.currencySymbol + finalProductPrice}
-            </span>
-          </Fragment>
-        ) : (
-          <span>{currency.currencySymbol + finalProductPrice} </span>
-        )}
+        <span>{currency.currencySymbol}<NumberFormat value={product.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+        </span>
       </div>
       {product.rating && product.rating > 0 ? (
         <div className="pro-details-rating-wrap">
@@ -65,79 +57,13 @@ const ProductDescriptionInfo = ({
         ""
       )}
       <div className="pro-details-list">
-        <p>{product.shortDescription}</p>
+        <Link to={process.env.PUBLIC_URL + "/shop-profile/" + product.accountId}>
+          {product.accountName}
+        </Link>
       </div>
 
-      {product.variation ? (
-        <div className="pro-details-size-color">
-          <div className="pro-details-color-wrap">
-            <span>Color</span>
-            <div className="pro-details-color-content">
-              {product.variation.map((single, key) => {
-                return (
-                  <label
-                    className={`pro-details-color-content--single ${single.color}`}
-                    key={key}
-                  >
-                    <input
-                      type="radio"
-                      value={single.color}
-                      name="product-color"
-                      checked={
-                        single.color === selectedProductColor ? "checked" : ""
-                      }
-                      onChange={() => {
-                        setSelectedProductColor(single.color);
-                        setSelectedProductSize(single.size[0].name);
-                        setProductStock(single.size[0].stock);
-                        setQuantityCount(1);
-                      }}
-                    />
-                    <span className="checkmark"></span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
-          <div className="pro-details-size">
-            <span>Size</span>
-            <div className="pro-details-size-content">
-              {product.variation &&
-                product.variation.map(single => {
-                  return single.color === selectedProductColor
-                    ? single.size.map((singleSize, key) => {
-                        return (
-                          <label
-                            className={`pro-details-size-content--single`}
-                            key={key}
-                          >
-                            <input
-                              type="radio"
-                              value={singleSize.name}
-                              checked={
-                                singleSize.name === selectedProductSize
-                                  ? "checked"
-                                  : ""
-                              }
-                              onChange={() => {
-                                setSelectedProductSize(singleSize.name);
-                                setProductStock(singleSize.stock);
-                                setQuantityCount(1);
-                              }}
-                            />
-                            <span className="size-name">{singleSize.name}</span>
-                          </label>
-                        );
-                      })
-                    : "";
-                })}
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
-      {product.affiliateLink ? (
+
+      {product.status === "Active" ? (
         <div className="pro-details-quality">
           <div className="pro-details-cart btn-hover ml-0">
             <a
@@ -230,20 +156,20 @@ const ProductDescriptionInfo = ({
           </div>
         </div>
       )}
-      {product.category ? (
+      {product.categoryId ? (
         <div className="pro-details-meta">
           <span>Categories :</span>
-          <ul>
-            {product.category.map((single, key) => {
-              return (
-                <li key={key}>
-                  <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
-                    {single}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+
+          {product.categoryId !== null &&
+
+
+            <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+              {product.categoryName}
+            </Link>
+                
+              
+}
+
         </div>
       ) : (
         ""
