@@ -34,8 +34,14 @@ class Login extends Component {
             },
             data: { tokenId: response.tokenId },
         }).then((res) => {
-            this.props.login(res.data);
-            console.log('>>this is web token id', res.data.tokenId);
+            if (this.props.user.id !== 0) {
+                this.props.login(res.data); // dispatch to redux login
+                console.log('>>this is web token id', res.data.tokenId); // delete when review
+            }
+            alert(
+                'This account has been deactivated due to the violation of the terms of use.'
+            );
+
             // dispatch google response data to redux
             return res.data.tokenId;
         });
