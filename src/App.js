@@ -1,13 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, Suspense, lazy } from 'react';
 import ScrollToTop from './helpers/scroll-top';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Redirect,
+} from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 import { multilanguage, loadLanguages } from 'redux-multilanguage';
 import { connect } from 'react-redux';
 import { BreadcrumbsProvider } from 'react-breadcrumbs-dynamic';
 import { gapi } from 'gapi-script';
 import Logout from './pages/other/Logout';
+import Admin from './pages/admin';
 
 // home pages
 const HomeFashion = lazy(() => import('./pages/home/HomeFashion'));
@@ -623,16 +629,16 @@ const App = (props) => {
                                     component={Wishlist}
                                 />
                                 <Route
-                                    path={process.env.PUBLIC_URL + '/post'}
-                                    component={Post}
-                                />
-                                <Route
                                     path={process.env.PUBLIC_URL + '/compare'}
                                     component={Compare}
                                 />
                                 <Route
                                     path={process.env.PUBLIC_URL + '/checkout'}
                                     component={Checkout}
+                                />
+                                <Route
+                                    path={process.env.PUBLIC_URL + '/admin'}
+                                    component={Admin}
                                 />
 
                                 <Route
