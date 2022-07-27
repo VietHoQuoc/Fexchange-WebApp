@@ -3,7 +3,7 @@ import { Link, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import ManageUser from "./manageUser";
 import ManageProduct from "./manageProduct";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import userApi from "../../utils/api/userApi";
 
@@ -11,21 +11,21 @@ import "./admin.css";
 
 const Admin = ({ location }) => {
   const [userList, setUserList] = useState([]);
+  const user = useSelector((state) => state.authData.user);
 
   useEffect(() => {
     const getData = async () => {
-      const response = await userApi.get(3);
-      setUserList([...userList, response]);
+      const response = await userApi.getAll(user.tokenId);
+      setUserList(response.data);
     };
     getData();
   }, []);
 
-  const changeInfo = () => {
-    const getData = async () => {
-      const response = await userApi.get(3);
-      setUserList([response]);
-    };
-    getData();
+  const changeInfo = async (obj) => {
+    const success = await userApi.put(obj.id, obj, user.tokenId);
+    const response = await userApi.getAll(user.tokenId);
+    console.log(success);
+    setUserList(response.data);
   };
 
   return (

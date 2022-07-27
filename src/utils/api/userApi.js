@@ -1,21 +1,24 @@
-import axiosClient from "./axiosClient";
-
+import { get, put, remove } from "./apiCaller";
 const adminUserApi = {
-  getAll: (params) => {
-    const url = "/acounts";
-    return axiosClient.get(url, { params });
+  getAll: (token) => {
+    const url = "/acounts/10000/1";
+    return get(
+      url,
+      { NumberOfProductPosts: 0 },
+      { Authorization: "Bearer " + token }
+    );
   },
-  get: (id) => {
+  get: (id, token) => {
     const url = `/acounts/${id}`;
-    return axiosClient.get(url);
+    return get(url, {}, { Authorization: "Bearer " + token });
   },
-  put: (id, params) => {
+  put: (id, obj, token) => {
     const url = `/acounts/${id}`;
-    return axiosClient.put(url, { params });
+    return put(url, obj, {}, { Authorization: "Bearer " + token });
   },
-  delete: (id) => {
+  delete: (id, token) => {
     const url = `/acounts/${id}`;
-    return axiosClient.delete(url);
+    return put(url, {}, {}, { Authorization: "Bearer " + token });
   },
 };
 
