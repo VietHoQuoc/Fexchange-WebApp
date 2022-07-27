@@ -190,6 +190,7 @@ export const setActiveSort = e => {
     item.classList.remove("active");
   });
   e.currentTarget.classList.add("active");
+  
 };
 
 export const setActiveLayout = e => {
