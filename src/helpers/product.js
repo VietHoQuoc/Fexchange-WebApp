@@ -91,7 +91,7 @@ export const getSortedProducts = (products, sortType, sortValue) => {
         });
       }
     }
-  }
+  }else return products;
   return products;
 };
 

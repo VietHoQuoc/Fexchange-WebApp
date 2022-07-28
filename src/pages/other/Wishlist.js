@@ -115,7 +115,7 @@ const Wishlist = ({
                                 </td>
 
                                 <td className="product-wishlist-cart">
-                                  {wishlistItem.status==="Active" ? (
+                                  {/* {wishlistItem.status==="Active" ? (
                                     <a
                                       href={wishlistItem.affiliateLink}
                                       rel="noopener noreferrer"
@@ -162,7 +162,36 @@ const Wishlist = ({
                                     <button disabled className="active">
                                       Out of stock
                                     </button>
-                                  )}
+                                  )} */}
+                                  {wishlistItem.status==="Active"?
+                                  (<button
+                                    onClick={() =>
+                                      addToCart(wishlistItem, addToast)
+                                    }
+                                    className={
+                                      cartItem !== undefined &&
+                                        cartItem.quantity > 0
+                                        ? "active"
+                                        : ""
+                                    }
+                                    disabled={
+                                      cartItem !== undefined &&
+                                      cartItem.quantity > 0
+                                    }
+                                    title={
+                                      wishlistItem !== undefined
+                                        ? "Added to cart"
+                                        : "Add to cart"
+                                    }
+                                  >
+                                    {cartItem !== undefined &&
+                                      cartItem.quantity > 0
+                                      ? "Added"
+                                      : "Add to cart"}
+                                  </button>):
+                                  (<button disabled className="active">
+                                  Out of stock
+                                </button>)}
                                 </td>
 
                                 <td className="product-remove">
