@@ -57,9 +57,10 @@ const ProductDescriptionInfo = ({
         ""
       )}
       <div className="pro-details-list">
+        <h4>
         <Link to={process.env.PUBLIC_URL + "/shop-profile/" + product.accountId}>
-          {product.accountName}
-        </Link>
+        Saler : {product.accountName}
+        </Link></h4>
       </div>
 
 

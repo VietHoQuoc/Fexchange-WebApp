@@ -23,12 +23,12 @@ const ProfileDescriptionTab = ({
     useEffect(() => {
         setCurrentData(posts.slice(offset, offset + pageLimit));
         setCurrentData2(postsSold.slice(offset2, offset2 + pageLimit2));
-    }, [offset, offset2]);
+    }, []);
     return (
         <div className={`description-review-area ${spaceBottomClass}`}>
             <div className="container">
                 <div className="description-review-wrapper">
-                    <Tab.Container defaultActiveKey="additionalInfo">
+                    <Tab.Container defaultActiveKey="productDescription">
                         <Nav
                             variant="pills"
                             className="description-review-topbar"

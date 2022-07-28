@@ -130,7 +130,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                         <img
                           src={single.image}
                           className="img-fluid"
-                          alt=""
+                          alt={product.name}
                         />
                       </div>
                     </div>

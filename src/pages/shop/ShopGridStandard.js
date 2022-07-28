@@ -47,10 +47,10 @@ const ShopGridStandard = ({location, products}) => {
     }
 
     useEffect(() => {
-              //làm sao để hàm getSortedProducts trả về sortedProducts đúng theo database
+        //làm sao để hàm getSortedProducts trả về sortedProducts đúng theo database
         // let sortedProducts = getSortedProducts(posts, sortType, sortValue);
         let searchedProducts = getSortedProducts(posts,searchType,searchValue);
-
+        
         let sortedProducts = getSortedProducts(searchedProducts, sortType, sortValue);
         //flow: sẽ lấy post ứng với search và checkboxes -> sortedProducts
         //sau đây lấy sortedProducts filter theo giá 
@@ -58,15 +58,17 @@ const ShopGridStandard = ({location, products}) => {
 
         sortedProducts = filterSortedProducts;
         setSortedProducts(sortedProducts);
+        
         setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
-
+        
         axios.get(`https://fbuyexchange.azurewebsites.net/api/productposts/1/19?all=true`)
             .then(res => {
                 setPosts(res.data);
+                
             })
             .catch(error => console.log(error));
 
-    }, [offset, posts, sortType, sortValue, filterSortType, filterSortValue ]);
+    }, [offset, sortType, sortValue, filterSortType, filterSortValue ]);
 
     return (
         <Fragment>

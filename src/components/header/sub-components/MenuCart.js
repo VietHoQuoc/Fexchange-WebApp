@@ -3,10 +3,16 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { getDiscountPrice } from "../../../helpers/product";
-
+import { useState,useEffect } from "react";
 const MenuCart = ({ cartData, currency, deleteFromCart }) => {
   let cartTotalPrice = 0;
   const { addToast } = useToasts();
+  const getTotalPrice = (items) => items
+  .map((item) => item.price)
+  .reduce((acc, value) => acc + value, 0)
+
+const result = getTotalPrice(cartData);
+
   return (
     <div className="shopping-cart-content">
       {cartData!==null && cartData.length > 0 ? (
@@ -77,7 +83,8 @@ const MenuCart = ({ cartData, currency, deleteFromCart }) => {
             <h4>
               Total :{" "}
               <span className="shop-total">
-                {currency.currencySymbol + cartTotalPrice.toFixed(2)}
+                {/* {currency.currencySymbol + cartTotalPrice.toFixed(2)} */}
+                {result}
               </span>
             </h4>
           </div>
