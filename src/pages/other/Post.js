@@ -20,6 +20,7 @@ import { ToastConsumer } from 'react-toast-notifications';
 import { useToasts } from 'react-toast-notifications';
 import { useHistory } from 'react-router-dom';
 import TooltipBox from './../../components/tooltip/index';
+import { useSelector } from 'react-redux';
 const ImageUploader = (props) => {
     const { maxNumber, images, onChange } = props;
     // if (images.length > 0) console.log(images[0].file);
@@ -84,6 +85,7 @@ const Post = (props) => {
     const [showInvalid, setShowInvalid] = useState({
         selectBox: false,
     });
+    const userData = useSelector((state) => state.authData);
     const [images, setImages] = useState([]);
     const [data, setData] = useState({
         id: 0,
@@ -93,8 +95,8 @@ const Post = (props) => {
         goodsStatus: 1,
         description: '',
         status: '',
-        accountId: 1,
-        categoryId: 1,
+        accountId: userData.user.id,
+        categoryId: undefined,
         accountName: 'Đăng', //TODO: change to user when login success
         categoryName: 'Unknown',
         numberOfExchangeDesires: 1,
@@ -108,19 +110,30 @@ const Post = (props) => {
             files: tmpFile,
         });
     };
+    if (userData.tokenId === '') {
+        history.push('/login-register');
+        addToast('You need to sign in first', {
+            appearance: 'info',
+            autoDismiss: true,
+            autoDismissTimeout: 5000,
+        });
+    }
     useEffect(() => {
         const getCategories = async () => {
             let tmpShowCategories = [];
-            for (let i = 1; i < 8; i++) {
-                const data = await categoryApi
-                    .get(i)
+            let data = '';
+            let i = 1;
+            do {
+                data = await categoryApi
+                    .get(i++)
                     .then((res) => res)
                     .catch((err) => err);
                 tmpShowCategories.push({
                     value: data.id || 0,
                     label: data.category1 || 'other',
                 });
-            }
+            } while (data.data !== '');
+            tmpShowCategories.pop();
             setCategoriesDataShow(tmpShowCategories);
         };
         getCategories();
@@ -128,9 +141,8 @@ const Post = (props) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         productApi
-            .post(data)
+            .post(data, userData.tokenId)
             .then((res) => {
-                console.log(res);
                 history.push('/'); //TODO: redirect to manage page
                 addToast('Success', { appearance: 'success' });
             })

@@ -5,6 +5,6 @@
     "trailingComma": "es5",
     "jsxBracketSameLine": false,
     "arrowParens": "always",
-    "singleQuote": false,
+    "singleQuote": true,
     "endOfLine": "auto"
 }

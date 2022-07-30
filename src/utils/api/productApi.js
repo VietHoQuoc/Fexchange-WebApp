@@ -12,7 +12,7 @@ const productApi = {
         const url = `/productposts/${id}`;
         return axiosClient.get(url);
     },
-    post: (product) => {
+    post: (product, token) => {
         const url = '/productposts';
         let formData = new FormData();
         Object.keys(product).map((key) => {
@@ -26,7 +26,8 @@ const productApi = {
         formData.set('BoughtDate', convertToString(product.boughtDate));
         return axiosClient.post(url, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-type': 'multipart/form-data',
+                Authorization: 'Bearer ' + token,
             },
         });
     },
