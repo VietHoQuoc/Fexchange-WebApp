@@ -1,27 +1,23 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import wishlistApi from "../../utils/api/wishlistApi";
 export const ADD_TO_WISHLIST = "ADD_TO_WISHLIST";
 export const DELETE_FROM_WISHLIST = "DELETE_FROM_WISHLIST";
 export const DELETE_ALL_FROM_WISHLIST = "DELETE_ALL_FROM_WISHLIST";
 
-// add to wishlist
 
-export const addToWishlist = (item, addToast) => {
-  let token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ikx1dSBIb25nIERvbmcgTXkgKEsxNl9IQ00pIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoibXlsaGRzZTE2MDkxM0BmcHQuZWR1LnZuIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTY1ODY0MTYwNX0.ACe8OWgZ3bVSsUxYjMQma4pnE1_obJnCAkFx5CEub1E';
-  axios.interceptors.request.use(
-    config=>{
-      config.headers.authorization=`Bearer ${token}`;
-      return config;
-    },
-    error=>{
-      return Promise.reject(error)
-    }
-  );
+export const addToWishlist = (item, addToast, user) => {
+  
+  // axios.interceptors.request.use(
+  //   config=>{
+  //     config.headers.authorization=`Bearer ${token}`;
+  //     return config;
+  //   },
+  //   error=>{
+  //     return Promise.reject(error)
+  //   }
+  // );
   let data={
     productPostId: item.id,
-    accountId: 0,//lay tai khoan dang dang nhap
+    accountId: 9,//lay tai khoan dang dang nhap
     productName: item.name,
     accountName: '',
     status: item.status,
@@ -31,19 +27,21 @@ export const addToWishlist = (item, addToast) => {
   }
 
 
-  axios.post(`https://fbuyexchange.azurewebsites.net/api/wishlist`,data)
-            .then((res) => {
-                console.log(res);
-                addToast('Success', { appearance: 'success' });
-            })
-            .catch((err) => {
-                console.log(err);
-                addToast('Some thing went wrong', {
-                    appearance: 'error',
-                });
-            });
+  // axios.post(`https://fbuyexchange.azurewebsites.net/api/wishlist`,data)
+  //           .then((res) => {
+                
+  //               console.log(res);
+  //               addToast('Success', { appearance: 'success' });
+  //           })
+  //           .catch((err) => {
+  //               console.log(err);
+  //               addToast('Some thing went wrong', {
+  //                   appearance: 'error',
+  //               });
+  //           });
   return dispatch => {
-    console.log(data)
+    console.log(data);
+    console.log(user)
     if (addToast) {
       addToast("Added To Wishlist", {
         appearance: "success",

@@ -8,6 +8,7 @@ export function updateProfile(response) {
     };
 }
 export function login(token) {
+
     return (dispath) => {
         dispath({
             type: 'LOGIN',

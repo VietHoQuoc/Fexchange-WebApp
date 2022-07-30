@@ -47,6 +47,12 @@ const ShopGridStandard = ({location, products}) => {
     }
 
     useEffect(() => {
+        axios.get(`https://fbuyexchange.azurewebsites.net/api/productposts/1/19?all=true`)
+            .then(res => {
+                setPosts(res.data);
+                
+            })
+            .catch(error => console.log(error));
         //làm sao để hàm getSortedProducts trả về sortedProducts đúng theo database
         // let sortedProducts = getSortedProducts(posts, sortType, sortValue);
         let searchedProducts = getSortedProducts(posts,searchType,searchValue);
@@ -58,15 +64,10 @@ const ShopGridStandard = ({location, products}) => {
 
         sortedProducts = filterSortedProducts;
         setSortedProducts(sortedProducts);
-        
         setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
         
-        axios.get(`https://fbuyexchange.azurewebsites.net/api/productposts/1/19?all=true`)
-            .then(res => {
-                setPosts(res.data);
-                
-            })
-            .catch(error => console.log(error));
+        
+        
 
     }, [offset, sortType, sortValue, filterSortType, filterSortValue ]);
 
@@ -93,10 +94,11 @@ const ShopGridStandard = ({location, products}) => {
                             </div>
                             <div className="col-lg-9 order-1 order-lg-2">
                                 {/* shop topbar default */}
-                                <ShopTopbar getLayout={getLayout} getFilterSortParams={getFilterSortParams} productCount={sortedProducts.length} sortedProductCount={currentData.length} />
+                                <ShopTopbar getLayout={getLayout} getFilterSortParams={getFilterSortParams} productCount={sortValue===''?posts.length:sortedProducts.length} sortedProductCount={sortValue===''?posts.length:currentData.length} />
 
                                 {/* shop page content default */}
-                                <ShopProducts layout={layout} products={currentData} />
+                                
+                                <ShopProducts layout={layout} products={sortValue===''? posts:currentData} />
 
                                 {/* shop product pagination */}
                                 <div className="pro-pagination-style text-center mt-30">

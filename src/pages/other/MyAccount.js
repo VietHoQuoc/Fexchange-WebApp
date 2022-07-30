@@ -10,6 +10,7 @@ import adminUserApi from '../../utils/api/userApi';
 import { updateProfile } from '../../redux/actions/authActions';
 
 const MyAccount = ({ location }) => {
+
     const userData = useSelector((state) => state.authData);
     const { pathname } = location;
     //remove previous img when set new img
