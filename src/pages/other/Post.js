@@ -93,12 +93,12 @@ const Post = (props) => {
         goodsStatus: 1,
         description: '',
         status: '',
-        accountId: 1,
-        categoryId: 1,
+        accountId: '',
+        categoryId: undefined,
         accountName: 'Đăng', //TODO: change to user when login success
         categoryName: 'Unknown',
         numberOfExchangeDesires: 1,
-        files: [],//images
+        files: [],
     });
     const onImageUpload = (imagesList, addUpdateIndex) => {
         setImages(imagesList);
@@ -160,11 +160,8 @@ const Post = (props) => {
                         <p className="h2">Create your product</p>
                     </div>
                 </div>
-                <div className="row">
-                    <form
-                        className="container col-sm-10 col-lg-8 col-xl-6 post-form"
-                        onSubmit={(e) => onSubmit(e)}
-                    >
+                <form className="row" onSubmit={(e) => onSubmit(e)}>
+                    <div className="container col-sm-10 col-lg-8 col-xl-6 post-form">
                         <div className="row m-1 m-md-3">
                             <div className="col">
                                 <label className="form-label">
@@ -256,6 +253,7 @@ const Post = (props) => {
                                             ...data,
                                             boughtDate: date,
                                         });
+                                        console.log(date);
                                     }}
                                 ></DateInput>
                             </div>
@@ -323,8 +321,8 @@ const Post = (props) => {
                                 className="col-2 btn btn-primary"
                             />
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </LayoutOne>
         </Fragment>
     );
