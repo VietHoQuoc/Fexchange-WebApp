@@ -16,8 +16,7 @@ export const addToWishlist = (item, addToast, user) => {
     };
 
     return (dispatch) => {
-        console.log(data);
-        console.log(user);
+        console.log('log data', data);
         if (addToast) {
             addToast('Added To Wishlist', {
                 appearance: 'success',
@@ -38,6 +37,7 @@ export const deleteFromWishlist = (item, addToast) => {
             });
         }
         dispatch({ type: DELETE_FROM_WISHLIST, payload: item });
+        console.log('this is action delete', item);
     };
 };
 
