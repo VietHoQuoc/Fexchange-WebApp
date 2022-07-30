@@ -1,14 +1,66 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import MetaTags from 'react-meta-tags';
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
-import Card from 'react-bootstrap/Card';
-import Accordion from 'react-bootstrap/Accordion';
+import { useSelector, useDispatch } from 'react-redux';
+
 import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
+import adminUserApi from '../../utils/api/userApi';
+import { updateProfile } from '../../redux/actions/authActions';
 
 const MyAccount = ({ location }) => {
+
+    const userData = useSelector((state) => state.authData);
     const { pathname } = location;
+    //remove previous img when set new img
+    const [data, setData] = useState({
+        fullName: userData.user.fullName,
+        address: userData.user.address,
+        phone: userData.user.phone,
+    });
+    const dispatch = useDispatch();
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        await adminUserApi.put(userData.user.id, data, userData.tokenId);
+        const response = await adminUserApi.get(
+            userData.user.id,
+            userData.tokenId
+        );
+        dispatch(updateProfile(response.data));
+    };
+
+    let result = userData.user.gmail.substr(-19, 8);
+    let finalResult = result.toUpperCase();
+
+    const callbackChangeFullname = (e) => {
+        e.preventDefault();
+        setData({
+            ...data,
+            fullName: e.target.value,
+        });
+    };
+    const callbackChangePhoneNumber = (e) => {
+        e.preventDefault();
+        setData({
+            ...data,
+            phone: e.target.value,
+        });
+    };
+    const callbackChangeAddress = (e) => {
+        e.preventDefault();
+        setData({
+            ...data,
+            address: e.target.value,
+        });
+    };
+
+    // const callbackChangeFile = (avatar) => {
+    //     const avatarFile = URL.createObjectURL(avatar);
+    //     setAvatar(avatarFile);
+    //     setData({ ...data, avatar: avatar });
+    // };
 
     return (
         <Fragment>
@@ -28,111 +80,123 @@ const MyAccount = ({ location }) => {
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
                 <Breadcrumb />
-                <div className="myaccount-area pb-80 pt-100">
+                <div className="myaccount-area pb-30 pt-50">
                     <div className="container">
                         <div className="row">
                             <div className="ml-auto mr-auto col-lg-9">
-                                <div className="myaccount-wrapper">
-                                    <Accordion defaultActiveKey="0">
-                                        <Card className="single-my-account mb-20">
-                                            <Card.Header className="panel-heading">
-                                                <Accordion.Toggle
-                                                    variant="link"
-                                                    eventKey="0"
-                                                >
-                                                    <h3 className="panel-title">
-                                                        <span>1 .</span> Edit
-                                                        your account information{' '}
-                                                    </h3>
-                                                </Accordion.Toggle>
-                                            </Card.Header>
-                                            <Accordion.Collapse eventKey="0">
-                                                <Card.Body>
-                                                    <div className="myaccount-info-wrapper">
-                                                        <div
-                                                            className="account-info-wrapper mx-auto text-center"
-                                                            style={{
-                                                                width: '450px',
-                                                            }}
-                                                        >
-                                                            <img
-                                                                src="https://images.unsplash.com/photo-1657336641332-d0bef6ada5e0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
-                                                                className="mb-4 img-fluid"
-                                                                style={{
-                                                                    width: '150px',
-                                                                    maxHeight:
-                                                                        '150px',
-                                                                    borderRadius:
-                                                                        '10px',
-                                                                }}
-                                                                alt="Avatar"
-                                                            />
-
-                                                            <div className="col-lg-12 col-md-12">
-                                                                <div className="billing-info">
-                                                                    <input
-                                                                        type="text"
-                                                                        placeholder="input link image"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="account-info-wrapper text-center">
-                                                            <h5>
-                                                                Your Personal
-                                                                Details
-                                                            </h5>
-                                                        </div>
-                                                        <div className="row">
-                                                            <div className="col-lg-6 col-md-6">
-                                                                <div className="billing-info">
-                                                                    <label>
-                                                                        Full
-                                                                        Name
-                                                                    </label>
-                                                                    <input type="text" />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-6 col-md-6">
-                                                                <div className="billing-info">
-                                                                    <label>
-                                                                        Phone
-                                                                        Number
-                                                                    </label>
-                                                                    <input type="text" />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-12 col-md-12">
-                                                                <div className="billing-info">
-                                                                    <label>
-                                                                        Email
-                                                                        Address
-                                                                    </label>
-                                                                    <input type="email" />
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-12 col-md-12">
-                                                                <div className="billing-info">
-                                                                    <label>
-                                                                        Address
-                                                                    </label>
-                                                                    <input type="email" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="billing-back-btn">
-                                                            <div className="billing-btn">
-                                                                <button type="submit">
-                                                                    Continue
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </Card.Body>
-                                            </Accordion.Collapse>
-                                        </Card>
-                                    </Accordion>
+                                <div className="d-flex align-items-center justify-content-center mb-5">
+                                    <p className="h2">View my account</p>
                                 </div>
+                                <form
+                                    className="row"
+                                    onSubmit={(e) => onSubmit(e)}
+                                >
+                                    <div className="single-my-account mb-20">
+                                        <div className="myaccount-info-wrapper">
+                                            <div className=" mx-auto row">
+                                                <img
+                                                    src={userData.user.avatar}
+                                                    className="mb-4"
+                                                    referrerPolicy="no-referrer"
+                                                    style={{
+                                                        width: '150px',
+                                                        height: '150px',
+                                                    }}
+                                                    alt="Avatar"
+                                                />
+                                                {/* <div className="col-lg-6">
+                                                <FileInput
+                                                    onChange={
+                                                        callbackChangeFile
+                                                    }
+                                                />
+                                            </div> */}
+                                            </div>
+
+                                            <div className="row">
+                                                <div className="col-lg-12 col-md-12">
+                                                    <div className="billing-info">
+                                                        <label>Full Name</label>
+                                                        <input
+                                                            type="text"
+                                                            value={
+                                                                data.fullName
+                                                            }
+                                                            onChange={
+                                                                callbackChangeFullname
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-12 col-md-12">
+                                                    <div className="billing-info">
+                                                        <label>
+                                                            Email Address
+                                                        </label>
+                                                        <input
+                                                            className="disabled"
+                                                            type="email"
+                                                            placeholder={
+                                                                userData.user
+                                                                    .gmail
+                                                            }
+                                                            disabled
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-6 col-md-6">
+                                                    <div className="billing-info">
+                                                        <label>
+                                                            Phone Number
+                                                        </label>
+                                                        <input
+                                                            type="tel"
+                                                            value={data.phone}
+                                                            required
+                                                            onChange={
+                                                                callbackChangePhoneNumber
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-6 col-md-6">
+                                                    <div className="billing-info">
+                                                        <label>
+                                                            Student Code
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder={
+                                                                finalResult
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-lg-12 col-md-12">
+                                                    <div className="billing-info">
+                                                        <label>Address</label>
+                                                        <input
+                                                            type="text"
+                                                            value={data.address}
+                                                            required
+                                                            onChange={
+                                                                callbackChangeAddress
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="billing-back-btn">
+                                                <div className="billing-btn">
+                                                    <button type="submit">
+                                                        Continue
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -1,14 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, Suspense, lazy } from 'react';
 import ScrollToTop from './helpers/scroll-top';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Redirect,
+} from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 import { multilanguage, loadLanguages } from 'redux-multilanguage';
 import { connect } from 'react-redux';
 import { BreadcrumbsProvider } from 'react-breadcrumbs-dynamic';
-import productApi from './utils/api/productApi';
 import { gapi } from 'gapi-script';
 import Logout from './pages/other/Logout';
+import Admin from './pages/admin';
 
 // home pages
 const HomeFashion = lazy(() => import('./pages/home/HomeFashion'));
@@ -79,6 +84,8 @@ const ShopListTwoColumn = lazy(() => import('./pages/shop/ShopListTwoColumn'));
 
 // product pages
 const Product = lazy(() => import('./pages/shop-product/Product'));
+const ShopProfile = lazy(() => import('./pages/shop-product/ShopProfile'));
+
 const ProductTabLeft = lazy(() =>
     import('./pages/shop-product/ProductTabLeft')
 );
@@ -442,6 +449,18 @@ const App = (props) => {
                                 <Route
                                     path={
                                         process.env.PUBLIC_URL +
+                                        '/shop-profile/:id'
+                                    }
+                                    render={(routeProps) => (
+                                        <ShopProfile
+                                            {...routeProps}
+                                            key={routeProps.match.params.id}
+                                        />
+                                    )}
+                                />
+                                <Route
+                                    path={
+                                        process.env.PUBLIC_URL +
                                         '/shop-grid-filter'
                                     }
                                     component={ShopGridFilter}
@@ -623,6 +642,10 @@ const App = (props) => {
                                 <Route
                                     path={process.env.PUBLIC_URL + '/checkout'}
                                     component={Checkout}
+                                />
+                                <Route
+                                    path={process.env.PUBLIC_URL + '/admin'}
+                                    component={Admin}
                                 />
 
                                 <Route

@@ -52,6 +52,7 @@ const ProductImageDescription = ({
             ) : galleryType === "fixedImage" ? (
               <ProductImageFixed product={product} />
             ) : (
+              //default
               <ProductImageGallery product={product} />
             )}
           </div>
