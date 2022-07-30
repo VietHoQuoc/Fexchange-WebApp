@@ -48,7 +48,7 @@ export const addToWishlist = (item, addToast, user) => {
         autoDismiss: true
       })
     }
-    dispatch({ type: ADD_TO_WISHLIST, payload: item });
+    dispatch({ type: ADD_TO_WISHLIST, payload:  item});
   };
 };
 

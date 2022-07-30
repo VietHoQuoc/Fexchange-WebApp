@@ -3,7 +3,9 @@ import {
   DELETE_FROM_WISHLIST,
   DELETE_ALL_FROM_WISHLIST
 } from "../actions/wishlistActions";
-
+import {
+  LOGIN
+}from "../actions/authActions"
 const initState = [];
 
 const wishlistReducer = (state = initState, action) => {
