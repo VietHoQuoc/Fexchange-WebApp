@@ -14,6 +14,7 @@ import { BreadcrumbsProvider } from 'react-breadcrumbs-dynamic';
 import { gapi } from 'gapi-script';
 import Logout from './pages/other/Logout';
 import Admin from './pages/admin';
+import { useSelector } from 'react-redux';
 
 // home pages
 const HomeFashion = lazy(() => import('./pages/home/HomeFashion'));
@@ -149,7 +150,7 @@ const App = (props) => {
 
     //   return () => unregisterAuthObserver();
     // }, []);
-
+    const userData = useSelector((state) => state.authData);
     return (
         <ToastProvider placement="bottom-left">
             <BreadcrumbsProvider>
@@ -636,10 +637,16 @@ const App = (props) => {
                                     path={process.env.PUBLIC_URL + '/checkout'}
                                     component={Checkout}
                                 />
-                                <Route
-                                    path={process.env.PUBLIC_URL + '/admin'}
-                                    component={Admin}
-                                />
+                                {userData.user.role === 1 &&
+                                    userData.tokenId !== '' && (
+                                        <Route
+                                            path={
+                                                process.env.PUBLIC_URL +
+                                                '/admin'
+                                            }
+                                            component={Admin}
+                                        />
+                                    )}
 
                                 <Route
                                     path={process.env.PUBLIC_URL + '/not-found'}
