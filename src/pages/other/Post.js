@@ -134,7 +134,6 @@ const Post = (props) => {
                 });
             } while (data.data !== '');
             tmpShowCategories.pop();
-            console.log(tmpShowCategories);
             setCategoriesDataShow(tmpShowCategories);
         };
         getCategories();
