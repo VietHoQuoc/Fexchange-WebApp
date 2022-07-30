@@ -9,8 +9,8 @@ const initState = [];
 const wishlistReducer = (state = initState, action) => {
   const wishlistItems = state,
     product = action.payload;
-
   if (action.type === ADD_TO_WISHLIST) {
+    
     const wishlistItem = wishlistItems.filter(
       item => item.id === product.id
     )[0];
