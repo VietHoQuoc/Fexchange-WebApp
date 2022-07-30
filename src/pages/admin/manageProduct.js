@@ -63,6 +63,13 @@ const ManageProduct = (props) => {
         }
     };
 
+    const confirmDelete = () => {
+        if (window.confirm('Are you sure to delete this product?') === true) {
+            props.deleteProduct(form.id);
+            setIsShowModal(false);
+        }
+    };
+
     const handleFormChange = (e) => {
         setForm({ ...form, [e.target.id]: e.target.value });
     };
@@ -177,6 +184,9 @@ const ManageProduct = (props) => {
                             Approve
                         </Button>
                     )}
+                    <Button variant="danger" onClick={confirmDelete}>
+                        Delete
+                    </Button>
                     <Button variant="secondary" onClick={hideModal}>
                         Cancel
                     </Button>
