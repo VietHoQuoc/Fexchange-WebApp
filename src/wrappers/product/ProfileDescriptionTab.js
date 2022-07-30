@@ -71,6 +71,19 @@ const ProfileDescriptionTab = ({ spaceBottomClass, productFullDesc, posts, layou
                                         pagePrevText="«"
                                         pageNextText="»"
                                     />
+                                    <div className="pro-pagination-style text-center mt-30">
+                                        <Paginator
+                                            totalRecords={posts.length}
+                                            pageLimit={pageLimit}
+                                            pageNeighbours={2}
+                                            setOffset={setOffset}
+                                            currentPage={currentPage}
+                                            setCurrentPage={setCurrentPage}
+                                            pageContainerClass="mb-0 mt-0"
+                                            pagePrevText="«"
+                                            pageNextText="»"
+                                        />
+                                    </div>
                                 </div>
                 </div> */}
                 {posts && posts.map((product) => <div>
@@ -260,18 +273,14 @@ const ProfileDescriptionTab = ({ spaceBottomClass, productFullDesc, posts, layou
                     </div>
                   </div>
                 </div>
-              </Tab.Pane>
-            </Tab.Content>
-          </Tab.Container>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 ProfileDescriptionTab.propTypes = {
-  productFullDesc: PropTypes.string,
-  spaceBottomClass: PropTypes.string
+    productFullDesc: PropTypes.string,
+    spaceBottomClass: PropTypes.string,
 };
 
 export default ProfileDescriptionTab;
