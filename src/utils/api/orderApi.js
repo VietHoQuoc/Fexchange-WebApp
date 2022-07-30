@@ -1,18 +1,25 @@
-import axiosClient from './axiosClient';
+import { put } from "./apiCaller";
+import axiosClient from "./axiosClient";
 
 const orderApi = {
-    rating: (orderId, feedback, rate) => {
-        const url = '/orders/' + orderId;
+    rating: (orderId, feedback, rate, token) => {
+        const url = "/orders/feedback/" + orderId;
         const order = {
             feedback: feedback,
             rate: rate,
         };
-        return axiosClient.put(url, order, {
-            headers: {
-                'Content-Type': 'application/json',
+        return put(
+            url,
+            {
+                rate,
+                feedback,
             },
-        });
-    }, //TODO: call rating api
+            {},
+            {
+                Authorization: `Bearer ${token}`,
+            }
+        );
+    },
 };
 
 export default orderApi;

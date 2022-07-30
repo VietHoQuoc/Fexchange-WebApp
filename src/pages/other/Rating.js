@@ -1,21 +1,23 @@
-import React, { Fragment } from 'react';
-import { Container } from 'react-bootstrap';
-import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
-import { MetaTags } from 'react-meta-tags';
-import StarRatings from 'react-star-ratings';
-import LayoutOne from './../../layouts/LayoutOne';
-import Breadcrumb from './../../wrappers/breadcrumb/Breadcrumb';
-import { useState } from 'react';
-import Divider from './Divider/index';
-import { useHistory } from 'react-router-dom';
-import { useToasts } from 'react-toast-notifications';
-import orderApi from './../../utils/api/orderApi';
+import React, { Fragment } from "react";
+import { Container } from "react-bootstrap";
+import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
+import { MetaTags } from "react-meta-tags";
+import StarRatings from "react-star-ratings";
+import LayoutOne from "./../../layouts/LayoutOne";
+import Breadcrumb from "./../../wrappers/breadcrumb/Breadcrumb";
+import { useState } from "react";
+import Divider from "./Divider/index";
+import { useHistory } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
+import orderApi from "./../../utils/api/orderApi";
+import { useSelector } from "react-redux";
 
 const Rating = (props) => {
     //TODO: import order id as orderId attribute when using this component
+    const userData = useSelector((state) => state.authData);
     const { pathname, orderId = 5 } = props; // TODO: may be you need to delete the default value of orderID in the destructure
     const [star, setStar] = new useState(0);
-    const [ratingDescription, setRatingDescription] = new useState('');
+    const [ratingDescription, setRatingDescription] = new useState("");
     const history = useHistory();
     const toast = useToasts();
     const changeRating = (newRating, name) => {
@@ -25,21 +27,21 @@ const Rating = (props) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         await orderApi
-            .rating(orderId, ratingDescription, star)
+            .rating(orderId, ratingDescription, star, userData.tokenId)
             .then((res) => {
-                toast.addToast('Success', { appearance: 'success' });
+                toast.addToast("Success", { appearance: "success" });
+                history.push("/");
             })
             .catch((err) => {
-                toast.addToast('SomeThing went wrong', { appearance: 'error' });
+                toast.addToast("SomeThing went wrong", { appearance: "error" });
             });
-        history.push('/');
     };
     return (
         <Fragment>
             <MetaTags>
                 <title>FEX| Rating product</title>
             </MetaTags>
-            <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>
+            <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>
                 home
             </BreadcrumbsItem>
             <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
