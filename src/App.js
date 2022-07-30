@@ -108,6 +108,7 @@ const Cart = lazy(() => import('./pages/other/Cart'));
 const Wishlist = lazy(() => import('./pages/other/Wishlist'));
 const Compare = lazy(() => import('./pages/other/Compare'));
 const Checkout = lazy(() => import('./pages/other/Checkout'));
+const OrderManagement = lazy(() => import ('./pages/profile/OrdersManagement'));
 
 const NotFound = lazy(() => import('./pages/other/NotFound'));
 
@@ -115,6 +116,7 @@ const NotFound = lazy(() => import('./pages/other/NotFound'));
 const ProductManagement = lazy(() =>
   import('./pages/profile/ProductManagement')
 );
+
 
 const App = (props) => {
   useEffect(() => {
@@ -450,7 +452,10 @@ const App = (props) => {
                   path={process.env.PUBLIC_URL + '/product-management'}
                   component={ProductManagement}
                 />
-
+                <Route
+                  path={process.env.PUBLIC_URL + '/orders-management'}
+                  component={OrderManagement}
+                />
                 <Route
                   path={process.env.PUBLIC_URL + '/not-found'}
                   component={NotFound}

@@ -463,6 +463,11 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
                   {strings['product_management']}
                 </Link>
               </li>
+              <li>
+                <Link to={process.env.PUBLIC_URL + '/orders-management'}>
+                  {strings['orders-management']}
+                </Link>
+              </li>
             </ul>
           </li>
           <li>

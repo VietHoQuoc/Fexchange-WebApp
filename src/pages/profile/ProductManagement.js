@@ -137,7 +137,7 @@ const ProductManagement = ({ location }) => {
         );
       }
     };
-    fetchPost();
+    fetchPost();  
   }, [products, accountId, isDataLoaded]);
 
   return accountId !== undefined ? (
