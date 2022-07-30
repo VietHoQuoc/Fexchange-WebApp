@@ -182,12 +182,6 @@ const ManageProduct = (props) => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>
-                Admin
-            </BreadcrumbsItem>
-            <BreadcrumbsItem to={process.env.PUBLIC_URL + 'admin/product'}>
-                Product Management
-            </BreadcrumbsItem>
         </Fragment>
     );
 };
