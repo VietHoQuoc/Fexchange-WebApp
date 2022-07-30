@@ -12,8 +12,8 @@ const productApi = {
         const url = `/productposts/${id}`;
         return axiosClient.get(url);
     },
-    post: (product) => {
-        const url = '/api/productposts';
+    post: (product, token) => {
+        const url = '/productposts';
         let formData = new FormData();
         Object.keys(product).map((key) => {
             console.log(capitalizeFirstLetter(key));
@@ -28,6 +28,7 @@ const productApi = {
         return axiosClient.post(url, formData, {
             headers: {
                 'Content-type': 'multipart/form-data',
+                Authorization: 'Bearer ' + token,
             },
         });
     },

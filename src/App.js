@@ -617,6 +617,10 @@ const App = (props) => {
                                     component={LoginRegister}
                                 />
                                 <Route
+                                    path={process.env.PUBLIC_URL + '/post'}
+                                    component={Post}
+                                />
+                                <Route
                                     path={process.env.PUBLIC_URL + '/logout'}
                                     component={Logout}
                                 />
