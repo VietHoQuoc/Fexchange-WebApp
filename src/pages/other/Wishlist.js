@@ -15,6 +15,7 @@ import { addToCart } from '../../redux/actions/cartActions';
 import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import NumberFormat from 'react-number-format';
+import wishlistApi from '../../utils/api/wishlistApi';
 const Wishlist = ({
     location,
     cartItems,
@@ -23,10 +24,43 @@ const Wishlist = ({
     wishlistItems,
     deleteFromWishlist,
     deleteAllFromWishlist,
+    auth,
 }) => {
     const { addToast } = useToasts();
     const { pathname } = location;
 
+    const [wishlist, setWishlist] = useState();
+    const [requestList, setRequestList] = useState(false);
+
+    const wishlistItem = wishlistItems.map((item) => {
+        return {
+            productPostId: item.id,
+            accountId: auth.user.id,
+        };
+    });
+
+    useEffect(() => {
+        wishlistItem.map(async (obj) => {
+            await wishlistApi.post(obj, auth.tokenId);
+            // console.log('this is response', response);
+        });
+    }, []);
+    useEffect(() => {
+        const getData = async () => {
+            const response = await wishlistApi.get(auth.user.id, auth.tokenId);
+            console.log('this is response', response.data);
+            setWishlist(response.data);
+        };
+        getData();
+    }, [requestList]);
+
+    const deleteWishlist = async (productId) => {
+        await wishlistApi.delete(auth.user.id, productId, auth.tokenId);
+        setRequestList(true);
+        deleteFromWishlist(productId, addToast);
+    };
+
+    // console.log('get wishlist data from redux', wishlistItems);
     return (
         <Fragment>
             <MetaTags>
@@ -36,20 +70,18 @@ const Wishlist = ({
                     content="Wishlist page of flone react minimalist eCommerce template."
                 />
             </MetaTags>
-
             <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>
                 Home
             </BreadcrumbsItem>
             <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
                 Wishlist
             </BreadcrumbsItem>
-
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
                 <Breadcrumb />
                 <div className="cart-main-area pt-90 pb-100">
                     <div className="container">
-                        {wishlistItems && wishlistItems.length >= 1 ? (
+                        {wishlist && wishlist.length >= 1 ? (
                             <Fragment>
                                 <h3 className="cart-page-title">
                                     Your wishlist items
@@ -68,29 +100,8 @@ const Wishlist = ({
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {wishlistItems.map(
-                                                        (wishlistItem, key) => {
-                                                            const discountedPrice =
-                                                                getDiscountPrice(
-                                                                    wishlistItem.price,
-                                                                    wishlistItem.discount
-                                                                );
-                                                            const finalProductPrice =
-                                                                (
-                                                                    wishlistItem.price *
-                                                                    currency.currencyRate
-                                                                ).toFixed(2);
-                                                            const finalDiscountedPrice =
-                                                                (
-                                                                    discountedPrice *
-                                                                    currency.currencyRate
-                                                                ).toFixed(2);
-                                                            const cartItem =
-                                                                cartItems.filter(
-                                                                    (item) =>
-                                                                        item.id ===
-                                                                        wishlistItem.id
-                                                                )[0];
+                                                    {wishlist.map(
+                                                        (wishlist, key) => {
                                                             return (
                                                                 <tr key={key}>
                                                                     <td className="product-thumbnail">
@@ -100,10 +111,10 @@ const Wishlist = ({
                                                                                     .env
                                                                                     .PUBLIC_URL +
                                                                                 '/product/' +
-                                                                                wishlistItem.id
+                                                                                wishlist.productPostId
                                                                             }
                                                                         >
-                                                                            {wishlistItem.images ==
+                                                                            {wishlist.img ==
                                                                             null ? (
                                                                                 <img
                                                                                     width="50px"
@@ -117,9 +128,7 @@ const Wishlist = ({
                                                                                     height="130px"
                                                                                     alt=""
                                                                                     src={
-                                                                                        wishlistItem
-                                                                                            .images[0]
-                                                                                            .image
+                                                                                        wishlist.img
                                                                                     }
                                                                                 />
                                                                             )}
@@ -133,11 +142,11 @@ const Wishlist = ({
                                                                                     .env
                                                                                     .PUBLIC_URL +
                                                                                 '/product/' +
-                                                                                wishlistItem.id
+                                                                                wishlist.productPostId
                                                                             }
                                                                         >
                                                                             {
-                                                                                wishlistItem.name
+                                                                                wishlist.productName
                                                                             }
                                                                         </Link>
                                                                     </td>
@@ -149,7 +158,7 @@ const Wishlist = ({
                                                                             }
                                                                             <NumberFormat
                                                                                 value={
-                                                                                    wishlistItem.price
+                                                                                    wishlist.price
                                                                                 }
                                                                                 displayType={
                                                                                     'text'
@@ -213,42 +222,21 @@ const Wishlist = ({
                                       Out of stock
                                     </button>
                                   )} */}
-                                                                        {wishlistItem.status ===
+                                                                        {wishlist.status ===
                                                                         'Active' ? (
                                                                             <button
                                                                                 onClick={() =>
                                                                                     addToCart(
-                                                                                        wishlistItem,
+                                                                                        wishlist,
                                                                                         addToast
                                                                                     )
                                                                                 }
-                                                                                className={
-                                                                                    cartItem !==
-                                                                                        undefined &&
-                                                                                    cartItem.quantity >
-                                                                                        0
-                                                                                        ? 'active'
-                                                                                        : ''
-                                                                                }
-                                                                                disabled={
-                                                                                    cartItem !==
-                                                                                        undefined &&
-                                                                                    cartItem.quantity >
-                                                                                        0
-                                                                                }
-                                                                                title={
-                                                                                    wishlistItem !==
-                                                                                    undefined
-                                                                                        ? 'Added to cart'
-                                                                                        : 'Add to cart'
-                                                                                }
+                                                                                className="active"
+                                                                                title="Add to cart"
                                                                             >
-                                                                                {cartItem !==
-                                                                                    undefined &&
-                                                                                cartItem.quantity >
-                                                                                    0
-                                                                                    ? 'Added'
-                                                                                    : 'Add to cart'}
+                                                                                Add
+                                                                                to
+                                                                                cart
                                                                             </button>
                                                                         ) : (
                                                                             <button
@@ -265,8 +253,8 @@ const Wishlist = ({
                                                                     <td className="product-remove">
                                                                         <button
                                                                             onClick={() =>
-                                                                                deleteFromWishlist(
-                                                                                    wishlistItem,
+                                                                                deleteWishlist(
+                                                                                    wishlist.productPostId,
                                                                                     addToast
                                                                                 )
                                                                             }
@@ -296,17 +284,6 @@ const Wishlist = ({
                                                 >
                                                     Continue Shopping
                                                 </Link>
-                                            </div>
-                                            <div className="cart-clear">
-                                                <button
-                                                    onClick={() =>
-                                                        deleteAllFromWishlist(
-                                                            addToast
-                                                        )
-                                                    }
-                                                >
-                                                    Clear Wishlist
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -356,6 +333,7 @@ const mapStateToProps = (state) => {
         cartItems: state.cartData,
         wishlistItems: state.wishlistData,
         currency: state.currencyData,
+        auth: state.authData,
     };
 };
 
