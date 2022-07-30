@@ -6,7 +6,7 @@ import { getDiscountPrice } from "../../helpers/product";
 import Rating from "./sub-components/ProductRating";
 import ProductModal from "./ProductModal";
 import NumberFormat from "react-number-format";
-
+import { useSelector } from "react-redux";
 
 const ProductGridSingle = ({
   product,
@@ -29,6 +29,12 @@ const ProductGridSingle = ({
     discountedPrice * currency.currencyRate
   ).toFixed(2);
 
+  const userData = useSelector((state) => state.authData);
+  const user={
+    id:userData.user.id,
+    name:userData.user.fullName,
+    tokenId:userData.user.tokenId
+  }
   return (
     <Fragment>
       <div
@@ -100,7 +106,7 @@ const ProductGridSingle = ({
                       ? "Added to wishlist"
                       : "Add to wishlist"
                   }
-                  onClick={() => addToWishlist(product, addToast)}
+                  onClick={() => addToWishlist(product, addToast,user.id)}
                 >
                   <i className="pe-7s-like" />
                 </button>
@@ -206,6 +212,7 @@ const ProductGridSingle = ({
             <div className="product-price">
             <span>{currency.currencySymbol}<NumberFormat value={product.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
               </span>
+              {user.id}
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
 
 const ManageUser = (props) => {
     const [isShowModal, setIsShowModal] = useState(false);
@@ -65,6 +66,12 @@ const ManageUser = (props) => {
 
     return (
         <Fragment>
+            <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>
+                Home
+            </BreadcrumbsItem>
+            <BreadcrumbsItem to={process.env.PUBLIC_URL + 'admin/user'}>
+                My Account
+            </BreadcrumbsItem>
             <div className="admin-page">
                 <table class="table">
                     <thead>

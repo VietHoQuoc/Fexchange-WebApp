@@ -4,16 +4,21 @@ import { connect } from 'react-redux';
 import ManageUser from './manageUser';
 import ManageProduct from './manageProduct';
 import { useSelector } from 'react-redux';
+import MetaTags from 'react-meta-tags';
+import { SectionsContainer, Section, Header } from 'react-fullpage';
+import HeaderOne from '../../wrappers/header/HeaderOne';
 
 import userApi from '../../utils/api/userApi';
 import adminProduct from '../../utils/api/adminProduct';
 
 import './admin.css';
+import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
 
 const Admin = ({ location }) => {
+    const { pathname } = location;
     const [userList, setUserList] = useState([]);
     const [productList, setProductList] = useState([]);
-    const user = useSelector((state) => state.authData.user);
+    const user = useSelector((state) => state.authData);
 
     useEffect(() => {
         const getData = async () => {

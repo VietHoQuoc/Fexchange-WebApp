@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
 import { connect } from 'react-redux';
 
 const ManageProduct = (props) => {

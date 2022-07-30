@@ -17,6 +17,7 @@ class Login extends Component {
         alert(error);
     };
 
+
     googleResponse = async (response) => {
         console.log(response);
         if (!response.tokenId) {

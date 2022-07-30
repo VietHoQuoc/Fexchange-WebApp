@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { setActiveSort } from "../../helpers/product";
+import { setActiveSort} from "../../helpers/product";
 
 const ShopCategories = ({ categories, getSortParams }) => {
+  
   return (
     <div className="sidebar-widget">
       <h4 className="pro-sidebar-title">Categories </h4>
@@ -11,10 +12,11 @@ const ShopCategories = ({ categories, getSortParams }) => {
           <ul>
             <li>
               <div className="sidebar-widget-list-left">
-                <button
+                {/* default : all cate */}
+                <button className="active"
                   onClick={e => {
                     getSortParams("category", "");
-                    setActiveSort(e);
+                    setActiveSort(e);//ham dung de khong click vao thi mat 
                   }}
                 >
                   <span className="checkmark" /> All Categories

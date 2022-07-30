@@ -1,32 +1,34 @@
 import PropTypes from 'prop-types';
-import React, { Fragment, useEffect, useState, useCallback } from 'react';
+import React, { Fragment, useState } from 'react';
 import MetaTags from 'react-meta-tags';
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
-import { connect, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import adminUserApi from '../../utils/api/userApi';
+import { updateProfile } from '../../redux/actions/authActions';
 
 const MyAccount = ({ location }) => {
+
     const userData = useSelector((state) => state.authData);
     const { pathname } = location;
     //remove previous img when set new img
     const [data, setData] = useState({
         fullName: userData.user.fullName,
-        address: '',
-        phone: '',
-        avatar: userData.user.avatar,
+        address: userData.user.address,
+        phone: userData.user.phone,
     });
+    const dispatch = useDispatch();
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        const success = await adminUserApi.put(
+        await adminUserApi.put(userData.user.id, data, userData.tokenId);
+        const response = await adminUserApi.get(
             userData.user.id,
-            data,
-            userData.user.tokenId
+            userData.tokenId
         );
-        console.log('this is succcess', success);
+        dispatch(updateProfile(response.data));
     };
 
     let result = userData.user.gmail.substr(-19, 8);
@@ -95,6 +97,7 @@ const MyAccount = ({ location }) => {
                                                 <img
                                                     src={userData.user.avatar}
                                                     className="mb-4"
+                                                    referrerPolicy="no-referrer"
                                                     style={{
                                                         width: '150px',
                                                         height: '150px',
@@ -149,6 +152,7 @@ const MyAccount = ({ location }) => {
                                                         <input
                                                             type="tel"
                                                             value={data.phone}
+                                                            required
                                                             onChange={
                                                                 callbackChangePhoneNumber
                                                             }
@@ -175,6 +179,7 @@ const MyAccount = ({ location }) => {
                                                         <input
                                                             type="text"
                                                             value={data.address}
+                                                            required
                                                             onChange={
                                                                 callbackChangeAddress
                                                             }
