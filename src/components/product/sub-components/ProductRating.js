@@ -16,7 +16,7 @@ const ProductRating = ({ ratingValue }) => {
 };
 
 ProductRating.propTypes = {
-  ratingValue: PropTypes.number
+  ratingValue: PropTypes.number,
 };
 
 export default ProductRating;
