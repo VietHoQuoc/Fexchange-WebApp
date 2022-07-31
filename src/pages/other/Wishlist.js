@@ -5,7 +5,6 @@ import { useToasts } from 'react-toast-notifications';
 import MetaTags from 'react-meta-tags';
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
 import { connect } from 'react-redux';
-import { getDiscountPrice } from '../../helpers/product';
 import {
     addToWishlist,
     deleteFromWishlist,
@@ -30,7 +29,7 @@ const Wishlist = ({
     const { pathname } = location;
 
     const [wishlist, setWishlist] = useState();
-    const [requestList, setRequestList] = useState(false);
+    const [requestList, setRequestList] = useState(0);
 
     const wishlistItem = wishlistItems.map((item) => {
         return {
@@ -56,7 +55,7 @@ const Wishlist = ({
 
     const deleteWishlist = async (productId) => {
         await wishlistApi.delete(auth.user.id, productId, auth.tokenId);
-        setRequestList(true);
+        setRequestList(requestList + 1);
         deleteFromWishlist(productId, addToast);
     };
 
@@ -174,54 +173,6 @@ const Wishlist = ({
                                                                     </td>
 
                                                                     <td className="product-wishlist-cart">
-                                                                        {/* {wishlistItem.status==="Active" ? (
-                                    <a
-                                      href={wishlistItem.affiliateLink}
-                                      rel="noopener noreferrer"
-                                      target="_blank"
-                                    >
-                                      {" "}
-                                      Buy now{" "}
-                                    </a>
-                                  ) : wishlistItem.variation &&
-                                    wishlistItem.variation.length >= 1 ? (
-                                    <Link
-                                      to={`${process.env.PUBLIC_URL}/product/${wishlistItem.id}`}
-                                    >
-                                      Select option
-                                    </Link>
-                                  ) : wishlistItem.stock &&
-                                    wishlistItem.stock > 0 ? (
-                                    <button
-                                      onClick={() =>
-                                        addToCart(wishlistItem, addToast)
-                                      }
-                                      className={
-                                        cartItem !== undefined &&
-                                          cartItem.quantity > 0
-                                          ? "active"
-                                          : ""
-                                      }
-                                      disabled={
-                                        cartItem !== undefined &&
-                                        cartItem.quantity > 0
-                                      }
-                                      title={
-                                        wishlistItem !== undefined
-                                          ? "Added to cart"
-                                          : "Add to cart"
-                                      }
-                                    >
-                                      {cartItem !== undefined &&
-                                        cartItem.quantity > 0
-                                        ? "Added"
-                                        : "Add to cart"}
-                                    </button>
-                                  ) : (
-                                    <button disabled className="active">
-                                      Out of stock
-                                    </button>
-                                  )} */}
                                                                         {wishlist.status ===
                                                                         'Active' ? (
                                                                             <button
