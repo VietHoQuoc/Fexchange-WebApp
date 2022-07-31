@@ -747,6 +747,11 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
                                 </Link>
                             </li>
                             <li>
+                                <Link to={process.env.PUBLIC_URL + '/rating'}>
+                                    {strings['rating']}
+                                </Link>
+                            </li>
+                            <li>
                                 <Link to={process.env.PUBLIC_URL + '/contact'}>
                                     {strings['contact_us']}
                                 </Link>
@@ -756,6 +761,26 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
                                     to={process.env.PUBLIC_URL + '/not-found'}
                                 >
                                     {strings['404_page']}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to={
+                                        process.env.PUBLIC_URL +
+                                        '/product-management'
+                                    }
+                                >
+                                    {strings['product_management']}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to={
+                                        process.env.PUBLIC_URL +
+                                        '/orders-management'
+                                    }
+                                >
+                                    {strings['orders-management']}
                                 </Link>
                             </li>
                         </ul>

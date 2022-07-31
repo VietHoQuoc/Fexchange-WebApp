@@ -16,7 +16,6 @@ const productApi = {
         const url = '/productposts';
         let formData = new FormData();
         Object.keys(product).map((key) => {
-            console.log(capitalizeFirstLetter(key));
             formData.append(
                 key === 'files' || key === 'id'
                     ? key

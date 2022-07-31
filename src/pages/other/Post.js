@@ -172,8 +172,11 @@ const Post = (props) => {
                         <p className="h2">Create your product</p>
                     </div>
                 </div>
-                <form className="row" onSubmit={(e) => onSubmit(e)}>
-                    <div className="container col-sm-10 col-lg-8 col-xl-6 post-form">
+                <div className="row">
+                    <form
+                        className="container col-sm-10 col-lg-8 col-xl-6 post-form"
+                        onSubmit={(e) => onSubmit(e)}
+                    >
                         <div className="row m-1 m-md-3">
                             <div className="col">
                                 <label className="form-label">
@@ -265,7 +268,6 @@ const Post = (props) => {
                                             ...data,
                                             boughtDate: date,
                                         });
-                                        console.log(date);
                                     }}
                                 ></DateInput>
                             </div>
@@ -333,8 +335,8 @@ const Post = (props) => {
                                 className="col-2 btn btn-primary"
                             />
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </LayoutOne>
         </Fragment>
     );
