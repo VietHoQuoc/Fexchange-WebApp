@@ -119,6 +119,10 @@ const Compare = lazy(() => import('./pages/other/Compare'));
 const Checkout = lazy(() => import('./pages/other/Checkout'));
 const Rating = lazy(() => import('./pages/other/Rating'));
 const NotFound = lazy(() => import('./pages/other/NotFound'));
+const OrderManagement = lazy(() => import('./pages/profile/OrdersManagement'));
+const ProductManagement = lazy(() =>
+    import('./pages/profile/ProductManagement')
+);
 
 const App = (props) => {
     useEffect(() => {
@@ -663,7 +667,20 @@ const App = (props) => {
                                             component={Admin}
                                         />
                                     )}
-
+                                <Route
+                                    path={
+                                        process.env.PUBLIC_URL +
+                                        '/product-management'
+                                    }
+                                    component={ProductManagement}
+                                />
+                                <Route
+                                    path={
+                                        process.env.PUBLIC_URL +
+                                        '/orders-management'
+                                    }
+                                    component={OrderManagement}
+                                />
                                 <Route
                                     path={process.env.PUBLIC_URL + '/not-found'}
                                     component={NotFound}
