@@ -8,10 +8,25 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import RelatedProductSlider from "../../wrappers/product/RelatedProductSlider";
 import ProductDescriptionTab from "../../wrappers/product/ProductDescriptionTab";
 import ProductImageDescription from "../../wrappers/product/ProductImageDescription";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 const Product = ({ location, product }) => {
   const { pathname } = location;
+  const [post, setPost] = useState({});
+  const [accountId, setAccountId] = useState(0);
+  useEffect(() => {
+    //Runs only the first render
 
+    axios
+      .get(
+        `https://fbuyexchange.azurewebsites.net/api/productposts/` + product.id
+      )
+      .then((res) => {
+        setPost(res.data);
+        setAccountId(product.accountId);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   return (
     <Fragment>
       <MetaTags>
@@ -35,19 +50,21 @@ const Product = ({ location, product }) => {
         <ProductImageDescription
           spaceTopClass="pt-100"
           spaceBottomClass="pb-100"
-          product={product}
+          product={post}
+          accountId={accountId}
         />
 
         {/* product description tab */}
         <ProductDescriptionTab
           spaceBottomClass="pb-90"
-          productFullDesc={product.fullDescription}
+          productFullDesc={post.description}
         />
 
         {/* related product slider */}
         <RelatedProductSlider
           spaceBottomClass="pb-95"
-          category={product.category[0]}
+          category={post.categoryId}
+          currentId={post.id}
         />
       </LayoutOne>
     </Fragment>

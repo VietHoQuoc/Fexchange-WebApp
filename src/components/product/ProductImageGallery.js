@@ -57,10 +57,10 @@ const ProductImageGallery = ({ product }) => {
   return (
     <Fragment>
       <div className="product-large-image-wrapper">
-        {product.discount || product.new ? (
+        {product.images || product.new ? (
           <div className="product-img-badges">
-            {product.discount ? (
-              <span className="pink">-{product.discount}%</span>
+            {product.images!==null ? (
+              <span className="pink">{product.images.length}</span>
             ) : (
               ""
             )}
@@ -71,13 +71,13 @@ const ProductImageGallery = ({ product }) => {
         )}
         <LightgalleryProvider>
           <Swiper {...gallerySwiperParams}>
-            {product.image &&
-              product.image.map((single, key) => {
+            {product.images &&
+              product.images.map((single, key) => {
                 return (
                   <div key={key}>
                     <LightgalleryItem
                       group="any"
-                      src={process.env.PUBLIC_URL + single}
+                      src={single.image}
                     >
                       <button>
                         <i className="pe-7s-expand1"></i>
@@ -85,7 +85,7 @@ const ProductImageGallery = ({ product }) => {
                     </LightgalleryItem>
                     <div className="single-image">
                       <img
-                        src={process.env.PUBLIC_URL + single}
+                        src={single.image}
                         className="img-fluid"
                         alt=""
                       />
@@ -98,21 +98,22 @@ const ProductImageGallery = ({ product }) => {
       </div>
       <div className="product-small-image-wrapper mt-15">
         <Swiper {...thumbnailSwiperParams}>
-          {product.image &&
-            product.image.map((single, key) => {
+          {product.images &&
+            product.images.map((single, key) => {
               return (
                 <div key={key}>
-                  <div className="single-image">
+                  <div className="">
                     <img
-                      src={process.env.PUBLIC_URL + single}
+                      src={single.image}
                       className="img-fluid"
-                      alt=""
+                      alt={product.name}
                     />
                   </div>
                 </div>
               );
             })}
         </Swiper>
+
       </div>
     </Fragment>
   );

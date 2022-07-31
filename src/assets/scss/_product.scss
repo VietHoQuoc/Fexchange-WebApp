@@ -1,4 +1,44 @@
-/*------- 6. Product style  --------*/
+/*------- 7. Product style  --------*/
+.post-form   {
+  textarea {
+    resize: none;
+  }
+}
+.image-slider {
+  width: 400px;
+  height: 500px;
+}
+.btn-next{
+  right: 0;
+};
+.btn-prev {
+  left: 0;  
+}
+.image-slider__item {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+.select-wrapper-container{
+  position: relative;
+  cursor: pointer;
+  .select-wrapper{
+    position: relative;
+    z-index: 1000;
+    cursor: pointer;
+  }
+  .input-required{
+    position: absolute;
+    border: 0;
+    color: transparent;
+    background-color: transparent;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+}
 .product-area {
   position: relative;
   .row {

@@ -3,16 +3,22 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { getDiscountPrice } from "../../../helpers/product";
-
+import { useState,useEffect } from "react";
 const MenuCart = ({ cartData, currency, deleteFromCart }) => {
   let cartTotalPrice = 0;
   const { addToast } = useToasts();
+  const getTotalPrice = (items) => items
+  .map((item) => item.price)
+  .reduce((acc, value) => acc + value, 0)
+
+const result = getTotalPrice(cartData);
+
   return (
     <div className="shopping-cart-content">
-      {cartData && cartData.length > 0 ? (
+      {cartData!==null && cartData.length > 0 ? (
         <Fragment>
           <ul>
-            {cartData.map((single, key) => {
+            {/* {cartData.map((single, key) => {
               const discountedPrice = getDiscountPrice(
                 single.price,
                 single.discount
@@ -71,13 +77,14 @@ const MenuCart = ({ cartData, currency, deleteFromCart }) => {
                   </div>
                 </li>
               );
-            })}
+            })} */}
           </ul>
           <div className="shopping-cart-total">
             <h4>
               Total :{" "}
               <span className="shop-total">
-                {currency.currencySymbol + cartTotalPrice.toFixed(2)}
+                {/* {currency.currencySymbol + cartTotalPrice.toFixed(2)} */}
+                {result}
               </span>
             </h4>
           </div>
