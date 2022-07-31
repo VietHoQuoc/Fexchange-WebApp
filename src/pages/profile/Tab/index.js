@@ -1,7 +1,7 @@
 import React from 'react';
-import { TabContent } from 'react-bootstrap';
 import { useEffect, useReducer } from 'react';
 import { useState } from 'react';
+import Order from '../Order';
 
 const TabLink = ({ tabIndex, onClick, children, active }) => {
   return (
@@ -22,22 +22,53 @@ const TabLink = ({ tabIndex, onClick, children, active }) => {
   );
 };
 
-const Tab = ({orders = [] }) => {
+const TabContent = ({ orders }) => {
+  return (
+    <div class="tab-content" id="ex2-content">
+      <div
+        class="tab-pane fade show active d-flex flex-wrap"
+        id="ex3-tabs-1"
+        role="tabpanel"
+        aria-labelledby="ex3-tab-1"
+      >
+        {orders.map((order, index) => {
+          return <Order key={index + 'order'} order={order} />
+        })}
+      </div>
+    </div>
+  );
+};
+
+const Tab = ({ orders }) => {
+  console.log(orders)
+  const TABS_FILTER = [
+      {
+        type: function (order) {
+          return order?.status.toLowerCase() === "pending" || true;
+        },
+        status: "Pending",
+      },
+      {
+        type: function (order) {
+          return order?.status.toLowerCase() === "on-Sale";
+        },
+        status: "On-Sale",
+      },
+      {
+        type: function (order) {
+          return order?.status.toLowerCase() === "bought";
+        },
+        status: "Bought",
+      },
+       {
+         type: function (order) {
+          return order?.status.toLowerCase() === "reject"; 
+        },
+        status: "Reject",
+      },
+    ]
   const currentTabDataReducer = (state, action) => {
-    const TABS_FILTER = {
-      0: function (orders) {
-        return orders?.goodsStatus === 1;
-      },
-      1: function (orders) {
-        return orders?.goodsStatus === 2;
-      },
-      2: function (orders) {
-        return orders?.goodsStatus === 3;
-      },
-      3: function (orders) {
-        return orders?.goodsStatus === 4;
-      },
-    };
+    
     const { type } = action;
 
     switch (type) {
@@ -45,7 +76,7 @@ const Tab = ({orders = [] }) => {
       case 1:
       case 2:
       case 3:
-        return orders.filter(TABS_FILTER[type]);
+        return orders.filter(TABS_FILTER[type].type);
       default:
         throw new Error();
     }
@@ -68,20 +99,14 @@ const Tab = ({orders = [] }) => {
   return (
     <div>
       <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
-        <TabLink tabIndex={0} onClick={onChangeTab} active={currentTab === 0}>
-          Pending
-        </TabLink>
-        <TabLink tabIndex={1} onClick={onChangeTab} active={currentTab === 1}>
-          On-sale
-        </TabLink>
-        <TabLink tabIndex={2} onClick={onChangeTab} active={currentTab === 2}>
-          Sold
-        </TabLink>
-        <TabLink tabIndex={3} onClick={onChangeTab} active={currentTab === 3}>
-          Rejected
-        </TabLink>
+        {TABS_FILTER.map((item, index) => {
+          return (
+            <TabLink key={index} tabIndex={index} onClick={onChangeTab} active={currentTab === index}>
+            {item.status}
+          </TabLink>)
+        })}
       </ul>
-      <TabContent products={currentTabData} />
+      <TabContent orders={currentTabData} />
     </div>
   );
 };

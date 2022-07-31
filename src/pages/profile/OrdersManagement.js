@@ -22,19 +22,22 @@ const OrderManagement = ({ location, history }) => {
     if (!accountId) {
         history.push('/login-register');
     }
-
     useEffect(() => {
         const fetchPost = async () => {                                         
             if (orders.length === 0 && !isDataLoaded) {
-                await orderApi.getAll(accountId, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IkRhdCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6InRxZGF0cW4wMTIzMEBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNjU5MTk2Njg0fQ.Njwm7ADiGV2z4drGshCrC0vul8lX3mgU9Ufk0z7DDbw")
-                    .then((res) => console.log(res))
-                    .catch((err) => console.log(err))
-            
-                // setOrder(tmp);
+                const tmp = await orderApi.getAll(accountId, userData.user.tokenId)
+                    .then((res) => res)
+                    .catch((err) => {
+                        console.log(err);
+                        return null;
+                    })
+                if (tmp !== null) {
+                    setOrder(tmp);
+                }
             }
         }
         fetchPost();
-    }, []);                             
+    }, [accountId, isDataLoaded, orders, userData]);                             
     return (
         <Fragment>
             <MetaTags>
