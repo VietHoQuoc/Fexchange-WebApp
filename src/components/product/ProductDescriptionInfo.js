@@ -40,6 +40,13 @@ const ProductDescriptionInfo = ({
     selectedProductSize
   );
 
+
+  const handleBuy = () => {
+    
+  }
+
+  console.log(product);
+
   return (
     <div className="product-details-content ml-70">
       <h2>{product.name}</h2>
@@ -68,9 +75,9 @@ const ProductDescriptionInfo = ({
         <div className="pro-details-quality">
           <div className="pro-details-cart btn-hover ml-0">
             <a
-              href={product.affiliateLink}
+              href="#"
               rel="noopener noreferrer"
-              target="_blank"
+              onClick={handleBuy}
             >
               Buy Now
             </a>
