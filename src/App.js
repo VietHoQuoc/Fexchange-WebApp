@@ -625,7 +625,6 @@ const App = (props) => {
                                     component={LoginRegister}
                                 />
                                 <Route
-                                    path={process.env.PUBLIC_URL + '/logout'}
                                     path={process.env.PUBLIC_URL + '/post'}
                                     component={Post}
                                 />
@@ -657,7 +656,7 @@ const App = (props) => {
                                     path={process.env.PUBLIC_URL + '/checkout'}
                                     component={Checkout}
                                 />
-                                {userData.user.role === 1 &&
+                                {userData.user?.role === 1 &&
                                     userData.tokenId !== '' && (
                                         <Route
                                             path={
