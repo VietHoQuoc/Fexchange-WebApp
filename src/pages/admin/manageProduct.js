@@ -75,7 +75,7 @@ const ManageProduct = (props) => {
     };
 
     const submitChange = () => {
-        props.changeInfo(form);
+        props.changeProductInfo(form);
         setIsShowModal(false);
     };
 
