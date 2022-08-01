@@ -89,16 +89,8 @@ const OrderManagement = ({ location, history }) => {
                 <Breadcrumb />
                 <div className="shop-area pt-95 pb-100">
                     <div className="container">
-                        <p className="h2 text-center mb-6">Your orders</p>
-                        <div className="row d-flex flex-column p-3">
-                            {orders.map((order, index) => {
-                                return (
-                                    <Order
-                                        key={index + 'order'}
-                                        order={order}
-                                    />
-                                );
-                            })}
+                        <div className="row d-flex flex-column">
+                            <Tab orders={orders} />
                         </div>
                     </div>
                 </div>

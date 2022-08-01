@@ -38,7 +38,6 @@ const TabContent = ({ orders }) => {
 };
 
 const Tab = ({ orders }) => {
-    console.log(orders);
     const TABS_FILTER = [
         {
             type: function (order) {
@@ -48,21 +47,15 @@ const Tab = ({ orders }) => {
         },
         {
             type: function (order) {
-                return order?.status.toLowerCase() === 'on-Sale';
+                return order?.status.toLowerCase() === 'Accepted';
             },
-            status: 'On-Sale',
+            status: 'Accepted',
         },
         {
             type: function (order) {
-                return order?.status.toLowerCase() === 'bought';
+                return order?.status.toLowerCase() === 'Decline';
             },
-            status: 'Bought',
-        },
-        {
-            type: function (order) {
-                return order?.status.toLowerCase() === 'reject';
-            },
-            status: 'Reject',
+            status: 'Decline',
         },
     ];
     const currentTabDataReducer = (state, action) => {
