@@ -6,9 +6,16 @@ import { MetaTags } from 'react-meta-tags';
 import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import { useReducer } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
+import Select from 'react-select';
 import Product from './Product';
+import DateInput from '../../components/input/DatePicker';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import categoryApi from '../../utils/api/categoryApi';
+import ImageUploader from '../../components/input/ImageUploader';
+import adminProduct from '../../utils/api/adminProduct';
 
 const TabLink = ({ tabIndex, onClick, children, active }) => {
     return (
@@ -32,18 +39,362 @@ const TabLink = ({ tabIndex, onClick, children, active }) => {
 };
 
 const TabContent = ({ products }) => {
+    const [isShowModal, setIsShowModal] = useState(false);
+    const [form, setForm] = useState();
+    const [categoriesDataShow, setCategoriesDataShow] = useState([]);
+    const [images, setImages] = useState();
+
+    useEffect(() => {
+        const getCategories = async () => {
+            let tmpShowCategories = [];
+            let data = '';
+            let i = 1;
+            do {
+                data = await categoryApi
+                    .get(i++)
+                    .then((res) => res)
+                    .catch((err) => err);
+                tmpShowCategories.push({
+                    value: data.id || 0,
+                    label: data.category1 || 'other',
+                });
+            } while (data.data !== '');
+            tmpShowCategories.pop();
+            setCategoriesDataShow(tmpShowCategories);
+        };
+        getCategories();
+    }, [form]);
+
+    const addImageFromDB = (form) => {
+        if (form) {
+            let imageArray = [];
+            form.images.map((item) => {
+                imageArray.push({
+                    data_url: item.image,
+                });
+            });
+            setImages(imageArray);
+        }
+    };
+
+    const onImageUpload = (imagesList, addUpdateIndex) => {
+        setImages(imagesList);
+        const tmpFile = imagesList.map((item) => item.file);
+        setForm({
+            ...form,
+            files: tmpFile,
+        });
+    };
+
+    const showModal = () => {
+        setIsShowModal(true);
+    };
+
+    const hideModal = () => {
+        setIsShowModal(false);
+    };
+
+    const submitChange = () => {
+        setIsShowModal(false);
+    };
+
+    const handleFormChange = (e) => {
+        setForm({ ...form, [e.target.id]: e.target.value });
+    };
+
+    // console.log('this is images state', images);
+    console.log('this is form state', form);
+
+    const RenderSwitch = (goodsStatus) => {
+        switch (goodsStatus) {
+            case 1:
+                return 'Pending';
+                break;
+            case 2:
+                return 'On-sale';
+                break;
+            case 3:
+                return 'Sold';
+                break;
+            case 4:
+                return 'Rejected';
+                break;
+
+            default:
+                break;
+        }
+    };
+    const confirmDelete = () => {
+        if (window.confirm('Are you sure to delete this product?') === true) {
+            setIsShowModal(false);
+        }
+    };
+
     return (
-        <div class="tab-content" id="ex2-content">
-            <div
-                class="tab-pane fade show active d-flex flex-wrap"
-                id="ex3-tabs-1"
-                role="tabpanel"
-                aria-labelledby="ex3-tab-1"
-            >
-                {products?.map((product) => (
-                    <Product key={`product-${product.id}`} product={product} />
-                ))}
+        // <div class="tab-content" id="ex2-content">
+        //     <div
+        //         class="tab-pane fade show active d-flex flex-wrap"
+        //         id="ex3-tabs-1"
+        //         role="tabpanel"
+        //         aria-labelledby="ex3-tab-1"
+        //     >
+        //         {products?.map((product) => (
+        // <Product key={`product-${product.id}`} product={product} />
+        //         ))}
+        //     </div>
+        // </div>
+
+        <div className="container">
+            <div className="row">
+                {products && products.length > 0 ? (
+                    <div className="col-12">
+                        <div className="table-content table-responsive cart-table-content">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Product Name</th>
+                                        <th>Unit Price</th>
+                                        <th>Product Status</th>
+                                        <th>action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {products.map((product) => {
+                                        return (
+                                            <tr key={`product-${product.id}`}>
+                                                <td className="product-thumbnail">
+                                                    <Link
+                                                        to={
+                                                            process.env
+                                                                .PUBLIC_URL +
+                                                            '/product/' +
+                                                            product.id
+                                                        }
+                                                    >
+                                                        {product.images !==
+                                                        null ? (
+                                                            <img
+                                                                width="130px"
+                                                                height="130px"
+                                                                variant="top"
+                                                                className="default-img"
+                                                                src={
+                                                                    product
+                                                                        ?.images[0]
+                                                                        ?.image
+                                                                }
+                                                                alt=""
+                                                            />
+                                                        ) : (
+                                                            <img
+                                                                width="100px"
+                                                                height="130px"
+                                                                alt=""
+                                                                src="../../../public/assets/img/icon-img/13.png"
+                                                            />
+                                                        )}
+                                                    </Link>
+                                                </td>
+
+                                                <td className="product-name text-center">
+                                                    <Link
+                                                        to={
+                                                            process.env
+                                                                .PUBLIC_URL +
+                                                            '/product/' +
+                                                            product.id
+                                                        }
+                                                    >
+                                                        {product.name}
+                                                    </Link>
+                                                </td>
+                                                <td className="product-price-cart">
+                                                    <Link
+                                                        to={
+                                                            process.env
+                                                                .PUBLIC_URL +
+                                                            '/product/' +
+                                                            product.id
+                                                        }
+                                                    >
+                                                        {product.price}đ
+                                                    </Link>
+                                                </td>
+
+                                                <td className="product-name text-center">
+                                                    <Link
+                                                        to={
+                                                            process.env
+                                                                .PUBLIC_URL +
+                                                            '/product/' +
+                                                            product.id
+                                                        }
+                                                    >
+                                                        {RenderSwitch(
+                                                            product.goodsStatus
+                                                        )}
+                                                    </Link>
+                                                </td>
+                                                <td className="product-wishlist-cart">
+                                                    <Button
+                                                        onClick={() => {
+                                                            setForm(product);
+                                                            addImageFromDB(
+                                                                product
+                                                            );
+                                                            showModal();
+                                                        }}
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="col-lg-12">
+                        <div className="item-empty-area text-center">
+                            <div className="item-empty-area__text">
+                                No items found <br />{' '}
+                                <Link
+                                    to={
+                                        process.env.PUBLIC_URL +
+                                        '/shop-grid-standard'
+                                    }
+                                >
+                                    Add Items
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
+            <Modal show={isShowModal} onHide={hideModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit product</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {form === undefined ? (
+                        ''
+                    ) : (
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>ID: </Form.Label>
+                                <Form.Control
+                                    value={form.id}
+                                    disabled
+                                    readOnly
+                                ></Form.Control>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Goods Status</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={RenderSwitch(form.goodsStatus)}
+                                    disabled
+                                    readOnly
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    id="name"
+                                    onChange={handleFormChange}
+                                    type="text"
+                                    value={form.name}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Price</Form.Label>
+                                <Form.Control
+                                    id="price"
+                                    onChange={handleFormChange}
+                                    type="text"
+                                    value={form.price}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    id="description"
+                                    onChange={handleFormChange}
+                                    type="text"
+                                    value={form.description}
+                                    rows="5"
+                                />
+                            </Form.Group>
+
+                            <div className="row">
+                                <Form.Group className="mb-3 col-lg-6">
+                                    <Form.Label>Category</Form.Label>
+                                    <Select
+                                        className="position-relative zindex-dropdown select-wrapper"
+                                        options={categoriesDataShow}
+                                        components={{
+                                            IndicatorSeparator: null,
+                                        }}
+                                        defaultValue={{
+                                            label: form.categoryName,
+                                            value: form.categoryId,
+                                        }}
+                                        styles={{
+                                            menu: (base) => ({
+                                                ...base,
+                                                zIndex: 1000,
+                                            }),
+                                        }}
+                                        onChange={(selected) => {
+                                            setForm({
+                                                ...form,
+                                                categoryName: selected.label,
+                                                categoryId: selected.value,
+                                            });
+                                        }}
+                                        required
+                                    ></Select>
+                                </Form.Group>
+                                <Form.Group className="mb-3 col-lg-6">
+                                    <Form.Label>Brought Date</Form.Label>
+                                    <DateInput
+                                        required
+                                        className="form-control"
+                                        selected={new Date(form.boughtDate)}
+                                        onChange={(date) => {
+                                            setForm({
+                                                ...form,
+                                                boughtDate: date,
+                                            });
+                                        }}
+                                    ></DateInput>
+                                </Form.Group>
+                                <Form.Group className="mb-3 col-lg-6">
+                                    <Form.Label>Image</Form.Label>
+                                    <ImageUploader
+                                        maxNumber={23}
+                                        images={images}
+                                        onChange={onImageUpload}
+                                    />
+                                </Form.Group>
+                            </div>
+                        </Form>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={submitChange}>Update</Button>
+                    <Button variant="danger" onClick={confirmDelete}>
+                        Delete
+                    </Button>
+                    <Button variant="secondary" onClick={hideModal}>
+                        Cancel
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
@@ -135,6 +486,9 @@ const ProductManagement = ({ location }) => {
     const tempId = useSelector((state) => state.authData.user?.id);
     const [accountId] = useState(tempId);
 
+    const dataFromProduct = () => {};
+    console.log('dataFromProduct', products);
+
     useEffect(() => {
         const fetchPost = async () => {
             if (products.length === 0 && !isDataLoaded) {
@@ -180,7 +534,10 @@ const ProductManagement = ({ location }) => {
                 <div className="shop-area pt-95 pb-100">
                     <div className="container">
                         <div className="row d-flex flex-column">
-                            <Tab products={products} />
+                            <Tab
+                                products={products}
+                                onChange={dataFromProduct}
+                            />
                         </div>
                     </div>
                 </div>
