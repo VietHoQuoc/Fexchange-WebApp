@@ -32,7 +32,11 @@ const TabContent = ({ orders }) => {
                 id="ex3-tabs-1"
                 role="tabpanel"
                 aria-labelledby="ex3-tab-1"
-            ></div>
+            >
+                {orders.map((order, index) => {
+                    return <Order key={index + 'order'} order={order}></Order>;
+                })}
+            </div>
         </div>
     );
 };
@@ -41,26 +45,25 @@ const Tab = ({ orders }) => {
     const TABS_FILTER = [
         {
             type: function (order) {
-                return order?.status.toLowerCase() === 'pending' || true;
+                return order?.status.toLowerCase() === 'pending';
             },
             status: 'Pending',
         },
         {
             type: function (order) {
-                return order?.status.toLowerCase() === 'Accepted';
+                return order?.status.toLowerCase() === 'accepted';
             },
             status: 'Accepted',
         },
         {
             type: function (order) {
-                return order?.status.toLowerCase() === 'Decline';
+                return order?.status.toLowerCase() === 'decline';
             },
             status: 'Decline',
         },
     ];
     const currentTabDataReducer = (state, action) => {
         const { type } = action;
-
         switch (type) {
             case 0:
             case 1:

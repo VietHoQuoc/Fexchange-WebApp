@@ -48,7 +48,6 @@ const OrderManagement = ({ location, history }) => {
                         return null;
                     });
                 if (tmp !== null) {
-                    console.log(tmp);
                     const syncResFilter = await asyncFilter(
                         tmp,
                         async (item) => {
