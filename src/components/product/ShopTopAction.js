@@ -27,14 +27,14 @@ const ShopTopAction = ({
       </div>
 
       <div className="shop-tab">
-        <button
+        {/* <button
           onClick={e => {
             getLayout("grid two-column");
             setActiveLayout(e);
           }}
         >
           <i className="fa fa-th-large" />
-        </button>
+        </button> */}
         <button
           onClick={e => {
             getLayout("grid three-column");

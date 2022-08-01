@@ -19,7 +19,8 @@ const ProductGrid = ({
   compareItems,
   sliderClassName,
   spaceBottomClass,
-  currentId
+  currentId,
+  category
   
 }) => {
   const [posts, setPosts] = useState([]);
@@ -35,7 +36,8 @@ const ProductGrid = ({
   }, [])
   return (
     <Fragment>
-      {posts&&posts.sort((a,b)=>Number(a.boughtDate)-Number(b.boughtDate)).slice(0,4).map(product => {
+      
+      {posts&&posts.filter(p=>p.categoryId==category).sort((a,b)=>Number(a.boughtDate)-Number(b.boughtDate)).slice(0,4).map(product => {
         return (
           <ProductGridSingle
             sliderClassName={sliderClassName}
