@@ -60,7 +60,7 @@ const Rating = (props) => {
                             className="mb-3"
                             rating={star}
                             changeRating={changeRating}
-                            numberOfStars={10}
+                            numberOfStars={5}
                             starRatedColor="#f1d045"
                             starHoverColor="#f1b345"
                             name="product rating"

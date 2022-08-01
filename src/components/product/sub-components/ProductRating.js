@@ -4,11 +4,12 @@ import React, { Fragment } from 'react';
 const ProductRating = ({ ratingValue }) => {
     let rating = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
         rating.push(<i className="fa fa-star-o" key={i}></i>);
     }
     if (ratingValue && ratingValue > 0) {
-        for (let i = 0; i <= ratingValue - 1; i++) {
+        const rate = ratingValue > 5 ? ratingValue / 2 : ratingValue;
+        for (let i = 0; i <= Math.ceil(rate - 1); i++) {
             rating[i] = (
                 <i
                     className="fa fa-star-o"

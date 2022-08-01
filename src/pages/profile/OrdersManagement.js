@@ -24,41 +24,52 @@ const OrderManagement = ({ location, history }) => {
         history.push('/login-register');
     }
     useEffect(() => {
+        const getSeller = async (item) => {
+            const res = await productApi.get(item.productId).then((res) => res);
+            return {
+                id: res.accountId,
+                name: res.accountName,
+            };
+        };
+        const asyncFilter = async (arr, predicticate) => {
+            const results = await Promise.all(arr.map(predicticate));
+            return arr.filter((_v, index) => results[index]);
+        };
         const fetchPost = async () => {
             if (orders.length === 0 && !isDataLoaded) {
                 let tmp = await orderApi
                     .getAll(accountId, userData.user.tokenId)
                     .then((res) => {
                         // TODO: check if seller also recieve
-                        const data = res.map(async (item) => {
-                            const getSellerId = async (item) => {
-                                const product = await productApi
-                                    .get(item.productId)
-                                    .then((res) => res);
-                                return {
-                                    id: product.accountId,
-                                    name: product.accountName,
-                                };
-                            };
-                            return null;
-                        });
-                        return data;
+                        return res;
                     })
                     .catch((err) => {
                         console.log(err);
                         return null;
                     });
                 if (tmp !== null) {
-                    setOrder(
-                        tmp.map((item) => {
-                            return item.then((res) => res);
-                        })
+                    console.log(tmp);
+                    const syncResFilter = await asyncFilter(
+                        tmp,
+                        async (item) => {
+                            const seller = getSeller(item);
+                            if (
+                                seller.id === accountId ||
+                                accountId === item.buyerId
+                            ) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
                     );
+                    console.log(syncResFilter);
+                    setOrder(syncResFilter);
                 }
             }
         };
         fetchPost();
-    }, [accountId, isDataLoaded, orders, userData]);
+    }, [accountId, isDataLoaded, userData]);
     return (
         <Fragment>
             <MetaTags>
