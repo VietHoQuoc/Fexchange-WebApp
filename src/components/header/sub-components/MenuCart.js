@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { getDiscountPrice } from "../../../helpers/product";
 import { useState,useEffect } from "react";
+import NumberFormat from "react-number-format";
 const MenuCart = ({ cartData, currency, deleteFromCart }) => {
   let cartTotalPrice = 0;
   const { addToast } = useToasts();
@@ -83,8 +84,9 @@ const result = getTotalPrice(cartData);
             <h4>
               Total :{" "}
               <span className="shop-total">
-                {/* {currency.currencySymbol + cartTotalPrice.toFixed(2)} */}
-                {result}
+                
+                <span><NumberFormat value={result} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+              </span>
               </span>
             </h4>
           </div>

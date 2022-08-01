@@ -100,7 +100,7 @@ const ProductGridSingle = ({
               <div className="pro-same-action pro-wishlist">
                 <button
                   className={wishlistItem !== undefined ? "active" : ""}
-                  disabled={wishlistItem !== undefined}
+                  disabled={wishlistItem !== undefined||product.status==="Inactive"}
                   title={
                     wishlistItem !== undefined
                       ? "Added to wishlist"
@@ -212,7 +212,7 @@ const ProductGridSingle = ({
             <div className="product-price">
             <span><NumberFormat value={product.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
               </span>
-              {user.id}
+              
             </div>
           </div>
         </div>

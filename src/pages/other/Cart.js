@@ -68,8 +68,8 @@ const Cart = ({
                             <th>Image</th>
                             <th>Product Name</th>
                             <th>Unit Price</th>
-                            <th>Qty</th>
-                            <th>Subtotal</th>
+                            <th></th>
+                            <th></th>
                             <th>action</th>
                           </tr>
                         </thead>
@@ -106,12 +106,12 @@ const Cart = ({
                                       src={
                                         cartItem.images[0].image
                                       }
-                                      alt=""
+                                      alt="cart"
                                     />
                                   </Link>
                                 </td>
 
-                                <td className="product-name">
+                                <td className="product-name text-center">
                                   <Link
                                     to={
                                       process.env.PUBLIC_URL +
@@ -124,78 +124,17 @@ const Cart = ({
 
                                 </td>
 
-                                <td className="product-price-cart">
-                                  {/* {discountedPrice !== null ? (
-                                    <Fragment>
-                                      <span className="amount old">
-                                        {currency.currencySymbol +
-                                          finalProductPrice}
-                                      </span>
-                                      <span className="amount">
-                                        {currency.currencySymbol +
-                                          finalDiscountedPrice}
-                                      </span>
-                                    </Fragment>
-                                  ) : (
-                                    <span className="amount">
-                                      {currency.currencySymbol +
-                                        finalProductPrice}
-                                    </span>
-                                  )} */}
+                                <td className="product-price-cart text-center">
+                                  
                                   <span><NumberFormat value={cartItem.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
                                   </span>
                                 </td>
 
                                 <td className="product-quantity">
-                                  {/* <div className="cart-plus-minus">
-                                    <button
-                                      className="dec qtybutton"
-                                      onClick={() =>
-                                        decreaseQuantity(cartItem, addToast)
-                                      }
-                                    >
-                                      -
-                                    </button>
-                                    <input
-                                      className="cart-plus-minus-box"
-                                      type="text"
-                                      value={cartItem.quantity}
-                                      readOnly
-                                    />
-                                    <button
-                                      className="inc qtybutton"
-                                      onClick={() =>
-                                        addToCart(
-                                          cartItem,
-                                          addToast,
-                                          quantityCount
-                                        )
-                                      }
-                                      disabled={
-                                        cartItem !== undefined &&
-                                        cartItem.quantity &&
-                                        cartItem.quantity >=
-                                          cartItemStock(
-                                            cartItem,
-                                            cartItem.selectedProductColor,
-                                            cartItem.selectedProductSize
-                                          )
-                                      }
-                                    >
-                                      +
-                                    </button>
-                                  </div> */}
+                                  
                                 </td>
                                 <td className="product-subtotal">
-                                  {/* {discountedPrice !== null
-                                    ? currency.currencySymbol +
-                                      (
-                                        finalDiscountedPrice * cartItem.quantity
-                                      ).toFixed(2)
-                                    : currency.currencySymbol +
-                                      (
-                                        finalProductPrice * cartItem.quantity
-                                      ).toFixed(2)} */}
+     
                                 </td>
 
                                 <td className="product-remove">
@@ -235,7 +174,7 @@ const Cart = ({
                 </div>
 
                 <div className="row">
-                  <div className="col-lg-4 col-md-6">
+                  {/* <div className="col-lg-4 col-md-6">
                     <div className="cart-tax">
                       <div className="title-wrap">
                         <h4 className="cart-bottom-title section-bg-gray">
@@ -296,7 +235,7 @@ const Cart = ({
                         </form>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-lg-4 col-md-12">
                     <div className="grand-totall">
@@ -316,8 +255,8 @@ const Cart = ({
                       <h4 className="grand-totall-title">
                         Grand Total{" "}
                         <span>
-                          {/* {currency.currencySymbol + cartTotalPrice.toFixed(2)} */}
-                          {result}
+                          <span><NumberFormat value={result} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+              </span>
 
                         </span>
                       </h4>

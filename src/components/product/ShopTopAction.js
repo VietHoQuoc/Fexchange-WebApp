@@ -20,8 +20,9 @@ const ShopTopAction = ({
             <option value="priceLowToHigh">Price - Low to High</option>
           </select>
         </div>
-        <p>
-          Showing {sortedProductCount} of {productCount} result
+        <p>Showing {productCount}
+          {productCount>1?" results":" result"}
+           
         </p>
       </div>
 

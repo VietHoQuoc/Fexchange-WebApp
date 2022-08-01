@@ -44,7 +44,7 @@ const ProductDescriptionInfo = ({
     <div className="product-details-content ml-70">
       <h2>{product.name}</h2>
       <div className="product-details-price">
-        <span>{currency.currencySymbol}<NumberFormat value={product.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+        <span><NumberFormat value={product.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
         </span>
       </div>
       {product.rating && product.rating > 0 ? (
@@ -59,7 +59,7 @@ const ProductDescriptionInfo = ({
       <div className="pro-details-list">
         <h4>
         <Link to={process.env.PUBLIC_URL + "/shop-profile/" + product.accountId}>
-        Saler : {product.accountName}
+        Seller : {product.accountName}
         </Link></h4>
       </div>
 
@@ -75,37 +75,25 @@ const ProductDescriptionInfo = ({
               Buy Now
             </a>
           </div>
+          <div className="pro-details-wishlist">
+            <button
+              className={wishlistItem !== undefined ? "active" : ""}
+              disabled={wishlistItem !== undefined||product.status==="Inactive"}
+              title={
+                wishlistItem !== undefined
+                  ? "Added to wishlist"
+                  : "Add to wishlist"
+              }
+              onClick={() => addToWishlist(product, addToast)}
+            >
+              <i className="pe-7s-like" />
+            </button>
+          </div>
         </div>
       ) : (
         <div className="pro-details-quality">
-          <div className="cart-plus-minus">
-            <button
-              onClick={() =>
-                setQuantityCount(quantityCount > 1 ? quantityCount - 1 : 1)
-              }
-              className="dec qtybutton"
-            >
-              -
-            </button>
-            <input
-              className="cart-plus-minus-box"
-              type="text"
-              value={quantityCount}
-              readOnly
-            />
-            <button
-              onClick={() =>
-                setQuantityCount(
-                  quantityCount < productStock - productCartQty
-                    ? quantityCount + 1
-                    : quantityCount
-                )
-              }
-              className="inc qtybutton"
-            >
-              +
-            </button>
-          </div>
+          
+          
           <div className="pro-details-cart btn-hover">
             {productStock && productStock > 0 ? (
               <button
@@ -130,7 +118,7 @@ const ProductDescriptionInfo = ({
           <div className="pro-details-wishlist">
             <button
               className={wishlistItem !== undefined ? "active" : ""}
-              disabled={wishlistItem !== undefined}
+              disabled={wishlistItem !== undefined||product.status==="Inactive"}
               title={
                 wishlistItem !== undefined
                   ? "Added to wishlist"
@@ -141,20 +129,7 @@ const ProductDescriptionInfo = ({
               <i className="pe-7s-like" />
             </button>
           </div>
-          <div className="pro-details-compare">
-            <button
-              className={compareItem !== undefined ? "active" : ""}
-              disabled={compareItem !== undefined}
-              title={
-                compareItem !== undefined
-                  ? "Added to compare"
-                  : "Add to compare"
-              }
-              onClick={() => addToCompare(product, addToast)}
-            >
-              <i className="pe-7s-shuffle" />
-            </button>
-          </div>
+          
         </div>
       )}
       {product.categoryId ? (
