@@ -16,10 +16,9 @@ const Rating = (props) => {
     //TODO: import order id as orderId attribute when using this component
     const orderId = useSelector((state) => state.orderId);
     const userData = useSelector((state) => state.authData);
-    const { pathname } = props; // TODO: may be you need to delete the default value of orderID in the destructure
+    const { pathname, history } = props; // TODO: may be you need to delete the default value of orderID in the destructure
     const [star, setStar] = new useState(0);
     const [ratingDescription, setRatingDescription] = new useState('');
-    const history = useHistory();
     const toast = useToasts();
     const changeRating = (newRating, name) => {
         console.log(name);
@@ -61,7 +60,7 @@ const Rating = (props) => {
                             className="mb-3"
                             rating={star}
                             changeRating={changeRating}
-                            numberOfStars={5}
+                            numberOfStars={10}
                             starRatedColor="#f1d045"
                             starHoverColor="#f1b345"
                             name="product rating"

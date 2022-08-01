@@ -1,11 +1,10 @@
 import { SET_ORDER_ID } from './../actions/orderAction';
 
-const initState = 0;
-
-const orderReducer = (state = initState, type) => {
-    switch (type) {
+const orderReducer = (state = 0, action) => {
+    switch (action.type) {
         case SET_ORDER_ID:
-            return state;
+            state = action.payload;
+            break;
         default:
     }
     return state;

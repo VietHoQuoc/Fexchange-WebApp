@@ -8,8 +8,9 @@ import Tab from './Tab';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import orderApi from './../../utils/api/ordersApi';
+import orderApi from './../../utils/api/orderApi';
 import Order from './Order/index';
+import productApi from './../../utils/api/productApi';
 
 const OrderManagement = ({ location, history }) => {
     const { pathname } = location;
@@ -25,15 +26,34 @@ const OrderManagement = ({ location, history }) => {
     useEffect(() => {
         const fetchPost = async () => {
             if (orders.length === 0 && !isDataLoaded) {
-                const tmp = await orderApi
+                let tmp = await orderApi
                     .getAll(accountId, userData.user.tokenId)
-                    .then((res) => res)
+                    .then((res) => {
+                        // TODO: check if seller also recieve
+                        const data = res.map(async (item) => {
+                            const getSellerId = async (item) => {
+                                const product = await productApi
+                                    .get(item.productId)
+                                    .then((res) => res);
+                                return {
+                                    id: product.accountId,
+                                    name: product.accountName,
+                                };
+                            };
+                            return null;
+                        });
+                        return data;
+                    })
                     .catch((err) => {
                         console.log(err);
                         return null;
                     });
                 if (tmp !== null) {
-                    setOrder(tmp);
+                    setOrder(
+                        tmp.map((item) => {
+                            return item.then((res) => res);
+                        })
+                    );
                 }
             }
         };

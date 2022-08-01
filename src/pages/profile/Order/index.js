@@ -2,11 +2,12 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import ProductRating from '../../../components/product/sub-components/ProductRating';
 import { Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { useHistory, withRouter } from 'react-router-dom';
 import { setOrderId } from '../../../redux/actions/orderAction';
+import { useSelector } from 'react-redux';
 const Order = (props) => {
-    const { order, statusStyle } = props;
+    const { order } = props;
     const history = useHistory();
     const STATUS_STYLE = {
         Declined: 'text-danger',
@@ -14,7 +15,9 @@ const Order = (props) => {
         'On-Sale': 'text-primary',
         Bought: 'text-success',
     };
+    const dispatch = useDispatch();
     const onReview = (e) => {
+        dispatch(setOrderId(order.id));
         history.push(`/rating?id=${order.id}`);
     };
     return (
@@ -23,9 +26,9 @@ const Order = (props) => {
                 <div className="col-12 col-md-6 mb-3">
                     <p className="h4 text-capitalize"> {order.product1Name} </p>
                     <span>Your rate: </span>
-                    <p className="h5 product-rating d-sm-inline">
+                    <div className="h5 product-rating d-sm-inline">
                         <ProductRating ratingValue={order.rate} />
-                    </p>
+                    </div>
                 </div>
             </Card.Title>
             <Card.Body className="row">
@@ -48,18 +51,4 @@ const Order = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        orderId: state.orderId,
-    };
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setOrderId: (id) => {
-            dispatch(setOrderId(id));
-        },
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Order);
+export default Order;
