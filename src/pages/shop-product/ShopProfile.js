@@ -1,15 +1,10 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState, useEffect, useParams } from 'react';
 import MetaTags from 'react-meta-tags';
-import Paginator from 'react-hooks-paginator';
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
 import { connect } from 'react-redux';
-import { getSortedProducts } from '../../helpers/product';
 import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
-import ShopSidebar from '../../wrappers/product/ShopSidebar';
-import ShopTopbar from '../../wrappers/product/ShopTopbar';
-import ShopProducts from '../../wrappers/product/ShopProducts';
 import axios from "axios";
 import ProfileDescriptionTab from "../../wrappers/product/ProfileDescriptionTab";
 function ShopProfile({ location, products }) {
@@ -17,7 +12,8 @@ function ShopProfile({ location, products }) {
     const { pathname } = location;
     const [account, setAccount] = useState({});
     const [posts, setPosts] = useState([]);
-
+    const [rate,setRate]= useState(0);
+    
 
 
 
@@ -38,8 +34,7 @@ function ShopProfile({ location, products }) {
                 console.log(posts);
             })
             .catch(error => console.log(error));
-        
-        
+
     }, []);
 
     return (
@@ -60,8 +55,6 @@ function ShopProfile({ location, products }) {
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-3 order-2 order-lg-1">
-
-
                                 <div className="account">
                                     <div className="row">
                                         <div className="col-4">
@@ -72,7 +65,7 @@ function ShopProfile({ location, products }) {
                                         </div>
                                         <div className="col-8">
                                             <h2><b>{account.fullName}</b></h2>
-                                            <h4>Rate</h4>
+                                            <h4></h4>
 
                                         </div>
                                     </div>
@@ -84,7 +77,12 @@ function ShopProfile({ location, products }) {
                                                     <td className="p-2 pl-5 pr-5 bg-primary"><h2><i className="pe-7s-note mr-2 " /></h2></td>
                                                 </tr>
                                                 <tr>
-                                                    <td className=" bg-warning text-center"><h4><b>6.0</b></h4></td>
+                                                    <td className=" bg-warning text-center">
+                                                        <h4><b>
+                                                        {rate}
+                                                            </b></h4>
+    
+                                                        </td>
                                                     <td className=" bg-primary text-center"><h4><b>{account.numberOfOrders}</b> sold</h4></td>
                                                 </tr>
                                             </table>
@@ -110,6 +108,7 @@ function ShopProfile({ location, products }) {
                                     posts={posts.filter(i => i.accountId == parseInt(location.pathname.substr(14)) && i.status === "Active")}
                                     postsSold={posts.filter(i => i.accountId == parseInt(location.pathname.substr(14)) && i.status === "Inactive")}
                                     layout={layout}
+                                    getRate={setRate}
                                 />
 
 
