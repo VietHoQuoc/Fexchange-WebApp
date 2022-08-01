@@ -51,7 +51,6 @@ const Admin = ({ location }) => {
     const deleteProduct = async (id) => {
         const success = await adminProduct.delete(id, user.tokenId);
         const response = await adminProduct.getAll(user.tokenId);
-        console.log(success);
         setProductList(response.data);
     };
 
@@ -65,7 +64,27 @@ const Admin = ({ location }) => {
                     <div class="position-sticky">
                         {/* put a logo here */}
                         <div class="list-group list-group-flush mx-3">
-                            <div></div>
+                            <div
+                                class="btn-group admin-nav"
+                                role="group"
+                                aria-label="Basic example"
+                            >
+                                <Link
+                                    to={process.env.PUBLIC_URL + '/'}
+                                    type="button"
+                                    class="btn btn-success"
+                                >
+                                    Home
+                                </Link>
+
+                                <Link
+                                    to={process.env.PUBLIC_URL + '/logout'}
+                                    type="button"
+                                    class="btn btn-danger"
+                                >
+                                    Logout
+                                </Link>
+                            </div>
                             <Link
                                 role="button"
                                 to={process.env.PUBLIC_URL + '/admin/user'}

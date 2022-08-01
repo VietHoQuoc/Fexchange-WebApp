@@ -70,6 +70,9 @@ const IconGroup = ({
                     My Account
                   </Link>
                 </li>
+                {userData.user.role1 === "AD" ? <li>
+                  <Link to={process.env.PUBLIC_URL + "/admin"}>Admin Page</Link>
+                </li> : ""}
                 <li>
                   <Link to={process.env.PUBLIC_URL + "/logout"}>Logout</Link>
                 </li>
