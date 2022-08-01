@@ -18,7 +18,7 @@ const Admin = ({ location }) => {
     const { pathname } = location;
     const [userList, setUserList] = useState([]);
     const [productList, setProductList] = useState([]);
-    const user = useSelector((state) => state.authData);
+    const user = useSelector((state) => state.authData.user);
 
     useEffect(() => {
         const getData = async () => {
