@@ -14,6 +14,7 @@ import { BreadcrumbsProvider } from 'react-breadcrumbs-dynamic';
 import { gapi } from 'gapi-script';
 import Logout from './pages/other/Logout';
 import Admin from './pages/admin';
+import { useSelector } from 'react-redux';
 
 // home pages
 const HomeFashion = lazy(() => import('./pages/home/HomeFashion'));
@@ -116,8 +117,12 @@ const Cart = lazy(() => import('./pages/other/Cart'));
 const Wishlist = lazy(() => import('./pages/other/Wishlist'));
 const Compare = lazy(() => import('./pages/other/Compare'));
 const Checkout = lazy(() => import('./pages/other/Checkout'));
-
+const Rating = lazy(() => import('./pages/other/Rating'));
 const NotFound = lazy(() => import('./pages/other/NotFound'));
+const OrderManagement = lazy(() => import('./pages/profile/OrdersManagement'));
+const ProductManagement = lazy(() =>
+    import('./pages/profile/ProductManagement')
+);
 
 const App = (props) => {
     useEffect(() => {
@@ -132,9 +137,21 @@ const App = (props) => {
         );
     });
 
+    //       console.log("Logged in user: ", user.displayName);
 
+    //       const token = await user.getIdToken();
+    //       console.log("Logged in user token: ", token);
+    //     });
+
+    //   return () => unregisterAuthObserver();
+    // }, []);
+    const userData = useSelector((state) => state.authData);
     return (
-        <ToastProvider placement="bottom-left">
+        <ToastProvider
+            placement="bottom-left"
+            autoDismiss
+            autoDismissTimeout={5000}
+        >
             <BreadcrumbsProvider>
                 <Router>
                     <ScrollToTop>
@@ -599,10 +616,17 @@ const App = (props) => {
                                     component={LoginRegister}
                                 />
                                 <Route
+                                    path={process.env.PUBLIC_URL + '/post'}
+                                    component={Post}
+                                />
+                                <Route
                                     path={process.env.PUBLIC_URL + '/logout'}
                                     component={Logout}
                                 />
-
+                                <Route
+                                    path={process.env.PUBLIC_URL + '/rating'}
+                                    component={Rating}
+                                />
                                 <Route
                                     path={process.env.PUBLIC_URL + '/cart'}
                                     component={Cart}
@@ -616,14 +640,37 @@ const App = (props) => {
                                     component={Compare}
                                 />
                                 <Route
+                                    path={process.env.PUBLIC_URL + '/post'}
+                                    component={Post}
+                                />
+                                <Route
                                     path={process.env.PUBLIC_URL + '/checkout'}
                                     component={Checkout}
                                 />
+                                {userData.user.role === 1 &&
+                                    userData.tokenId !== '' && (
+                                        <Route
+                                            path={
+                                                process.env.PUBLIC_URL +
+                                                '/admin'
+                                            }
+                                            component={Admin}
+                                        />
+                                    )}
                                 <Route
-                                    path={process.env.PUBLIC_URL + '/admin'}
-                                    component={Admin}
+                                    path={
+                                        process.env.PUBLIC_URL +
+                                        '/product-management'
+                                    }
+                                    component={ProductManagement}
                                 />
-
+                                <Route
+                                    path={
+                                        process.env.PUBLIC_URL +
+                                        '/orders-management'
+                                    }
+                                    component={OrderManagement}
+                                />
                                 <Route
                                     path={process.env.PUBLIC_URL + '/not-found'}
                                     component={NotFound}

@@ -18,7 +18,7 @@ const Admin = ({ location }) => {
     const { pathname } = location;
     const [userList, setUserList] = useState([]);
     const [productList, setProductList] = useState([]);
-    const user = useSelector((state) => state.authData.user);
+    const user = useSelector((state) => state.authData);
 
     useEffect(() => {
         const getData = async () => {
@@ -39,12 +39,17 @@ const Admin = ({ location }) => {
     const changeInfo = async (obj) => {
         const success = await userApi.put(obj.id, obj, user.tokenId);
         const response = await userApi.getAll(user.tokenId);
-        console.log(success);
         setUserList(response.data);
     };
 
     const changeProductInfo = async (obj) => {
         const success = await adminProduct.put(obj.id, obj, user.tokenId);
+        const response = await adminProduct.getAll(user.tokenId);
+        setProductList(response.data);
+    };
+
+    const deleteProduct = async (id) => {
+        const success = await adminProduct.delete(id, user.tokenId);
         const response = await adminProduct.getAll(user.tokenId);
         console.log(success);
         setProductList(response.data);
@@ -52,18 +57,6 @@ const Admin = ({ location }) => {
 
     return (
         <Fragment>
-            <MetaTags>
-                <title>FExchange | Admin Page</title>
-                <meta name="description" content="Admin page" />
-            </MetaTags>
-
-            <Header>
-                <HeaderOne
-                    layout="container-fluid"
-                    headerPaddingClass="header-padding-1"
-                    headerBgClass="bg-white"
-                />
-            </Header>
             <header>
                 <nav
                     id="sidebarMenu"
@@ -100,29 +93,25 @@ const Admin = ({ location }) => {
                     </div>
                 </nav>
             </header>
-            <div className="container-fluid pt-100">
-                <Redirect to={process.env.PUBLIC_URL + '/admin/user'} />
-                <Route path={process.env.PUBLIC_URL + '/admin/user'}>
-                    {userList.length > 0 ? (
-                        <ManageUser
-                            userList={userList}
-                            changeInfo={changeInfo}
-                        />
-                    ) : (
-                        ''
-                    )}
-                </Route>
-                <Route path={process.env.PUBLIC_URL + '/admin/product'}>
-                    {productList.length > 0 ? (
-                        <ManageProduct
-                            productList={productList}
-                            changeProductInfo={changeProductInfo}
-                        />
-                    ) : (
-                        ''
-                    )}
-                </Route>
-            </div>
+            <Redirect to={process.env.PUBLIC_URL + '/admin/user'} />
+            <Route path={process.env.PUBLIC_URL + '/admin/user'}>
+                {userList.length > 0 ? (
+                    <ManageUser userList={userList} changeInfo={changeInfo} />
+                ) : (
+                    ''
+                )}
+            </Route>
+            <Route path={process.env.PUBLIC_URL + '/admin/product'}>
+                {productList.length > 0 ? (
+                    <ManageProduct
+                        productList={productList}
+                        changeProductInfo={changeProductInfo}
+                        deleteProduct={deleteProduct}
+                    />
+                ) : (
+                    ''
+                )}
+            </Route>
         </Fragment>
     );
 };

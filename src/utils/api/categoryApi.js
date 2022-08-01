@@ -2,7 +2,7 @@ import axiosClient from './axiosClient';
 
 const categoryApi = {
     get: (id) => {
-        const url = '/api/categories/' + id;
+        const url = `/categories/${id}`;
         return axiosClient.get(url);
     },
 };
