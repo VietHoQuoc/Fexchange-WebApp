@@ -7,23 +7,38 @@ import { useHistory, withRouter } from 'react-router-dom';
 import { setOrderId } from '../../../redux/actions/orderAction';
 import { useSelector } from 'react-redux';
 import ordersApi from './../../../utils/api/orderApi';
+import { useToasts } from 'react-toast-notifications';
 const Order = (props) => {
-    const { order } = props;
+    const { order, setOrder } = props;
     const userData = useSelector((state) => state.authData);
     const history = useHistory();
     const dispatch = useDispatch();
+    const { addToast } = useToasts();
     const onReview = (e) => {
         dispatch(setOrderId(order.id));
         history.push(`/rating?id=${order.id}`);
     };
-    const onChangeStatus = async () => {
+    const onChangeStatus = async (status) => {
         await ordersApi
-            .changeStatus(order, 'Accepted', userData.tokenId)
+            .changeStatus(order, userData.user.id, status, userData.tokenId)
             .then((res) => {
-                console.log(res);
+                setOrder((orders) =>
+                    orders.map((item) => {
+                        if (item.id === order.id) {
+                            return {
+                                ...item,
+                                status: status,
+                            };
+                        }
+                        return item;
+                    })
+                );
+                addToast('Successfully ' + status, {
+                    appearance: 'success',
+                });
+                // history.go(0);
             })
-            .then((err) => console.log(err));
-        // history.push('/orders-management');
+            .catch((err) => console.log(err));
     };
 
     return (
@@ -66,21 +81,24 @@ const Order = (props) => {
                     </div>
                 ) : (
                     <div className="col-12 col-md-6">
-                        <div className="d-flex h-100 mb-10 justify-content-end align-items-end">
-                            <Button
-                                className="btn-success mr-10"
-                                onClick={() => onChangeStatus('Accepted')}
-                            >
-                                Accept
-                            </Button>
-                            <Button
-                                className="btn-danger"
-                                onClick={onChangeStatus}
-                            >
-                                Decline
-                            </Button>
-                        </div>
-                        <div className="d-flex justify-content-end align-items-end"></div>
+                        {order.status.toLowerCase() === 'pending' ? (
+                            <div className="d-flex h-100 mb-10 justify-content-end align-items-end">
+                                <Button
+                                    className="btn-success mr-10"
+                                    onClick={() => onChangeStatus('Accepted')}
+                                >
+                                    Accept
+                                </Button>
+                                <Button
+                                    className="btn-danger"
+                                    onClick={() => onChangeStatus('Declined')}
+                                >
+                                    Decline
+                                </Button>
+                            </div>
+                        ) : (
+                            <div className="d-flex justify-content-end align-items-end"></div>
+                        )}
                     </div>
                 )}
             </Card.Body>

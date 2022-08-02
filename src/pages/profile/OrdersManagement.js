@@ -68,7 +68,7 @@ const OrderManagement = ({ location, history }) => {
             }
         };
         fetchPost();
-    }, [accountId, isDataLoaded, userData]);
+    }, [accountId, isDataLoaded, userData, orders]);
     return (
         <Fragment>
             <MetaTags>
@@ -89,7 +89,7 @@ const OrderManagement = ({ location, history }) => {
                 <div className="shop-area pt-95 pb-100">
                     <div className="container">
                         <div className="row d-flex flex-column">
-                            <Tab orders={orders} />
+                            <Tab orders={orders} setOrder={setOrder} />
                         </div>
                     </div>
                 </div>

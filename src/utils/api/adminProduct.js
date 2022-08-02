@@ -13,7 +13,15 @@ const adminProduct = {
     put: (id, obj, token) => {
         const url = `/productposts/${id}`;
 
-        return put(url, obj, {}, { Authorization: 'Bearer ' + token });
+        return put(
+            url,
+            obj,
+            {},
+            {
+                'Content-Type': 'multiple/form-data',
+                Authorization: 'Bearer ' + token,
+            }
+        );
     },
     post: () => {},
     delete: (id, token) => {

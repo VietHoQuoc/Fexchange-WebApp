@@ -16,12 +16,12 @@ const ordersApi = {
             }
         );
     },
-    changeStatus: (order, status, token) => {
+    changeStatus: (order, id, status, token) => {
         const url = '/orders/' + order.id;
         return put(
             url,
             {
-                buyerId: order.buyerId,
+                buyerId: id,
                 status: status,
                 createdDate: order.createdDate,
                 productId: order.productId,

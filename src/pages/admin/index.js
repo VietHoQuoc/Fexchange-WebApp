@@ -45,6 +45,7 @@ const Admin = ({ location }) => {
     const changeProductInfo = async (obj) => {
         const success = await adminProduct.put(obj.id, obj, user.tokenId);
         const response = await adminProduct.getAll(user.tokenId);
+        console.log(success);
         setProductList(response.data);
     };
 
