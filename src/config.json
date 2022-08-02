@@ -1,4 +1,4 @@
 {
-  "GOOGLE_CLIENT_ID": "565988690909-8ve03ft7hdobt3v74u2n7utergqd31cr.apps.googleusercontent.com",
-  "GOOGLE_AUTH_CALLBACK_URL": "https://fbuyexchange.azurewebsites.net/api/login/google"
+    "GOOGLE_CLIENT_ID": "565988690909-8ve03ft7hdobt3v74u2n7utergqd31cr.apps.googleusercontent.com",
+    "GOOGLE_AUTH_CALLBACK_URL": "https://fbuyexchange.azurewebsites.net/api/login/google"
 }
