@@ -17,22 +17,16 @@ const Order = (props) => {
         history.push(`/rating?id=${order.id}`);
     };
     console.log(order);
-    const onAccept = async () => {
+    const onChangeStatus = async () => {
         await ordersApi
-            .changeStatus(order.id, 'Accepted', userData.tokenId)
+            .changeStatus(order, 'Accepted', userData.tokenId)
             .then((res) => {
                 console.log(res);
             })
             .then((err) => console.log(err));
+        // history.push('/orders-management');
     };
-    const onDecline = async () => {
-        await ordersApi
-            .changeStatus(order.id, 'Declined', userData.tokenId)
-            .then((res) => {
-                console.log(res);
-            })
-            .then((err) => console.log(err));
-    };
+
     return (
         <Card className="w-100 mb-3">
             <Card.Title className="row p-3">
@@ -71,11 +65,14 @@ const Order = (props) => {
                         <div className="d-flex h-100 mb-10 justify-content-end align-items-end">
                             <Button
                                 className="btn-success mr-10"
-                                onClick={onAccept}
+                                onClick={() => onChangeStatus('Accepted')}
                             >
                                 Accept
                             </Button>
-                            <Button className="btn-danger" onClick={onAccept}>
+                            <Button
+                                className="btn-danger"
+                                onClick={onChangeStatus}
+                            >
                                 Decline
                             </Button>
                         </div>

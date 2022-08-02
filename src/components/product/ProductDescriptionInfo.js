@@ -40,7 +40,6 @@ const ProductDescriptionInfo = ({
     const [showModal, setShowModal] = useState(false);
     const [message, setMessage] = useState(false);
 
-    
     const productCartQty = getProductCartQuantity(
         cartItems,
         product,
@@ -99,13 +98,12 @@ const ProductDescriptionInfo = ({
             setShowModal(true);
         }
     };
-
+    console.log(product);
     return (
         <div className="product-details-content ml-70">
             <h2>{product.name}</h2>
             <div className="product-details-price">
                 <span>
-                    
                     <NumberFormat
                         value={product.price}
                         displayType={'text'}
@@ -151,7 +149,6 @@ const ProductDescriptionInfo = ({
                 </div>
             ) : (
                 <div className="pro-details-quality">
-                    
                     <div className="pro-details-cart btn-hover">
                         {productStock && productStock > 0 ? (
                             <button

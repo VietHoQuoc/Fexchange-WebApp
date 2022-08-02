@@ -123,7 +123,7 @@ const ProductGridListSingle = ({
                                 </button>
                             </div>
                             <div className="pro-same-action pro-cart">
-                                {product.status === 'Active' ? (
+                                {product.goodsStatus === 2 ? (
                                     // <a
                                     //   href={product.affiliateLink}
                                     //   rel="noopener noreferrer"
@@ -345,7 +345,7 @@ const ProductGridListSingle = ({
 
                                 <div className="shop-list-actions d-flex align-items-center">
                                     <div className="shop-list-btn btn-hover">
-                                        {product.status === 'Active' ? (
+                                        {product.goodsStatus === 2 ? (
                                             <a
                                                 href={product.affiliateLink}
                                                 rel="noopener noreferrer"
