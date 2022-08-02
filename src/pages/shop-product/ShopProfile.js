@@ -120,7 +120,8 @@ function ShopProfile({ location, products }) {
                                             <div className="row">
                                                 <div className="col-6">
                                                     <div className="mt-3">
-                                                        <h4>{rate.toFixed(2)}</h4>
+                                                        
+                                                        <h4>{isNaN(rate)?0:rate.toFixed(2)}</h4>
                                                         <p className="mb-0 text-muted">
                                                             Rating
                                                         </p>
