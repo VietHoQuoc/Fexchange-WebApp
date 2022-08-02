@@ -135,8 +135,8 @@ const ShopGridStandard = ({ location, products }) => {
                                 />
 
                                 {/* shop page content default */}
-                                {sortedProducts.filter(p=>p.goodsStatus===2).length !== 0 &&
-                                searchValue !== '' ? (
+                                {sortedProducts.filter(p=>p.goodsStatus===2).length !== 0 ||
+                                searchValue !== '' ||sortValue!==''? (
                                     <ShopProducts
                                         layout={layout}
                                         products={sortedProducts.filter(p=>p.goodsStatus===2)}
