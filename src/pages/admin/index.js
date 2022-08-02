@@ -19,7 +19,7 @@ const Admin = ({ location }) => {
     const { pathname } = location;
     const [userList, setUserList] = useState([]);
     const [productList, setProductList] = useState([]);
-    const user = useSelector((state) => state.authData.user);
+    const user = useSelector((state) => state.authData);
 
     useEffect(() => {
         const getData = async () => {
@@ -38,8 +38,10 @@ const Admin = ({ location }) => {
     }, []);
 
     const changeInfo = async (obj) => {
-        const success = await userApi.put(obj.id, obj, user.tokenId);
+        console.log(obj);
+        const success = await userApi.put(obj.id, obj, user.user.tokenId);
         const response = await userApi.getAll(user.tokenId);
+        console.log(success);
         setUserList(response.data);
     };
 
