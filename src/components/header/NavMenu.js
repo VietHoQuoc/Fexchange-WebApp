@@ -15,35 +15,30 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
             <nav>
                 <ul>
                     <li>
-                        <Link to={process.env.PUBLIC_URL + '/'}>
-                            {strings['home']}
-                        </Link>
+                        <Link to={process.env.PUBLIC_URL + '/'}>Home</Link>
                     </li>
                     <li>
                         <Link
                             to={process.env.PUBLIC_URL + '/shop-grid-standard'}
                         >
-                            {' '}
-                            {strings['shop']}
+                            Shop
                         </Link>
                     </li>
                     <li>
-                        <Link to={process.env.PUBLIC_URL + '/post'}>
-                            {strings['post']}
-                        </Link>
+                        <Link to={process.env.PUBLIC_URL + '/post'}>Post</Link>
                     </li>
                     <li>
                         <Link
                             to={process.env.PUBLIC_URL + '/product-management'}
                         >
-                            {strings['product_management']}
+                            Product management
                         </Link>
                     </li>
                     <li>
                         <Link
                             to={process.env.PUBLIC_URL + '/orders-management'}
                         >
-                            {strings['orders-management']}
+                            Orders management
                         </Link>
                     </li>
                 </ul>

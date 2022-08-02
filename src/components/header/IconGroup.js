@@ -75,7 +75,7 @@ const IconGroup = ({
                 </button>
                 <div className="account-dropdown">
                     <ul>
-                        {(userData.isAuthenticated === true && (
+                        {(userData?.isAuthenticated === true && (
                             <>
                                 <li>
                                     <Link
