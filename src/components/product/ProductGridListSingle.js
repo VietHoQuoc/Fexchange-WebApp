@@ -84,7 +84,7 @@ const ProductGridListSingle = ({
                         </Link>
                         {product.images || product.new ? (
                             <div className="product-img-badges">
-                                {product.images.length != 0 ? (
+                                {product.images.length !== 0 ? (
                                     <span className="pink">
                                         {product.images.length}
                                     </span>
@@ -281,7 +281,7 @@ const ProductGridListSingle = ({
                                     </Link>
                                     {product.images || product.new ? (
                                         <div className="product-img-badges">
-                                            {product.images.length != 0 ? (
+                                            {product.images.length !== 0 ? (
                                                 <span className="pink">
                                                     {product.images.length}
                                                 </span>

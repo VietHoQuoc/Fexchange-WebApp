@@ -37,7 +37,6 @@ const ProductDescriptionInfo = ({
     );
     const [quantityCount, setQuantityCount] = useState(1);
     const [notification, setNotification] = useState([]);
-
     const productCartQty = getProductCartQuantity(
         cartItems,
         product,
@@ -300,21 +299,6 @@ const ProductDescriptionInfo = ({
             </div>
         </div>
     );
-};
-
-ProductDescriptionInfo.propTypes = {
-    addToCart: PropTypes.func,
-    addToCompare: PropTypes.func,
-    addToWishlist: PropTypes.func,
-    addToast: PropTypes.func,
-    cartItems: PropTypes.array,
-    compareItem: PropTypes.array,
-    currency: PropTypes.object,
-    discountedPrice: PropTypes.number,
-    finalDiscountedPrice: PropTypes.number,
-    finalProductPrice: PropTypes.number,
-    product: PropTypes.object,
-    wishlistItem: PropTypes.object,
 };
 
 const mapDispatchToProps = (dispatch) => {

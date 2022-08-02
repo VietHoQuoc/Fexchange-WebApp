@@ -38,6 +38,7 @@ const RelatedProductSlider = ({ spaceBottomClass, category,currentId }) => {
           spaceClass="mb-50"
         />
         <div className="row">
+          
           <Swiper {...settings}>
             <ProductGrid
               category={category}
