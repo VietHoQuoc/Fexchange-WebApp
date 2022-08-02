@@ -1,24 +1,24 @@
-import React, { Fragment } from "react";
-import { Container } from "react-bootstrap";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import { MetaTags } from "react-meta-tags";
-import StarRatings from "react-star-ratings";
-import LayoutOne from "./../../layouts/LayoutOne";
-import Breadcrumb from "./../../wrappers/breadcrumb/Breadcrumb";
-import { useState } from "react";
-import Divider from "./Divider/index";
-import { useHistory } from "react-router-dom";
-import { useToasts } from "react-toast-notifications";
-import orderApi from "./../../utils/api/orderApi";
-import { useSelector } from "react-redux";
+import React, { Fragment } from 'react';
+import { Container } from 'react-bootstrap';
+import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
+import { MetaTags } from 'react-meta-tags';
+import StarRatings from 'react-star-ratings';
+import LayoutOne from './../../layouts/LayoutOne';
+import Breadcrumb from './../../wrappers/breadcrumb/Breadcrumb';
+import { useState } from 'react';
+import Divider from './Divider/index';
+import { useHistory } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
+import orderApi from './../../utils/api/orderApi';
+import { useSelector } from 'react-redux';
 
 const Rating = (props) => {
     //TODO: import order id as orderId attribute when using this component
+    const orderId = useSelector((state) => state.orderId);
     const userData = useSelector((state) => state.authData);
-    const { pathname, orderId = 5 } = props; // TODO: may be you need to delete the default value of orderID in the destructure
+    const { pathname, history } = props; // TODO: may be you need to delete the default value of orderID in the destructure
     const [star, setStar] = new useState(0);
-    const [ratingDescription, setRatingDescription] = new useState("");
-    const history = useHistory();
+    const [ratingDescription, setRatingDescription] = new useState('');
     const toast = useToasts();
     const changeRating = (newRating, name) => {
         console.log(name);
@@ -29,11 +29,11 @@ const Rating = (props) => {
         await orderApi
             .rating(orderId, ratingDescription, star, userData.tokenId)
             .then((res) => {
-                toast.addToast("Success", { appearance: "success" });
-                history.push("/");
+                toast.addToast('Success', { appearance: 'success' });
+                history.push('/');
             })
             .catch((err) => {
-                toast.addToast("SomeThing went wrong", { appearance: "error" });
+                toast.addToast('SomeThing went wrong', { appearance: 'error' });
             });
     };
     return (
@@ -41,7 +41,7 @@ const Rating = (props) => {
             <MetaTags>
                 <title>FEX| Rating product</title>
             </MetaTags>
-            <BreadcrumbsItem to={process.env.PUBLIC_URL + "/"}>
+            <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>
                 home
             </BreadcrumbsItem>
             <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
