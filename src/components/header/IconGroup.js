@@ -19,7 +19,8 @@ const IconGroup = ({
     const defaultImg =
         'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg';
     const userData = useSelector((state) => state.authData);
-    // console.log(userData);
+    const wishlist = useSelector((state) => state.wishlistData);
+    console.log('this is wishlist', wishlist);
     const handleClick = (e) => {
         e.currentTarget.nextSibling.classList.toggle('active');
     };
@@ -143,11 +144,6 @@ const IconGroup = ({
             <div className="same-style header-wishlist">
                 <Link to={process.env.PUBLIC_URL + '/wishlist'}>
                     <i className="pe-7s-like" />
-                    <span className="count-style">
-                        {wishlistData && wishlistData.length
-                            ? wishlistData.length
-                            : 0}
-                    </span>
                 </Link>
             </div>
 

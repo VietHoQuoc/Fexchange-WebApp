@@ -61,7 +61,7 @@ function ShopProfile({ location, products }) {
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-4">
-                                <div className="card text-center card-box shadow-sm p-5 mb-4 bg-white rounded">
+                                <div className="card text-center card-box shadow-sm p-3 mb-4 bg-white rounded">
                                     <div className="member-card pt-2 pb-2">
                                         <div className="thumb-lg member-thumb mx-auto">
                                             <img

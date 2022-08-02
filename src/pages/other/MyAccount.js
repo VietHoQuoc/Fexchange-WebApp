@@ -3,7 +3,12 @@ import React, { Fragment, useState } from 'react';
 import MetaTags from 'react-meta-tags';
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
 import { useSelector, useDispatch } from 'react-redux';
-
+import PlacesAutocomplete from 'react-places-autocomplete';
+import {
+    geocodeByAddress,
+    geocodeByPlaceId,
+    getLatLng,
+} from 'react-places-autocomplete';
 import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import adminUserApi from '../../utils/api/userApi';
@@ -14,6 +19,7 @@ const MyAccount = ({ location }) => {
     const { addToast } = useToasts();
     const userData = useSelector((state) => state.authData);
     const { pathname } = location;
+
     //remove previous img when set new img
     const [data, setData] = useState({
         fullName: userData.user.fullName,
@@ -29,8 +35,8 @@ const MyAccount = ({ location }) => {
             userData.user.id,
             userData.tokenId
         );
-        dispatch(updateProfile(response.data));
         addToast('Success', { appearance: 'success' });
+        await dispatch(updateProfile(response.data));
     };
 
     let result = userData.user.gmail.substr(-19, 8);
@@ -152,7 +158,9 @@ const MyAccount = ({ location }) => {
                                                             Phone Number
                                                         </label>
                                                         <input
-                                                            type="tel"
+                                                            type="text"
+                                                            min="0"
+                                                            pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b"
                                                             value={data.phone}
                                                             required
                                                             onChange={

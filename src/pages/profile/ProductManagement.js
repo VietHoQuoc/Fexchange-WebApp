@@ -534,7 +534,6 @@ const ProductManagement = ({ location }) => {
                         return item;
                     })
                 );
-                history.go(0);
                 addToast('Success', { appearance: 'success' });
             })
 

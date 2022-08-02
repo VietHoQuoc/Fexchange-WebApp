@@ -1,11 +1,13 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { withRouter, Redirect } from "react-router-dom";
-import { logout } from "../../redux/actions/authActions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter, Redirect } from 'react-router-dom';
+import { logout } from '../../redux/actions/authActions';
+import { deleteAllFromWishlist } from '../../redux/actions/wishlistActions';
 
 class Logout extends Component {
     componentWillMount() {
         this.props.logout();
+        this.props.deleteWishlist();
     }
 
     componentDidMount() {
@@ -17,7 +19,7 @@ class Logout extends Component {
             <div>
                 <Redirect
                     to={{
-                        pathname: "/login-register",
+                        pathname: '/login-register',
                     }}
                 />
             </div>
@@ -35,6 +37,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         logout: () => {
             dispatch(logout());
+        },
+        deleteWishlist: () => {
+            dispatch(deleteAllFromWishlist());
         },
     };
 };
