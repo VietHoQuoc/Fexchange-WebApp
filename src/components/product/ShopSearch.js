@@ -6,7 +6,7 @@ const ShopSearch = ({getSearchParams}) => {
     <div className="sidebar-widget">
       <h4 className="pro-sidebar-title">Search </h4>
       <div className="pro-sidebar-search mb-50 mt-25">
-        <form className="pro-sidebar-search-form" action="#">
+        <form className="pro-sidebar-search-form">
           <input type="text" placeholder="Search here..." onChange={event=>setKeyword(event.target.value)} />
           <button  onClick={()=>getSearchParams('search',keyword)}>
             <i className="pe-7s-search" />
