@@ -34,7 +34,7 @@ function ShopProfile({ location, products }) {
                 console.log(posts);
             })
             .catch(error => console.log(error));
-
+        
     }, []);
 
     return (
@@ -57,15 +57,14 @@ function ShopProfile({ location, products }) {
                             <div className="col-lg-3 order-2 order-lg-1">
                                 <div className="account">
                                     <div className="row">
-                                        <div className="col-4">
-                                            {account.avatar != null ?
+                                        <div className="col-2">
+                                            {account.avatar !== null ?
                                                 (<img src={account.avatar} alt={account.fullName} width="30px" height="35px"></img>)
                                                 :
                                                 (<img src="../../../public/assets/img/avt.png" alt={account.fullName} width="30px" height="35px"></img>)}
                                         </div>
-                                        <div className="col-8">
-                                            <h2><b>{account.fullName}</b></h2>
-                                            <h4></h4>
+                                        <div className="col-10">
+                                            <h4><b>{account.fullName}</b></h4>
 
                                         </div>
                                     </div>
@@ -83,15 +82,15 @@ function ShopProfile({ location, products }) {
                                                             </b></h4>
     
                                                         </td>
-                                                    <td className=" bg-primary text-center"><h4><b>{account.numberOfOrders}</b> sold</h4></td>
+                                                    <td className=" bg-primary text-center"><h4><b>{posts.filter(i => i.accountId == parseInt(location.pathname.substr(14)) && i.goodsStatus === 2).length}</b> posts</h4></td>
                                                 </tr>
                                             </table>
                                         </div>
                                     </div>
                                     <div className="row">
                                         {/* profile in4 */}
-                                        <div className="col-12"><h4><i className="pe-7s-call mr-2 text-info" />{account.phone}</h4></div>
-                                        <div className="col-12"><h4><i className="pe-7s-map-marker mr-2 text-info" />{account.address}</h4></div>
+                                        <div className="col-12"><h4><i className="pe-7s-call mr-2 text-info" />{account.phone==null?(<span className="text-secondary">not updated</span>):(account.phone)}</h4></div>
+                                        <div className="col-12"><h4><i className="pe-7s-map-marker mr-2 text-info" />{account.address==null?(<span className="text-secondary">not updated</span>):(account.address)}</h4></div>
                                         <div className="col-12"><h4><i className="pe-7s-mail mr-2 text-info" />{account.gmail}</h4></div>
                                     </div>
                                 </div>
@@ -105,8 +104,8 @@ function ShopProfile({ location, products }) {
                                 <ProfileDescriptionTab
                                     spaceBottomClass="pb-90"
                                     productFullDesc={"alo"}
-                                    posts={posts.filter(i => i.accountId == parseInt(location.pathname.substr(14)) && i.status === "Active")}
-                                    postsSold={posts.filter(i => i.accountId == parseInt(location.pathname.substr(14)) && i.status === "Inactive")}
+                                    posts={posts.filter(i => i.accountId == parseInt(location.pathname.substr(14)) && i.goodsStatus === 2)}
+                                    postsSold={posts.filter(i => i.accountId == parseInt(location.pathname.substr(14)) && i.goodsStatus === 3)}
                                     layout={layout}
                                     getRate={setRate}
                                 />

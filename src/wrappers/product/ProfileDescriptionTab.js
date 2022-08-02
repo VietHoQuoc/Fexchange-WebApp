@@ -13,7 +13,8 @@ import { connect } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import NumberFormat from 'react-number-format';
 import { useSelector } from 'react-redux';
-
+import axios from 'axios';
+import axiosClient from '../../utils/api/axiosClient';
 const ProfileDescriptionTab = ({
     spaceBottomClass,
     productFullDesc,
@@ -26,8 +27,17 @@ const ProfileDescriptionTab = ({
     const { addToast } = useToasts();
     const wishlistItems = useSelector((state) => state.wishlistData);
     const [wishlistItem, setWishlistItem] = useState(0);
-
-    useEffect(() => {}, []);
+    const auth=useSelector((state)=>state.authData);
+    const [orders,setOrders]=useState([])
+    useEffect(() => {
+        axios.get(`https://fbuyexchange.azurewebsites.net/api/orders/1/200?all=true`,{headers: {
+            Authorization: 'Bearer ' + auth.user.tokenId,
+        },})
+        .then(res => {
+            setOrders(res.data);
+        })
+        .catch(error => console.log(error));
+    }, []);
     return (
         <div className={`description-review-area ${spaceBottomClass}`}>
             <div className="container">
@@ -55,6 +65,7 @@ const ProfileDescriptionTab = ({
                         </Nav>
                         <Tab.Content className="description-review-bottom">
                             <Tab.Pane eventKey="additionalInfo">
+                                
                                 <h4 className="text-secondary text-right">
                                     {posts.length > 0 ? (
                                         <span>{posts.length} posts</span>
@@ -63,7 +74,7 @@ const ProfileDescriptionTab = ({
                                     )}
                                 </h4>
                                 {posts.length < 1 ? (
-                                    <div>Saler haven't post anything</div>
+                                    <div>Saler haven't posted anything</div>
                                 ) : (
                                     posts.map((product) => (
                                         //danh sach san pham hien theo layout list
@@ -257,44 +268,42 @@ const ProfileDescriptionTab = ({
                             </Tab.Pane>
                             <Tab.Pane eventKey="productDescription">
                                 <h4 className="text-secondary text-right">
-                                    {postsSold.length > 0 ? (
-                                        <span>Sold: {postsSold.length} </span>
+                                    {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length>0 ? (
+                                        <span>Sold: {orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length} </span>
                                     ) : (
                                         <span>Sold nothing</span>
                                     )}
                                 </h4>
-                                {postsSold.length < 0
+                                {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length < 0
                                     ? ''
-                                    : postsSold.map((product) => (
+                                    : orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map((product) => (
                                           <div className="card mb-4 shadow-sm p-1 bg-white rounded">
                                               <div className="card-body">
                                                   Sucessfully sold{' '}
-                                                  <b>"{product.name}"</b>
+                                                  <b>"{product.product1Name}"</b>
                                               </div>
                                           </div>
                                       ))}
                             </Tab.Pane>
                             <Tab.Pane eventKey="productReviews">
                                 <div className="row">
+                                
                                     <div className="col-lg-7">
-                                        <div className="review-wrapper">
+                                    {orders&&orders.filter(o=>o.feedback!==null&&o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map(o=><div>
+                                    <div className="review-wrapper">
                                             <div className="single-review">
                                                 <div className="review-img">
                                                     <img
-                                                        src={
-                                                            process.env
-                                                                .PUBLIC_URL +
-                                                            '/assets/img/testimonial/1.jpg'
-                                                        }
-                                                        alt=""
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrpGMzCk6bk1x-SDgwlg3Y6HxzQav_RsOSCQ&usqp=CAU"
+                                                        alt="ok"
+                                                        width="50px"
                                                     />
                                                 </div>
                                                 <div className="review-content">
                                                     <div className="review-top-wrap">
                                                         <div className="review-left">
                                                             <div className="review-name">
-                                                                <h4>
-                                                                    White Lewis
+                                                                <h4>{o.buyerName}
                                                                 </h4>
                                                             </div>
                                                             <div className="review-rating">
@@ -305,81 +314,25 @@ const ProfileDescriptionTab = ({
                                                                 <i className="fa fa-star" />
                                                             </div>
                                                         </div>
-                                                        <div className="review-left">
-                                                            <button>
-                                                                Reply
-                                                            </button>
+                                                        <div className="review-left ml-3">
+                                                            {o.rate}
                                                         </div>
                                                     </div>
                                                     <div className="review-bottom">
                                                         <p>
-                                                            Vestibulum ante
-                                                            ipsum primis aucibus
-                                                            orci luctustrices
-                                                            posuere cubilia
-                                                            Curae Suspendisse
-                                                            viverra ed viverra.
-                                                            Mauris ullarper
-                                                            euismod vehicula.
-                                                            Phasellus quam nisi,
-                                                            congue id nulla.
+                                                            {o.feedback}
                                                         </p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="single-review child-review">
-                                                <div className="review-img">
-                                                    <img
-                                                        src={
-                                                            process.env
-                                                                .PUBLIC_URL +
-                                                            '/assets/img/testimonial/2.jpg'
-                                                        }
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div className="review-content">
-                                                    <div className="review-top-wrap">
-                                                        <div className="review-left">
-                                                            <div className="review-name">
-                                                                <h4>
-                                                                    White Lewis
-                                                                </h4>
-                                                            </div>
-                                                            <div className="review-rating">
-                                                                <i className="fa fa-star" />
-                                                                <i className="fa fa-star" />
-                                                                <i className="fa fa-star" />
-                                                                <i className="fa fa-star" />
-                                                                <i className="fa fa-star" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="review-left">
-                                                            <button>
-                                                                Reply
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="review-bottom">
-                                                        <p>
-                                                            Vestibulum ante
-                                                            ipsum primis aucibus
-                                                            orci luctustrices
-                                                            posuere cubilia
-                                                            Curae Suspendisse
-                                                            viverra ed viverra.
-                                                            Mauris ullarper
-                                                            euismod vehicula.
-                                                            Phasellus quam nisi,
-                                                            congue id nulla.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
                                         </div>
+
+                                </div>)}
+
                                     </div>
                                     <div className="col-lg-5">
-                                        <div className="ratting-form-wrapper pl-50">
+                                        {/* <div className="ratting-form-wrapper pl-50">
                                             <h3>Add a Review</h3>
                                             <div className="ratting-form">
                                                 <form action="#">
@@ -430,7 +383,7 @@ const ProfileDescriptionTab = ({
                                                     </div>
                                                 </form>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </Tab.Pane>
