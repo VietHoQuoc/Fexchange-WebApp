@@ -57,7 +57,7 @@ const ProductGridSingle = ({
                                 product.id
                             }
                         >
-                            {product.images !== null ? (
+                            {product.images.length !== 0 ? (
                                 <img
                                     className="default-img"
                                     src={product.images[0].image}
@@ -92,7 +92,7 @@ const ProductGridSingle = ({
                         </Link>
                         {product.images || product.new ? (
                             <div className="product-img-badges">
-                                {product.images !== null ? (
+                                {product.images.length !== 0 ? (
                                     <span className="pink">
                                         {product.images.length}
                                     </span>
@@ -172,7 +172,7 @@ const ProductGridSingle = ({
                     Out of Stock
                   </button>
                 )} */}
-                                {product.status === 'Active' ? (
+                                {product.goodStatus === 2 ? (
                                     //   <a
                                     //     href={product.affiliateLink}
                                     //     rel="noopener noreferrer"
