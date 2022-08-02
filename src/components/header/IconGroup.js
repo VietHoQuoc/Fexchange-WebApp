@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import MenuCart from "./sub-components/MenuCart";
 import { deleteFromCart } from "../../redux/actions/cartActions";
+import NotificationCenter from "../notification";
+import { useState } from "react";
 
 const IconGroup = ({
   currency,
@@ -29,10 +31,23 @@ const IconGroup = ({
     offcanvasMobileMenu.classList.add("active");
   };
 
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
+  const toggleNotification = () => {
+    setIsNotificationOpen(prev => !prev)
+  }
+
   return (
     <div
       className={`header-right-wrap ${iconWhiteClass ? iconWhiteClass : ""}`}
     >
+      <div className="same-style header-search d-none d-lg-block">
+        <button className="notification-active" onClick={toggleNotification}>
+          <i className="pe-7s-bell" />
+        </button>
+        <div className="notification-content position-relative">
+        <NotificationCenter isOpen={isNotificationOpen} />
+        </div>
+      </div>
       <div className="same-style header-search d-none d-lg-block">
         <button className="search-active" onClick={(e) => handleClick(e)}>
           <i className="pe-7s-search" />
