@@ -23,7 +23,8 @@ const ProfileDescriptionTab = ({
     postsSold,
     addToWishlist,
     getRate,
-    getTotalOrders
+    getTotalOrders,
+    location
 }) => {
     const pageLimit = 100;
     const { addToast } = useToasts();
@@ -41,7 +42,7 @@ const ProfileDescriptionTab = ({
             
         })
         .catch(error => console.log(error));
-    }, []);
+    }, [orders]);
     
     return (
         <div className={`description-review-area ${spaceBottomClass}`}>
@@ -273,24 +274,26 @@ const ProfileDescriptionTab = ({
                             </Tab.Pane>
                             <Tab.Pane eventKey="productDescription">
                                 <h4 className="text-secondary text-right">
-                                {getRate(orders&&orders.filter(o=>o.status==="Accepted"&&o.feedback!==null&&posts.map(p=>p.id===o.productId)).map((item) => item.rate).reduce((acc, value) => acc + value, 0)
-                                /orders.filter(o=>o.status==="Accepted"&&o.feedback!==null&&posts.map(p=>p.id===o.productId)).length
+                                    
+                                    
+                                {getRate(orders&&orders.filter(o=>o.status==="Accepted"&&o.feedback!==null&&posts.filter(p=>p.id===o.productId).length==1).map((item) => item.rate).reduce((acc, value) => acc + value, 0)
+                                /orders.filter(o=>o.status==="Accepted"&&o.feedback!==null&&posts.filter(p=>p.id===o.productId).length==1).length
                                 )}
                                 
-                                {/* {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map((item) => item.rate).reduce((acc, value) => acc + value, 0)/10} */}
-                                    {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length>0 ? (
-                                        <span>Sold: {orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length} 
+                                    {orders&&orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId).length==1).length>0 ? (
+                                        <span>Sold: {orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId).length==1).length} 
                                         
-                                        {/* {getTotalOrders(orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length)} */}
+                                        {getTotalOrders(orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId).length==1).length)}
                                         </span>
                                         
                                     ) : (
-                                        <span>Sold nothing</span>
+                                        <span>Sold nothing </span>
                                     )}
                                 </h4>
-                                {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length < 0
+                                
+                                {orders&&orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId).length==1).length < 0
                                     ? ''
-                                    : orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map((product) => (
+                                    : orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId).length==1).map((product) => (
                                           <div className="card mb-4 shadow-sm p-1 bg-white rounded">
                                               <div className="card-body">
                                                   Sucessfully sold{' '}
@@ -303,7 +306,7 @@ const ProfileDescriptionTab = ({
                                 <div className="row">
                                 
                                     <div className="col-lg-7">
-                                    {orders&&orders.filter(o=>o.feedback!==null&&o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map(o=><div>
+                                    {orders&&orders.filter(o=>o.feedback!==null&&o.status==="Accepted"&&posts.filter(p=>p.id===o.productId).length==1).map(o=><div>
                                     <div className="review-wrapper">
                                             <div className="single-review">
                                                 <div className="review-img">
@@ -346,58 +349,7 @@ const ProfileDescriptionTab = ({
 
                                     </div>
                                     <div className="col-lg-5">
-                                        {/* <div className="ratting-form-wrapper pl-50">
-                                            <h3>Add a Review</h3>
-                                            <div className="ratting-form">
-                                                <form action="#">
-                                                    <div className="star-box">
-                                                        <span>
-                                                            Your rating:
-                                                        </span>
-                                                        <div className="ratting-star">
-                                                            <i className="fa fa-star" />
-                                                            <i className="fa fa-star" />
-                                                            <i className="fa fa-star" />
-                                                            <i className="fa fa-star" />
-                                                            <i className="fa fa-star" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-md-6">
-                                                            <div className="rating-form-style mb-10">
-                                                                <input
-                                                                    placeholder="Name"
-                                                                    type="text"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-md-6">
-                                                            <div className="rating-form-style mb-10">
-                                                                <input
-                                                                    placeholder="Email"
-                                                                    type="email"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-md-12">
-                                                            <div className="rating-form-style form-submit">
-                                                                <textarea
-                                                                    name="Your Review"
-                                                                    placeholder="Message"
-                                                                    defaultValue={
-                                                                        ''
-                                                                    }
-                                                                />
-                                                                <input
-                                                                    type="submit"
-                                                                    defaultValue="Submit"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div> */}
+   
                                     </div>
                                 </div>
                             </Tab.Pane>

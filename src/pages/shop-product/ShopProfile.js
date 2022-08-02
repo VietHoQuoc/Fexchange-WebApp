@@ -46,7 +46,7 @@ function ShopProfile({ location, products }) {
             
         })
         .catch(error => console.log(error));
-    }, []);
+    }, [rate]);
 
     return (
         <Fragment>
@@ -120,7 +120,8 @@ function ShopProfile({ location, products }) {
                                             <div className="row">
                                                 <div className="col-6">
                                                     <div className="mt-3">
-                                                        <h4>{rate.toFixed(2)}</h4>
+                                                        
+                                                        <h4>{isNaN(rate)?0:rate.toFixed(2)}</h4>
                                                         <p className="mb-0 text-muted">
                                                             Rating
                                                         </p>
@@ -130,8 +131,10 @@ function ShopProfile({ location, products }) {
                                                     <div className="mt-3">
                                                         <h4>
                                                             
-                                                                {orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length} 
-                                                            
+                                                            {orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId&&p.accountId ==
+                                                parseInt(
+                                                    location.pathname.substr(14)
+                                                ) && p.goodsStatus===2).length==1).map(o=><div>{o.id}</div>).length}
                                                         </h4>
                                                         <p className="mb-0 text-muted">
                                                             Total of orders
@@ -157,18 +160,19 @@ function ShopProfile({ location, products }) {
                                             i.accountId ==
                                                 parseInt(
                                                     location.pathname.substr(14)
-                                                ) && i.status === 'Active'
+                                                ) && i.goodsStatus===2
                                     )}
                                     postsSold={posts.filter(
                                         (i) =>
                                             i.accountId ==
                                                 parseInt(
                                                     location.pathname.substr(14)
-                                                ) && i.status === 'Inactive'
+                                                )
                                     )}
                                     layout={layout}
                                     getRate={setRate}
                                     getTotalOrders={setTotalOrders}
+                                    location={location}
                                 />
                             </div>
                         </div>
