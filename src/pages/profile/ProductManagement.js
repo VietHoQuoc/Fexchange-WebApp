@@ -493,6 +493,7 @@ const ProductManagement = ({ location }) => {
     const userData = useSelector((state) => state.authData);
 
     const onChange = (data) => {
+        data = { ...data, goodsStatus: 1 };
         console.log('day la product', products);
         updateProduct(data);
     };
