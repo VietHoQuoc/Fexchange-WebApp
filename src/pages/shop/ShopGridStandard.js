@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import React, { Fragment, useState, useEffect } from 'react';
 import MetaTags from 'react-meta-tags';
 import Paginator from 'react-hooks-paginator';
@@ -10,15 +10,15 @@ import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import ShopSidebar from '../../wrappers/product/ShopSidebar';
 import ShopTopbar from '../../wrappers/product/ShopTopbar';
 import ShopProducts from '../../wrappers/product/ShopProducts';
-import axios from "axios";
-const ShopGridStandard = ({location, products}) => {
+import axios from 'axios';
+const ShopGridStandard = ({ location, products }) => {
     const [layout, setLayout] = useState('grid three-column');
     //cate
     const [sortType, setSortType] = useState('');
     const [sortValue, setSortValue] = useState('');
     //search
-    const [searchType, setSearchType]=useState('')
-    const [searchValue, setSearchValue]=useState('');
+    const [searchType, setSearchType] = useState('');
+    const [searchValue, setSearchValue] = useState('');
     const [filterSortType, setFilterSortType] = useState('');
     const [filterSortValue, setFilterSortValue] = useState('');
     const [offset, setOffset] = useState(0);
@@ -27,59 +27,84 @@ const ShopGridStandard = ({location, products}) => {
     const [sortedProducts, setSortedProducts] = useState([]);
 
     const pageLimit = 15;
-    const {pathname} = location;
+    const { pathname } = location;
     const [posts, setPosts] = useState([]);
     const getLayout = (layout) => {
-        setLayout(layout)
-    }
+        setLayout(layout);
+    };
     const getSearchParams = (searchType, searchValue) => {
-        setSearchType(searchType)
-        setSearchValue(searchValue)
-    }
+        setSearchType(searchType);
+        setSearchValue(searchValue);
+    };
     const getSortParams = (sortType, sortValue) => {
         setSortType(sortType);
         setSortValue(sortValue);
-    }
+    };
 
     const getFilterSortParams = (sortType, sortValue) => {
         setFilterSortType(sortType);
         setFilterSortValue(sortValue);
-    }
+    };
 
     useEffect(() => {
-        axios.get(`https://fbuyexchange.azurewebsites.net/api/productposts/1/19?all=true`)
-            .then(res => {
+        axios
+            .get(
+                `https://fbuyexchange.azurewebsites.net/api/productposts/1/100?all=true`
+            )
+            .then((res) => {
                 setPosts(res.data);
-                
             })
-            .catch(error => console.log(error));
+            .catch((error) => console.log(error));
         //làm sao để hàm getSortedProducts trả về sortedProducts đúng theo database
         // let sortedProducts = getSortedProducts(posts, sortType, sortValue);
-        let searchedProducts = getSortedProducts(posts,searchType,searchValue);
-        
-        let sortedProducts = getSortedProducts(searchedProducts, sortType, sortValue);
+        let searchedProducts = getSortedProducts(
+            posts,
+            searchType,
+            searchValue
+        );
+
+        let sortedProducts = getSortedProducts(
+            searchedProducts,
+            sortType,
+            sortValue
+        );
         //flow: sẽ lấy post ứng với search và checkboxes -> sortedProducts
-        //sau đây lấy sortedProducts filter theo giá 
-        const filterSortedProducts = getSortedProducts(sortedProducts, filterSortType, filterSortValue);
+        //sau đây lấy sortedProducts filter theo giá
+        const filterSortedProducts = getSortedProducts(
+            sortedProducts,
+            filterSortType,
+            filterSortValue
+        );
 
         sortedProducts = filterSortedProducts;
         setSortedProducts(sortedProducts);
         // setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
-        
-        
-        
-
-    }, [offset, sortType, sortValue, filterSortType, filterSortValue,searchType,searchValue]);
+    }, [
+        offset,
+        sortType,
+        sortValue,
+        filterSortType,
+        filterSortValue,
+        searchType,
+        searchValue,
+    ]);
 
     return (
         <Fragment>
             <MetaTags>
                 <title>Flone | Shop Page</title>
-                <meta name="description" content="Shop page of flone react minimalist eCommerce template." />
+                <meta
+                    name="description"
+                    content="Shop page of flone react minimalist eCommerce template."
+                />
             </MetaTags>
 
-            <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>Home</BreadcrumbsItem>
-            <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>Shop</BreadcrumbsItem>
+            <BreadcrumbsItem to={process.env.PUBLIC_URL + '/'}>
+                Home
+            </BreadcrumbsItem>
+            <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
+                Shop
+            </BreadcrumbsItem>
 
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
@@ -90,17 +115,40 @@ const ShopGridStandard = ({location, products}) => {
                         <div className="row">
                             <div className="col-lg-3 order-2 order-lg-1">
                                 {/* shop sidebar */}
-                                
-                                <ShopSidebar getSearchParams={getSearchParams} products={posts} getSortParams={getSortParams} sideSpaceClass="mr-30"/>
+
+                                <ShopSidebar
+                                    getSearchParams={getSearchParams}
+                                    products={posts}
+                                    getSortParams={getSortParams}
+                                    sideSpaceClass="mr-30"
+                                />
                             </div>
                             <div className="col-lg-9 order-1 order-lg-2">
                                 {/* shop topbar default */}
-                                <ShopTopbar getLayout={getLayout} getFilterSortParams={getFilterSortParams} productCount={sortedProducts.length==0&&searchValue==''?posts.length:sortedProducts.length}  />
-                                
+                                <ShopTopbar
+                                    getLayout={getLayout}
+                                    getFilterSortParams={getFilterSortParams}
+                                    productCount={
+                                        sortedProducts.length == 0 &&
+                                        searchValue == ''
+                                            ? posts.length
+                                            : sortedProducts.length
+                                    }
+                                />
+
                                 {/* shop page content default */}
-                                {sortedProducts.length!==0||searchValue!==''? <ShopProducts layout={layout} products={sortedProducts} /> 
-                                :
-                                <ShopProducts layout={layout} products={posts} />}
+                                {sortedProducts.length !== 0 ||
+                                searchValue !== '' ? (
+                                    <ShopProducts
+                                        layout={layout}
+                                        products={sortedProducts}
+                                    />
+                                ) : (
+                                    <ShopProducts
+                                        layout={layout}
+                                        products={posts}
+                                    />
+                                )}
 
                                 {/* shop product pagination */}
                                 {/* <div className="pro-pagination-style text-center mt-30">
@@ -122,18 +170,18 @@ const ShopGridStandard = ({location, products}) => {
                 </div>
             </LayoutOne>
         </Fragment>
-    )
-}
+    );
+};
 
 ShopGridStandard.propTypes = {
-  location: PropTypes.object,
-  products: PropTypes.array
-}
+    location: PropTypes.object,
+    products: PropTypes.array,
+};
 
-const mapStateToProps = state => {
-    return{
-        products: state.productData.products
-    }
-}
+const mapStateToProps = (state) => {
+    return {
+        products: state.productData.products,
+    };
+};
 
 export default connect(mapStateToProps)(ShopGridStandard);

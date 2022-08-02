@@ -40,7 +40,6 @@ const OrderManagement = ({ location, history }) => {
                 let tmp = await orderApi
                     .getAll(accountId, userData.user.tokenId)
                     .then((res) => {
-                        // TODO: check if seller also recieve
                         return res;
                     })
                     .catch((err) => {
@@ -62,7 +61,6 @@ const OrderManagement = ({ location, history }) => {
                             }
                         }
                     );
-                    console.log(syncResFilter);
                     setOrder(syncResFilter);
                 }
             }
