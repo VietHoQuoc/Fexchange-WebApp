@@ -8,6 +8,8 @@ import { setOrderId } from '../../../redux/actions/orderAction';
 import { useSelector } from 'react-redux';
 import ordersApi from './../../../utils/api/orderApi';
 import { useToasts } from 'react-toast-notifications';
+import productApi from './../../../utils/api/productApi';
+import { post } from './../../../utils/api/notificationApi';
 const Order = (props) => {
     const { order, setOrder } = props;
     const userData = useSelector((state) => state.authData);
@@ -19,7 +21,7 @@ const Order = (props) => {
         history.push(`/rating?id=${order.id}`);
     };
     const onChangeStatus = async (status) => {
-        await ordersApi
+        const success = await ordersApi
             .changeStatus(order, userData.user.id, status, userData.tokenId)
             .then((res) => {
                 setOrder((orders) =>
@@ -36,9 +38,41 @@ const Order = (props) => {
                 addToast('Successfully ' + status, {
                     appearance: 'success',
                 });
+                return res;
                 // history.go(0);
             })
             .catch((err) => console.log(err));
+        if (success.data === 'OK') {
+            await productApi.get(order.productId).then((res) => {
+                const product = {
+                    ...res,
+                    goodsStatus: status === 'Accepted' ? 3 : 4,
+                };
+                post(
+                    `/notifications`,
+                    {
+                        accountId: order.buyerId,
+                        subject: 'response accepted',
+                        orderId: order.id,
+                        product1Id: order.productId,
+                        buyerId: order.buyerId,
+                        createdDate: new Date().toISOString(),
+                    },
+                    {},
+                    {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + userData.tokenId,
+                    }
+                )
+                    .then((res) => {
+                        console.log(res);
+                    })
+                    .catch((err) => console.log(err));
+                productApi
+                    .put(product, userData.tokenId)
+                    .catch((err) => console.log(err));
+            });
+        }
     };
 
     return (

@@ -493,10 +493,9 @@ const ProductManagement = ({ location }) => {
     const { addToast } = useToasts();
     const userData = useSelector((state) => state.authData);
     const history = useHistory();
-    const onChange = (data) => {
-        data = { ...data, goodsStatus: 1 };
+    const onChange = async (data) => {
         console.log('day la product', products);
-        updateProduct(data);
+        await updateProduct({ ...data, goodsStatus: 1 });
     };
     const onDelete = (data) => {
         deleteProduct(data);
@@ -523,6 +522,7 @@ const ProductManagement = ({ location }) => {
             });
     };
     const updateProduct = async (data) => {
+        console.log(data);
         productApi
             .put(data, userData.tokenId)
             .then((res) => {
@@ -534,7 +534,7 @@ const ProductManagement = ({ location }) => {
                         return item;
                     })
                 );
-                history.go(0);
+                // history.go(0);
                 addToast('Success', { appearance: 'success' });
             })
 
