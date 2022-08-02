@@ -45,6 +45,8 @@ const NotificationCenter = ({ isOpen }) => {
                         zIndex: 9999,
                         height: '400px',
                         width: '300px',
+                        overflowY: 'scroll',
+                        overflowX: 'hidden',
                         transform: 'translate(-50%, 6%)',
                     }}
                 >

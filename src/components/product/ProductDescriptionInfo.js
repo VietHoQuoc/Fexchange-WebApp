@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import buyApi from '../../utils/api/buyApi';
 import { useToasts } from 'react-toast-notifications';
+import { post } from './../../utils/api/notificationApi';
 
 const ProductDescriptionInfo = ({
     product,
@@ -68,6 +69,13 @@ const ProductDescriptionInfo = ({
                 appearance: 'error',
             });
         }
+        if (product.accountId === user.id) {
+            history.push('/shop-grid-standard');
+            addToast('You cannot buy your product', {
+                appearance: 'error',
+            });
+            return;
+        }
         if (createOrder.status === 200) {
             const orders = await buyApi.getAllOrder(user.tokenId);
             const notis = await buyApi.getAllNotifications(
@@ -78,27 +86,22 @@ const ProductDescriptionInfo = ({
                 (order) =>
                     order.buyerId === user.id && product.id === order.productId
             );
-
-            for (let i = 0; i < filteredOrders?.length; i++) {
-                for (let j = 0; j < notis?.data.length; j++) {
-                    if (filteredOrders[i]?.id === notis.data[j]?.orderId) {
-                        break;
-                    } else if (j === notis?.data.length - 1) {
-                        const createNotification =
-                            await buyApi.createNotification(
-                                {
-                                    accountId: product?.accountId,
-                                    subject: 'request',
-                                    fullName: product?.accountName,
-                                    orderId: filteredOrders[i].orderId,
-                                    product1Id: product?.id,
-                                    buyerId: user?.id,
-                                },
-                                user.tokenId
-                            );
-                    }
+            post(
+                '/notifications',
+                {
+                    accountId: product?.accountId,
+                    subject: 'request',
+                    fullName: user.fullName,
+                    orderId: filteredOrders[filteredOrders.length - 1]?.id,
+                    product1Id: product?.id,
+                    buyerId: user?.id,
+                },
+                {},
+                {
+                    Authorization: 'Bearer ' + user.tokenId,
                 }
-            }
+            ).then((res) => console.log(notis));
+
             setMessage(true);
             setShowModal(true);
             return;

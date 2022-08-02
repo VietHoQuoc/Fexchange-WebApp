@@ -22,8 +22,6 @@ const ShopGridStandard = ({ location, products }) => {
     const [filterSortType, setFilterSortType] = useState('');
     const [filterSortValue, setFilterSortValue] = useState('');
     const [offset, setOffset] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentData, setCurrentData] = useState([]);
     const [sortedProducts, setSortedProducts] = useState([]);
 
     const pageLimit = 15;
@@ -114,7 +112,7 @@ const ShopGridStandard = ({ location, products }) => {
                         <div className="row">
                             <div className="col-lg-3 order-2 order-lg-1">
                                 {/* shop sidebar */}
-                                
+
                                 <ShopSidebar
                                     getSearchParams={getSearchParams}
                                     products={posts}
