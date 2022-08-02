@@ -9,7 +9,9 @@ const computeCreatedTime = (date) => {
         value: 0,
         unit: '',
     };
-    const secondValue = Math.floor((now.getTime() - date.getTime()) / 1000);
+    const secondValue = Math.floor(
+        (now.getTime() - date.getTime()) / 1000 - 25200
+    );
     if (secondValue < 60) {
         result.value = secondValue;
         result.unit = Math.floor(result.value) === 1 ? 'second' : 'seconds';

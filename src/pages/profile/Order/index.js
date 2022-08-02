@@ -52,7 +52,10 @@ const Order = (props) => {
                     `/notifications`,
                     {
                         accountId: order.buyerId,
-                        subject: 'response accepted',
+                        subject:
+                            'response ' + status === 'Accepted'
+                                ? 'accepted'
+                                : 'rejected',
                         orderId: order.id,
                         product1Id: order.productId,
                         buyerId: order.buyerId,
