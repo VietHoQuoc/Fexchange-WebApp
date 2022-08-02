@@ -34,8 +34,6 @@ const getModalMessage = (buyer, product, notification, dealer, currentUser) => {
         message: '',
         status: '',
     };
-
-    console.log(notification);
     // Notification for buyer
     if (notification?.buyerId === notification?.accountId) {
         if (notification?.subject === 'response rejected') {
@@ -79,6 +77,7 @@ const getModalMessage = (buyer, product, notification, dealer, currentUser) => {
 };
 
 const getNotificationMessage = (buyer, product, notification, currentUser) => {
+    console.log(buyer);
     console.log(notification);
     if (notification?.buyerId === notification?.accountId) {
         if (notification?.subject === 'response accepted') {
@@ -139,7 +138,7 @@ const SingleNotification = ({
                 innerProduct = response.data;
             });
             console.log(notification);
-            if (notification?.buyerId === currentUser?.id) {
+            if (notification?.accountId === currentUser?.id) {
                 await get(
                     `/acounts/${notification?.buyerId}`,
                     {},
@@ -148,8 +147,8 @@ const SingleNotification = ({
                         Authorization: 'Bearer ' + currentUser?.tokenId,
                     }
                 ).then((response) => {
-                    setBuyer(response.data);
-                    buyer = response.data;
+                    setDealer(response.data);
+                    dealer = response.data;
                     setNotificationMessage(
                         getNotificationMessage(
                             response.data,
@@ -179,7 +178,7 @@ const SingleNotification = ({
                         setDealer(response.data);
                         setInnerModalMessage(
                             getModalMessage(
-                                buyer,
+                                dealer,
                                 innerProduct,
                                 notification,
                                 response.data,
