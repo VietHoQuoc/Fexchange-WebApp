@@ -33,9 +33,9 @@ const ProductGridSingle = ({
 
     const userData = useSelector((state) => state.authData);
     const user = {
-        id: userData.user.id,
-        name: userData.user.fullName,
-        tokenId: userData.user.tokenId,
+        id: userData.user?.id,
+        name: userData.user?.fullName,
+        tokenId: userData.user?.tokenId,
     };
     return (
         <Fragment>
@@ -90,7 +90,7 @@ const ProductGridSingle = ({
                                 <div></div>
                             )}
                         </Link>
-                        
+
                         {product.images || product.new ? (
                             <div className="product-img-badges">
                                 {product.images.length !== 0 ? (
@@ -136,9 +136,7 @@ const ProductGridSingle = ({
                                 </button>
                             </div>
                             <div className="pro-same-action pro-cart">
-                                
                                 {product.goodsStatus === 2 ? (
-                                    
                                     <Link
                                         to={`${process.env.PUBLIC_URL}/product/${product.id}`}
                                     >
@@ -181,7 +179,6 @@ const ProductGridSingle = ({
                         )}
                         <div className="product-price">
                             <span>
-                                
                                 <NumberFormat
                                     value={product.price}
                                     displayType={'text'}

@@ -47,19 +47,21 @@ const ProductManagement = lazy(() =>
 const App = (props) => {
     const [wishlist, setWishlist] = useState([]);
     const dispatch = useDispatch();
+    const userData = useSelector((state) => state.authData);
     useEffect(() => {
         const getData = async () => {
             const response = await wishlistApi.get(
-                userData.user.id,
-                userData.tokenId
+                userData?.user?.id,
+                userData?.tokenId
             );
             dispatch(addToWishlist(response.data));
             setWishlist(response.data);
         };
-        getData();
+        if (userData !== null) {
+            getData();
+        }
     }, [setWishlist]);
 
-    const userData = useSelector((state) => state.authData);
     return (
         <ToastProvider
             placement="bottom-left"
