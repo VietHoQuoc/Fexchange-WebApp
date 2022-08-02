@@ -46,7 +46,7 @@ function ShopProfile({ location, products }) {
             
         })
         .catch(error => console.log(error));
-    }, [account]);
+    }, [rate]);
 
     return (
         <Fragment>
@@ -131,8 +131,10 @@ function ShopProfile({ location, products }) {
                                                     <div className="mt-3">
                                                         <h4>
                                                             
-                                                                {orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId).length==1).length} 
-                                                            
+                                                            {orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId&&p.accountId ==
+                                                parseInt(
+                                                    location.pathname.substr(14)
+                                                ) && p.goodsStatus===2).length==1).map(o=><div>{o.id}</div>).length}
                                                         </h4>
                                                         <p className="mb-0 text-muted">
                                                             Total of orders

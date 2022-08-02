@@ -283,7 +283,7 @@ const ProfileDescriptionTab = ({
                                     {orders&&orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId).length==1).length>0 ? (
                                         <span>Sold: {orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId).length==1).length} 
                                         
-                                        {/* {getTotalOrders(orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length)} */}
+                                        {getTotalOrders(orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId).length==1).length)}
                                         </span>
                                         
                                     ) : (
