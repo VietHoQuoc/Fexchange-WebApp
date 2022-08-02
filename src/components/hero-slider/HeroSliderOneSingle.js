@@ -23,7 +23,7 @@ const HeroSliderOneSingle = ({ data, sliderClassName }) => {
                                 }}
                                 className="animated "
                             >
-                                place sell and buy products
+                                place to sell and buy products
                             </h3>
                             <h3
                                 style={{

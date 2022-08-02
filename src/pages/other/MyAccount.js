@@ -8,9 +8,10 @@ import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import adminUserApi from '../../utils/api/userApi';
 import { updateProfile } from '../../redux/actions/authActions';
+import { useToasts } from 'react-toast-notifications';
 
 const MyAccount = ({ location }) => {
-
+    const { addToast } = useToasts();
     const userData = useSelector((state) => state.authData);
     const { pathname } = location;
     //remove previous img when set new img
@@ -29,6 +30,7 @@ const MyAccount = ({ location }) => {
             userData.tokenId
         );
         dispatch(updateProfile(response.data));
+        addToast('Success', { appearance: 'success' });
     };
 
     let result = userData.user.gmail.substr(-19, 8);
