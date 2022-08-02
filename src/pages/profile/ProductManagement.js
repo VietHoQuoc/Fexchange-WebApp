@@ -15,7 +15,8 @@ import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import categoryApi from '../../utils/api/categoryApi';
 import ImageUploader from '../../components/input/ImageUploader';
-import adminProduct from '../../utils/api/adminProduct';
+import productApi from '../../utils/api/productApi';
+import { useToasts } from 'react-toast-notifications';
 
 const TabLink = ({ tabIndex, onClick, children, active }) => {
     return (
@@ -38,7 +39,7 @@ const TabLink = ({ tabIndex, onClick, children, active }) => {
     );
 };
 
-const TabContent = ({ products }) => {
+const TabContent = ({ products, onChange, onDelete }) => {
     const [isShowModal, setIsShowModal] = useState(false);
     const [form, setForm] = useState();
     const [categoriesDataShow, setCategoriesDataShow] = useState([]);
@@ -95,15 +96,13 @@ const TabContent = ({ products }) => {
     };
 
     const submitChange = () => {
+        onChange(form);
         setIsShowModal(false);
     };
 
     const handleFormChange = (e) => {
         setForm({ ...form, [e.target.id]: e.target.value });
     };
-
-    // console.log('this is images state', images);
-    console.log('this is form state', form);
 
     const RenderSwitch = (goodsStatus) => {
         switch (goodsStatus) {
@@ -127,6 +126,7 @@ const TabContent = ({ products }) => {
     const confirmDelete = () => {
         if (window.confirm('Are you sure to delete this product?') === true) {
             setIsShowModal(false);
+            onDelete(form);
         }
     };
 
@@ -399,7 +399,7 @@ const TabContent = ({ products }) => {
     );
 };
 
-const Tab = ({ products }) => {
+const Tab = ({ products, onChange, onDelete }) => {
     const currentTabDataReducer = (state, action) => {
         const TABS_FILTER = {
             0: function (product) {
@@ -474,7 +474,11 @@ const Tab = ({ products }) => {
                     Rejected
                 </TabLink>
             </ul>
-            <TabContent products={currentTabData} />
+            <TabContent
+                products={currentTabData}
+                onChange={onChange}
+                onDelete={onDelete}
+            />
         </div>
     );
 };
@@ -485,24 +489,74 @@ const ProductManagement = ({ location }) => {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const tempId = useSelector((state) => state.authData.user?.id);
     const [accountId] = useState(tempId);
+    const { addToast } = useToasts();
+    const userData = useSelector((state) => state.authData);
 
-    const dataFromProduct = () => {};
-    console.log('dataFromProduct', products);
+    const onChange = (data) => {
+        console.log('day la product', products);
+        updateProduct(data);
+    };
+    const onDelete = (data) => {
+        deleteProduct(data);
+    };
+    const deleteProduct = (data) => {
+        productApi
+            .delete(data, userData.tokenId)
+            .then((res) => {
+                addToast('Success', { appearance: 'Delete success' });
+                let tempProduct = products.map((item) => {
+                    if (item.id === data.id) {
+                        return data;
+                    }
+                    return item;
+                });
 
+                setProducts(tempProduct);
+            })
+            .catch((err) => {
+                console.log(err);
+                addToast('Some thing went wrong', {
+                    appearance: 'error',
+                });
+            });
+    };
+    const updateProduct = async (data) => {
+        productApi
+            .put(data, userData.tokenId)
+            .then((res) => {
+                addToast('Success', { appearance: 'success' });
+                let tempProduct = products.map((item) => {
+                    if (item.id === data.id) {
+                        return data;
+                    }
+                    return item;
+                });
+
+                setProducts(tempProduct);
+            })
+
+            .catch((err) => {
+                console.log(err);
+                addToast('Some thing went wrong', {
+                    appearance: 'error',
+                });
+            });
+    };
     useEffect(() => {
         const fetchPost = async () => {
             if (products.length === 0 && !isDataLoaded) {
                 setProducts(
                     await fetch(
-                        'https://fbuyexchange.azurewebsites.net/api/productposts/1/20?all=true'
+                        'https://fbuyexchange.azurewebsites.net/api/productposts/1/1000?all=true'
                     )
                         .then((res) => res.json())
-                        .then((res) =>
-                            res.filter(
-                                (product) => product.accountId === accountId
-                            )
-                        )
                         .then((res) => {
+                            return res.filter(
+                                (product) => product.accountId === accountId
+                            );
+                        })
+                        .then((res) => {
+                            console.log('is data loaded', res);
                             setIsDataLoaded(true);
                             return res;
                         })
@@ -536,7 +590,8 @@ const ProductManagement = ({ location }) => {
                         <div className="row d-flex flex-column">
                             <Tab
                                 products={products}
-                                onChange={dataFromProduct}
+                                onChange={onChange}
+                                onDelete={onDelete}
                             />
                         </div>
                     </div>
