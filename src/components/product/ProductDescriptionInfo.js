@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getProductCartQuantity } from '../../helpers/product';
 import { addToCart } from '../../redux/actions/cartActions';
@@ -10,8 +10,8 @@ import Rating from './sub-components/ProductRating';
 import NumberFormat from 'react-number-format';
 import { useSelector } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
-
 import buyApi from '../../utils/api/buyApi';
+import { useToasts } from 'react-toast-notifications';
 
 const ProductDescriptionInfo = ({
     product,
@@ -22,7 +22,6 @@ const ProductDescriptionInfo = ({
     cartItems,
     wishlistItem,
     compareItem,
-    addToast,
     addToCart,
     addToWishlist,
     addToCompare,
@@ -39,7 +38,8 @@ const ProductDescriptionInfo = ({
     const [quantityCount, setQuantityCount] = useState(1);
     const [showModal, setShowModal] = useState(false);
     const [message, setMessage] = useState(false);
-
+    const history = useHistory();
+    const { addToast } = useToasts();
     const productCartQty = getProductCartQuantity(
         cartItems,
         product,
@@ -61,6 +61,13 @@ const ProductDescriptionInfo = ({
             )
             .then((res) => res)
             .catch((err) => err.response);
+
+        if (!user) {
+            history.push('/login-register');
+            addToast('You need to login to continue', {
+                appearance: 'error',
+            });
+        }
         if (createOrder.status === 200) {
             const orders = await buyApi.getAllOrder(user.tokenId);
             const notis = await buyApi.getAllNotifications(
@@ -71,7 +78,7 @@ const ProductDescriptionInfo = ({
                 (order) =>
                     order.buyerId === user.id && product.id === order.productId
             );
-            // if ()
+
             for (let i = 0; i < filteredOrders?.length; i++) {
                 for (let j = 0; j < notis?.data.length; j++) {
                     if (filteredOrders[i]?.id === notis.data[j]?.orderId) {
@@ -89,7 +96,6 @@ const ProductDescriptionInfo = ({
                                 },
                                 user.tokenId
                             );
-                        console.log(createNotification);
                     }
                 }
             }

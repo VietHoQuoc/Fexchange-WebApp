@@ -53,9 +53,8 @@ const Order = (props) => {
                     {
                         accountId: order.buyerId,
                         subject:
-                            'response ' + status === 'Accepted'
-                                ? 'accepted'
-                                : 'rejected',
+                            'response ' +
+                            (status === 'Accepted' ? 'accepted' : 'rejected'),
                         orderId: order.id,
                         product1Id: order.productId,
                         buyerId: order.buyerId,
