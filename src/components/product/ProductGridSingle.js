@@ -87,9 +87,10 @@ const ProductGridSingle = ({
                                     style={{ objectFit: 'cover' }}
                                 />
                             ) : (
-                                <div>ok</div>
+                                <div></div>
                             )}
                         </Link>
+                        
                         {product.images || product.new ? (
                             <div className="product-img-badges">
                                 {product.images.length !== 0 ? (
@@ -135,89 +136,17 @@ const ProductGridSingle = ({
                                 </button>
                             </div>
                             <div className="pro-same-action pro-cart">
-                                {/* {product.affiliateLink ? (
-                  <a
-                    href={product.affiliateLink}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {" "}
-                    Buy now{" "}
-                  </a>
-                ) : product.variation && product.variation.length >= 1 ? (
-                  <Link to={`${process.env.PUBLIC_URL}/product/${product.id}`}>
-                    Select Option
-                  </Link>
-                ) : product.stock && product.stock > 0 ? (
-                  <button
-                    onClick={() => addToCart(product, addToast)}
-                    className={
-                      cartItem !== undefined && cartItem.quantity > 0
-                        ? "active"
-                        : ""
-                    }
-                    disabled={cartItem !== undefined && cartItem.quantity > 0}
-                    title={
-                      cartItem !== undefined ? "Added to cart" : "Add to cart"
-                    }
-                  >
-                    {" "}
-                    <i className="pe-7s-cart"></i>{" "}
-                    {cartItem !== undefined && cartItem.quantity > 0
-                      ? "Added"
-                      : "Add to cart"}
-                  </button>
-                ) : (
-                  <button disabled className="active">
-                    Out of Stock
-                  </button>
-                )} */}
-                                {product.goodStatus === 2 ? (
-                                    //   <a
-                                    //     href={product.affiliateLink}
-                                    //     rel="noopener noreferrer"
-                                    //     target="_blank"
-                                    //   >
-                                    //     {" "}
-                                    //     Buy now{" "}
-                                    //   </a>
-                                    // ) : product.variation && product.variation.length >= 1 ? (
+                                
+                                {product.goodsStatus === 2 ? (
+                                    
                                     <Link
                                         to={`${process.env.PUBLIC_URL}/product/${product.id}`}
                                     >
                                         Select Option
                                     </Link>
-                                ) : product.stock && product.stock > 0 ? (
-                                    <button
-                                        onClick={() =>
-                                            addToCart(product, addToast)
-                                        }
-                                        className={
-                                            cartItem !== undefined &&
-                                            cartItem.quantity > 0
-                                                ? 'active'
-                                                : ''
-                                        }
-                                        disabled={
-                                            cartItem !== undefined &&
-                                            cartItem.quantity > 0
-                                        }
-                                        title={
-                                            cartItem !== undefined
-                                                ? 'Added to cart'
-                                                : 'Add to cart'
-                                        }
-                                    >
-                                        {' '}
-                                        <i className="pe-7s-cart"></i>{' '}
-                                        {cartItem !== undefined &&
-                                        cartItem.quantity > 0
-                                            ? 'Added'
-                                            : 'Add to cart'}
-                                    </button>
                                 ) : (
                                     <button disabled className="active">
-                                        Out of Stock
+                                        Out of stock
                                     </button>
                                 )}
                             </div>
@@ -252,7 +181,7 @@ const ProductGridSingle = ({
                         )}
                         <div className="product-price">
                             <span>
-                                {currency.currencySymbol}
+                                
                                 <NumberFormat
                                     value={product.price}
                                     displayType={'text'}
@@ -260,7 +189,6 @@ const ProductGridSingle = ({
                                     suffix={' đ'}
                                 />
                             </span>
-                            {user.id}
                         </div>
                     </div>
                 </div>

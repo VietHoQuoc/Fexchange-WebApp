@@ -105,7 +105,7 @@ const ProductDescriptionInfo = ({
             <h2>{product.name}</h2>
             <div className="product-details-price">
                 <span>
-                    {currency.currencySymbol}
+                    
                     <NumberFormat
                         value={product.price}
                         displayType={'text'}
@@ -132,12 +132,12 @@ const ProductDescriptionInfo = ({
                             product.accountId
                         }
                     >
-                        Saler : {product.accountName}
+                        Seller : {product.accountName}
                     </Link>
                 </h4>
             </div>
 
-            {product.status === 'Active' ? (
+            {product.goodsStatus === 2 ? (
                 <div className="pro-details-quality">
                     <div className="pro-details-cart btn-hover ml-0">
                         <a
@@ -151,37 +151,7 @@ const ProductDescriptionInfo = ({
                 </div>
             ) : (
                 <div className="pro-details-quality">
-                    <div className="cart-plus-minus">
-                        <button
-                            onClick={() =>
-                                setQuantityCount(
-                                    quantityCount > 1 ? quantityCount - 1 : 1
-                                )
-                            }
-                            className="dec qtybutton"
-                        >
-                            -
-                        </button>
-                        <input
-                            className="cart-plus-minus-box"
-                            type="text"
-                            value={quantityCount}
-                            readOnly
-                        />
-                        <button
-                            onClick={() =>
-                                setQuantityCount(
-                                    quantityCount <
-                                        productStock - productCartQty
-                                        ? quantityCount + 1
-                                        : quantityCount
-                                )
-                            }
-                            className="inc qtybutton"
-                        >
-                            +
-                        </button>
-                    </div>
+                    
                     <div className="pro-details-cart btn-hover">
                         {productStock && productStock > 0 ? (
                             <button

@@ -39,6 +39,7 @@ const ProductGrid = ({
         <Fragment>
             {posts &&
                 posts
+                    .filter(post=>post.goodsStatus==2)
                     .sort((a, b) => Number(a.boughtDate) - Number(b.boughtDate))
                     .slice(0, 4)
                     .map((product) => {
