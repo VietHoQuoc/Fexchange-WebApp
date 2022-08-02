@@ -172,7 +172,7 @@ const ProductGridSingle = ({
                     Out of Stock
                   </button>
                 )} */}
-                                {product.goodStatus === 2 ? (
+                                {product.status === 'Active' ? (
                                     //   <a
                                     //     href={product.affiliateLink}
                                     //     rel="noopener noreferrer"

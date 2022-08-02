@@ -31,6 +31,7 @@ const ProductGrid = ({
             )
             .then((res) => {
                 setPosts(res.data);
+                console.log(res.data);
             })
             .catch((error) => console.log(error));
     }, []);

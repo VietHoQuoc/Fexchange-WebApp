@@ -78,8 +78,16 @@ const ShopGridStandard = ({ location, products }) => {
 
         sortedProducts = filterSortedProducts;
         setSortedProducts(sortedProducts);
-        setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
-    }, [offset, sortType, sortValue, filterSortType, filterSortValue]);
+        // setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+    }, [
+        offset,
+        sortType,
+        sortValue,
+        filterSortType,
+        filterSortValue,
+        searchType,
+        searchValue,
+    ]);
 
     return (
         <Fragment>
@@ -107,6 +115,7 @@ const ShopGridStandard = ({ location, products }) => {
                         <div className="row">
                             <div className="col-lg-3 order-2 order-lg-1">
                                 {/* shop sidebar */}
+
                                 <ShopSidebar
                                     getSearchParams={getSearchParams}
                                     products={posts}
@@ -120,30 +129,31 @@ const ShopGridStandard = ({ location, products }) => {
                                     getLayout={getLayout}
                                     getFilterSortParams={getFilterSortParams}
                                     productCount={
-                                        sortValue === ''
+                                        sortedProducts.length == 0 &&
+                                        searchValue == ''
                                             ? posts.length
                                             : sortedProducts.length
-                                    }
-                                    sortedProductCount={
-                                        sortValue === ''
-                                            ? posts.length
-                                            : currentData.length
                                     }
                                 />
 
                                 {/* shop page content default */}
-
-                                <ShopProducts
-                                    layout={layout}
-                                    products={
-                                        sortValue === '' ? posts : currentData
-                                    }
-                                />
+                                {sortedProducts.length !== 0 ||
+                                searchValue !== '' ? (
+                                    <ShopProducts
+                                        layout={layout}
+                                        products={sortedProducts}
+                                    />
+                                ) : (
+                                    <ShopProducts
+                                        layout={layout}
+                                        products={posts}
+                                    />
+                                )}
 
                                 {/* shop product pagination */}
-                                <div className="pro-pagination-style text-center mt-30">
+                                {/* <div className="pro-pagination-style text-center mt-30">
                                     <Paginator
-                                        totalRecords={sortedProducts.length}
+                                        totalRecords={sortValue===''?posts.length:sortedProducts.length}
                                         pageLimit={pageLimit}
                                         pageNeighbours={2}
                                         setOffset={setOffset}
@@ -153,7 +163,7 @@ const ShopGridStandard = ({ location, products }) => {
                                         pagePrevText="«"
                                         pageNextText="»"
                                     />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

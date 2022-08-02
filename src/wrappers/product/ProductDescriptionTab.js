@@ -14,11 +14,6 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                             className="description-review-topbar"
                         >
                             <Nav.Item>
-                                <Nav.Link eventKey="additionalInfo">
-                                    Additional Information
-                                </Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
                                 <Nav.Link eventKey="productDescription">
                                     Description
                                 </Nav.Link>

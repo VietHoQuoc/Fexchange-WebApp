@@ -28,7 +28,7 @@ const ProductGridListSingle = ({
     const finalDiscountedPrice = +(
         discountedPrice * currency.currencyRate
     ).toFixed(2);
-    console.log(product);
+
     return (
         <Fragment>
             <div
@@ -123,7 +123,7 @@ const ProductGridListSingle = ({
                                 </button>
                             </div>
                             <div className="pro-same-action pro-cart">
-                                {product.goodsStatus === 2 ? (
+                                {product.status === 'Active' ? (
                                     // <a
                                     //   href={product.affiliateLink}
                                     //   rel="noopener noreferrer"
