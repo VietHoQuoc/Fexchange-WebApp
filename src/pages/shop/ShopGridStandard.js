@@ -115,7 +115,6 @@ const ShopGridStandard = ({ location, products }) => {
                         <div className="row">
                             <div className="col-lg-3 order-2 order-lg-1">
                                 {/* shop sidebar */}
-
                                 <ShopSidebar
                                     getSearchParams={getSearchParams}
                                     products={posts}

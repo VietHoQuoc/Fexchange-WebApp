@@ -1,0 +1,9 @@
+.notification-hover:hover {
+  background-color: #80808010;
+  cursor: pointer;
+}
+
+.notification-time {
+  font-size: 0.25rem;
+  color: #be6eff;
+}
