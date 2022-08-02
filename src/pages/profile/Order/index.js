@@ -8,18 +8,16 @@ import { setOrderId } from '../../../redux/actions/orderAction';
 import { useSelector } from 'react-redux';
 const Order = (props) => {
     const { order } = props;
+    const userData = useSelector((state) => state.authData);
     const history = useHistory();
-    const STATUS_STYLE = {
-        Declined: 'text-danger',
-        Pending: 'text-info',
-        'On-Sale': 'text-primary',
-        Bought: 'text-success',
-    };
     const dispatch = useDispatch();
     const onReview = (e) => {
         dispatch(setOrderId(order.id));
         history.push(`/rating?id=${order.id}`);
     };
+    console.log(order);
+    const onAccept = () => {};
+    const onDecline = () => {};
     return (
         <Card className="w-100 mb-3">
             <Card.Title className="row p-3">
@@ -31,6 +29,7 @@ const Order = (props) => {
                     </div>
                 </div>
             </Card.Title>
+
             <Card.Body className="row">
                 <div className="col-12 col-md-6 mb-3">
                     <p className="h6">Price: {order.price} VNĐ</p>
@@ -41,11 +40,33 @@ const Order = (props) => {
                             : order.feedback}
                     </p>
                 </div>
-                <div className="col-12 col-md-6">
-                    <div className="d-flex justify-content-end align-items-end">
-                        <Button onClick={onReview}>Edit review</Button>
+
+                {userData.user.id === order.buyerId ? (
+                    <div className="col-12 col-md-6">
+                        {order.status.toLowerCase() === 'pending' ? (
+                            <></>
+                        ) : (
+                            <div className="d-flex  justify-content-end align-items-end">
+                                <Button onClick={onReview}>Edit review</Button>
+                            </div>
+                        )}
                     </div>
-                </div>
+                ) : (
+                    <div className="col-12 col-md-6">
+                        <div className="d-flex h-100 mb-10 justify-content-end align-items-end">
+                            <Button
+                                className="btn-success mr-10"
+                                onClick={onAccept}
+                            >
+                                Accept
+                            </Button>
+                            <Button className="btn-danger" onClick={onAccept}>
+                                Decline
+                            </Button>
+                        </div>
+                        <div className="d-flex justify-content-end align-items-end"></div>
+                    </div>
+                )}
             </Card.Body>
         </Card>
     );
