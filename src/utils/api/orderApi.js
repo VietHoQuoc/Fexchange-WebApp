@@ -33,7 +33,7 @@ const ordersApi = {
         );
     },
     getAll: (id, token) => {
-        const url = `/orders/1/100?all=true`;
+        const url = `/orders/1/1000?all=true`;
         return axiosClient.get(url, {
             headers: {
                 Authorization: 'Bearer ' + token,

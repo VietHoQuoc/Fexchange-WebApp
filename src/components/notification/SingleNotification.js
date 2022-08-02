@@ -139,9 +139,9 @@ const SingleNotification = ({
                 innerProduct = response.data;
             });
             console.log(notification);
-            if (notification?.accountId === currentUser?.id) {
+            if (notification?.buyerId === currentUser?.id) {
                 await get(
-                    `/acounts/${notification?.accountId}`,
+                    `/acounts/${notification?.buyerId}`,
                     {},
                     {
                         'Content-Type': 'application/json',
