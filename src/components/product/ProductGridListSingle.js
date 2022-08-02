@@ -39,7 +39,7 @@ const ProductGridListSingle = ({
         >
           <div className="product-img">
             <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
-            {product.images !== null ? (
+            {product.images.length !== 0 ? (
                 <img
                   className="default-img"
                   src={product.images[0].image}
@@ -176,7 +176,7 @@ const ProductGridListSingle = ({
               <div className="product-list-image-wrap">
                 <div className="product-img">
                   <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
-                  {product.images !== null ? (
+                  {product.images.length !== 0 ? (
                       <img
                         className="default-img img-fluid"
                         src={product.images[0].image}
