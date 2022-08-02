@@ -50,8 +50,8 @@ const App = (props) => {
     useEffect(() => {
         const getData = async () => {
             const response = await wishlistApi.get(
-                userData.user.id,
-                userData.tokenId
+                userData?.user.id,
+                userData?.tokenId
             );
             dispatch(addToWishlist(response.data));
             setWishlist(response.data);
