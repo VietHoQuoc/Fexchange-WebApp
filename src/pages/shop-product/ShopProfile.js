@@ -7,6 +7,7 @@ import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import axios from 'axios';
 import ProfileDescriptionTab from '../../wrappers/product/ProfileDescriptionTab';
+import { useSelector } from 'react-redux';
 function ShopProfile({ location, products }) {
     const [layout, setLayout] = useState('list');
     const { pathname } = location;
@@ -14,6 +15,9 @@ function ShopProfile({ location, products }) {
     const [posts, setPosts] = useState([]);
     const [rate, setRate] = useState(0);
     const [totalOrders, setTotalOrders]=useState(0);
+    const [orders,setOrders]=useState([])
+    const auth=useSelector((state)=>state.authData);
+
     useEffect(() => {
         axios
             .get(
@@ -34,6 +38,14 @@ function ShopProfile({ location, products }) {
                 console.log(posts);
             })
             .catch((error) => console.log(error));
+        axios.get(`https://fbuyexchange.azurewebsites.net/api/orders/1/200?all=true`,{headers: {
+            Authorization: 'Bearer ' + auth.user.tokenId,
+        },})
+        .then(res => {
+            setOrders(res.data);
+            
+        })
+        .catch(error => console.log(error));
     }, []);
 
     return (
@@ -117,9 +129,9 @@ function ShopProfile({ location, products }) {
                                                 <div className="col-6">
                                                     <div className="mt-3">
                                                         <h4>
-                                                            {
-                                                                totalOrders
-                                                            }
+                                                            
+                                                                {orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length} 
+                                                            
                                                         </h4>
                                                         <p className="mb-0 text-muted">
                                                             Total of orders
@@ -156,6 +168,7 @@ function ShopProfile({ location, products }) {
                                     )}
                                     layout={layout}
                                     getRate={setRate}
+                                    getTotalOrders={setTotalOrders}
                                 />
                             </div>
                         </div>

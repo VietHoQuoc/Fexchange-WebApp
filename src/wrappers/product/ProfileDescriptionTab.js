@@ -273,14 +273,15 @@ const ProfileDescriptionTab = ({
                             </Tab.Pane>
                             <Tab.Pane eventKey="productDescription">
                                 <h4 className="text-secondary text-right">
-                                {getRate(orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map((item) => item.rate).reduce((acc, value) => acc + value, 0)
-                                /orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length
+                                {getRate(orders&&orders.filter(o=>o.status==="Accepted"&&o.feedback!==null&&posts.map(p=>p.id===o.productId)).map((item) => item.rate).reduce((acc, value) => acc + value, 0)
+                                /orders.filter(o=>o.status==="Accepted"&&o.feedback!==null&&posts.map(p=>p.id===o.productId)).length
                                 )}
                                 
-                                {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map((item) => item.rate).reduce((acc, value) => acc + value, 0)/10}
+                                {/* {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map((item) => item.rate).reduce((acc, value) => acc + value, 0)/10} */}
                                     {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length>0 ? (
                                         <span>Sold: {orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length} 
                                         
+                                        {/* {getTotalOrders(orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length)} */}
                                         </span>
                                         
                                     ) : (
