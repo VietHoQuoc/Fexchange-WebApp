@@ -44,9 +44,11 @@ const productApi = {
                 product[key]
             );
         });
-        product.files.forEach((item) => {
-            formData.append('files', item);
-        });
+        if (product.files) {
+            product.files.forEach((item) => {
+                formData.append('files', item);
+            });
+        }
         formData.set(
             'BoughtDate',
             convertToString(new Date(product.boughtDate))

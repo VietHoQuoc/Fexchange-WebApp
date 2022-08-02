@@ -6,7 +6,6 @@ import FooterOne from '../wrappers/footer/FooterOne';
 const LayoutOne = ({
     children,
     headerContainerClass,
-    headerTop,
     headerPaddingClass,
     headerPositionClass,
 }) => {
@@ -14,7 +13,6 @@ const LayoutOne = ({
         <Fragment>
             <HeaderOne
                 layout={headerContainerClass}
-                top={headerTop}
                 headerPaddingClass={headerPaddingClass}
                 headerPositionClass={headerPositionClass}
             />

@@ -16,7 +16,6 @@ const Order = (props) => {
         dispatch(setOrderId(order.id));
         history.push(`/rating?id=${order.id}`);
     };
-    console.log(order);
     const onChangeStatus = async () => {
         await ordersApi
             .changeStatus(order, 'Accepted', userData.tokenId)
