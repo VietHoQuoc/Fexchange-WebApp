@@ -46,7 +46,7 @@ function ShopProfile({ location, products }) {
             
         })
         .catch(error => console.log(error));
-    }, []);
+    }, [account]);
 
     return (
         <Fragment>
@@ -130,7 +130,7 @@ function ShopProfile({ location, products }) {
                                                     <div className="mt-3">
                                                         <h4>
                                                             
-                                                                {orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length} 
+                                                                {orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId).length==1).length} 
                                                             
                                                         </h4>
                                                         <p className="mb-0 text-muted">
@@ -157,18 +157,19 @@ function ShopProfile({ location, products }) {
                                             i.accountId ==
                                                 parseInt(
                                                     location.pathname.substr(14)
-                                                ) && i.status === 'Active'
+                                                ) && i.goodsStatus===2
                                     )}
                                     postsSold={posts.filter(
                                         (i) =>
                                             i.accountId ==
                                                 parseInt(
                                                     location.pathname.substr(14)
-                                                ) && i.status === 'Inactive'
+                                                )
                                     )}
                                     layout={layout}
                                     getRate={setRate}
                                     getTotalOrders={setTotalOrders}
+                                    location={location}
                                 />
                             </div>
                         </div>

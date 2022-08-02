@@ -67,7 +67,7 @@ export const getSortedProducts = (products, sortType, sortValue) => {
     }
     if (sortType === "search") {
       
-      return products.filter(  
+      return  products.filter(  
         product => product.name.toLowerCase().includes(sortValue.toLowerCase())
       );
     }

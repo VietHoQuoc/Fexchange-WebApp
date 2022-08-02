@@ -20,6 +20,7 @@ const ProductGrid = ({
     sliderClassName,
     spaceBottomClass,
     currentId,
+    category
 }) => {
     const [posts, setPosts] = useState([]);
     const [count, setCount] = useState(0);
@@ -39,7 +40,7 @@ const ProductGrid = ({
         <Fragment>
             {posts &&
                 posts
-                    .filter((post) => post.goodsStatus === 2)
+                    .filter((post) => post.goodsStatus === 2 && category===post.categoryId)
                     .sort((a, b) => Number(a.boughtDate) - Number(b.boughtDate))
                     .slice(0, 4)
                     .map((product) => {
