@@ -34,7 +34,6 @@ const getModalMessage = (buyer, product, notification, dealer, currentUser) => {
         message: '',
         status: '',
     };
-
     // Notification for buyer
     if (notification?.buyerId === notification?.accountId) {
         if (notification?.subject === 'response rejected') {
@@ -78,6 +77,8 @@ const getModalMessage = (buyer, product, notification, dealer, currentUser) => {
 };
 
 const getNotificationMessage = (buyer, product, notification, currentUser) => {
+    console.log(buyer);
+    console.log(notification);
     if (notification?.buyerId === notification?.accountId) {
         if (notification?.subject === 'response accepted') {
             return (
@@ -119,6 +120,7 @@ const SingleNotification = ({
     const [notificationMessage, setNotificationMessage] = useState('');
     const [dealer, setDealer] = useState({});
     const time = computeCreatedTime(new Date(notification?.createdDate));
+
     useEffect(() => {
         const fetchNotificationRelatedData = async () => {
             let innerProduct = {};
@@ -132,12 +134,11 @@ const SingleNotification = ({
                     Authorization: 'Bearer ' + currentUser?.tokenId,
                 }
             ).then((response) => {
-                console.log(response.data);
                 setProduct(response.data);
                 innerProduct = response.data;
             });
-
-            if (notification?.buyerId === currentUser?.id) {
+            console.log(notification);
+            if (notification?.accountId === currentUser?.id) {
                 await get(
                     `/acounts/${notification?.buyerId}`,
                     {},
@@ -146,8 +147,8 @@ const SingleNotification = ({
                         Authorization: 'Bearer ' + currentUser?.tokenId,
                     }
                 ).then((response) => {
-                    setBuyer(response.data);
-                    buyer = response.data;
+                    setDealer(response.data);
+                    dealer = response.data;
                     setNotificationMessage(
                         getNotificationMessage(
                             response.data,
@@ -177,14 +178,13 @@ const SingleNotification = ({
                         setDealer(response.data);
                         setInnerModalMessage(
                             getModalMessage(
-                                buyer,
+                                dealer,
                                 innerProduct,
                                 notification,
                                 response.data,
                                 currentUser
                             )
                         );
-                        console.log(response.data);
                     });
                 });
             } else {
@@ -197,7 +197,6 @@ const SingleNotification = ({
             fetchNotificationRelatedData();
         }
     }, [isDataLoaded, notification, currentUser]);
-    console.log(notification);
     return (
         <>
             {isDataLoaded ? (

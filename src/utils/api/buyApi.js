@@ -21,7 +21,6 @@ const buyApi = {
 
     createNotification: (obj, token) => {
         const url = '/notifications';
-
         return post(url, obj, {}, { Authorization: 'Bearer ' + token });
     },
 

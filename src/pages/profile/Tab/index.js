@@ -94,7 +94,7 @@ const Tab = ({ orders, setOrder }) => {
         setCurrentTab(tabIndex);
         dispatchCurrentTabData({ type: tabIndex, orders });
     };
-
+    console.log(orders);
     return (
         <div>
             <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">

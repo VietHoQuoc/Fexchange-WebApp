@@ -22,8 +22,6 @@ const ShopGridStandard = ({ location, products }) => {
     const [filterSortType, setFilterSortType] = useState('');
     const [filterSortValue, setFilterSortValue] = useState('');
     const [offset, setOffset] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentData, setCurrentData] = useState([]);
     const [sortedProducts, setSortedProducts] = useState([]);
 
     const pageLimit = 15;
@@ -116,7 +114,9 @@ const ShopGridStandard = ({ location, products }) => {
                                 {/* shop sidebar */}
                                 <ShopSidebar
                                     getSearchParams={getSearchParams}
-                                    products={posts.filter(p=>p.goodsStatus===2)}
+                                    products={posts.filter(
+                                        (p) => p.goodsStatus === 2
+                                    )}
                                     getSortParams={getSortParams}
                                     sideSpaceClass="mr-30"
                                 />
@@ -127,24 +127,36 @@ const ShopGridStandard = ({ location, products }) => {
                                     getLayout={getLayout}
                                     getFilterSortParams={getFilterSortParams}
                                     productCount={
-                                        sortedProducts.filter(p=>p.goodsStatus===2).length == 0 &&
-                                        searchValue == ''
-                                            ? posts.filter(p=>p.goodsStatus===2).length
-                                            : sortedProducts.filter(p=>p.goodsStatus===2).length
+                                        sortedProducts.filter(
+                                            (p) => p.goodsStatus === 2
+                                        ).length == 0 && searchValue == ''
+                                            ? posts.filter(
+                                                  (p) => p.goodsStatus === 2
+                                              ).length
+                                            : sortedProducts.filter(
+                                                  (p) => p.goodsStatus === 2
+                                              ).length
                                     }
                                 />
 
                                 {/* shop page content default */}
-                                {sortedProducts.filter(p=>p.goodsStatus===2).length !== 0 ||
-                                searchValue !== '' ||sortValue!==''? (
+                                {sortedProducts.filter(
+                                    (p) => p.goodsStatus === 2
+                                ).length !== 0 ||
+                                searchValue !== '' ||
+                                sortValue !== '' ? (
                                     <ShopProducts
                                         layout={layout}
-                                        products={sortedProducts.filter(p=>p.goodsStatus===2)}
+                                        products={sortedProducts.filter(
+                                            (p) => p.goodsStatus === 2
+                                        )}
                                     />
                                 ) : (
                                     <ShopProducts
                                         layout={layout}
-                                        products={posts.filter(p=>p.goodsStatus===2)}
+                                        products={posts.filter(
+                                            (p) => p.goodsStatus === 2
+                                        )}
                                     />
                                 )}
 

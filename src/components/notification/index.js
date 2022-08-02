@@ -19,7 +19,7 @@ const NotificationCenter = ({ isOpen }) => {
     useEffect(() => {
         const fetchNotification = async () => {
             const response = await get(
-                '/notifications/10/1',
+                '/notifications/1000/1',
                 {
                     accountId: currentUser?.id,
                 },
@@ -45,6 +45,8 @@ const NotificationCenter = ({ isOpen }) => {
                         zIndex: 9999,
                         height: '400px',
                         width: '300px',
+                        overflowY: 'scroll',
+                        overflowX: 'hidden',
                         transform: 'translate(-50%, 6%)',
                     }}
                 >
