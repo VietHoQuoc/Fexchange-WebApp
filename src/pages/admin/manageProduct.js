@@ -51,14 +51,14 @@ const ManageProduct = (props) => {
 
     const confirmReject = () => {
         if (window.confirm('Are you sure to reject this product?') === true) {
-            props.changeProductInfo({ ...form, status: 'Inactive' });
+            props.changeProductInfo({ ...form, goodsStatus: 1 });
             setIsShowModal(false);
         }
     };
 
     const confirmApprove = () => {
         if (window.confirm('Are you sure to approve this product?') === true) {
-            props.changeProductInfo({ ...form, status: 'Inactive' });
+            props.changeProductInfo({ ...form, goodsStatus: 2 });
             setIsShowModal(false);
         }
     };
@@ -75,7 +75,7 @@ const ManageProduct = (props) => {
     };
 
     const submitChange = () => {
-        props.changeInfo(form);
+        props.changeProductInfo(form);
         setIsShowModal(false);
     };
 
@@ -143,15 +143,6 @@ const ManageProduct = (props) => {
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Goods Status</Form.Label>
-                                <Form.Control
-                                    id="goodsStatus"
-                                    onChange={handleFormChange}
-                                    type="email"
-                                    value={form.goodsStatus}
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3">
                                 <Form.Label>Account Name</Form.Label>
                                 <Form.Control
                                     type="text"
@@ -166,8 +157,18 @@ const ManageProduct = (props) => {
                                     type="text"
                                     value={form.status}
                                     id="status"
+                                    onChange={handleFormChange}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Goods Status</Form.Label>
+                                <Form.Control
+                                    id="goodsStatus"
+                                    onChange={handleFormChange}
+                                    type="email"
                                     disable
                                     readOnly
+                                    value={form.goodsStatus}
                                 />
                             </Form.Group>
                         </Form>
@@ -175,7 +176,7 @@ const ManageProduct = (props) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={submitChange}>Update</Button>
-                    {form?.status === 'Active' ? (
+                    {form?.goodsStatus !== 1 ? (
                         <Button variant="danger" onClick={confirmReject}>
                             Reject
                         </Button>

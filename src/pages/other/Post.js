@@ -97,7 +97,7 @@ const Post = (props) => {
         status: '',
         accountId: userData.user.id,
         categoryId: undefined,
-        accountName: 'Đăng', //TODO: change to user when login success
+        accountName: userData.user.name, //TODO: change to user when login success
         categoryName: 'Unknown',
         numberOfExchangeDesires: 1,
         files: [],
@@ -155,6 +155,7 @@ const Post = (props) => {
     };
 
     return (
+        //TODO: responsive this
         <Fragment>
             <MetaTags>
                 <title>FEX| Post product</title>

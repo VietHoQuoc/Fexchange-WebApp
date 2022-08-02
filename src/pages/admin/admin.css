@@ -53,3 +53,7 @@ body {
 .data-row:hover {
     background: #dadada;
 }
+
+.admin-nav {
+    margin-bottom: 16px;
+}
