@@ -50,14 +50,17 @@ const ProductDescriptionInfo = ({
     const user = useSelector((state) => state.authData.user);
 
     const handleBuy = async () => {
-        const createOrder = await buyApi.createOrder(
-            {
-                buyerId: user.id,
-                price: product.price,
-                productId: product.id,
-            },
-            user.tokenId
-        );
+        const createOrder = await buyApi
+            .createOrder(
+                {
+                    buyerId: user.id,
+                    price: product.price,
+                    productId: product.id,
+                },
+                user.tokenId
+            )
+            .then((res) => res)
+            .catch((err) => err.response);
         if (createOrder.status === 200) {
             const orders = await buyApi.getAllOrder(user.tokenId);
             const notis = await buyApi.getAllNotifications(
@@ -68,7 +71,7 @@ const ProductDescriptionInfo = ({
                 (order) =>
                     order.buyerId === user.id && product.id === order.productId
             );
-            console.log(filteredOrders);
+            // if ()
             for (let i = 0; i < filteredOrders?.length; i++) {
                 for (let j = 0; j < notis?.data.length; j++) {
                     if (filteredOrders[i]?.id === notis.data[j]?.orderId) {
