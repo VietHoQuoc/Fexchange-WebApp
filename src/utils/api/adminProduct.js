@@ -12,13 +12,20 @@ const adminProduct = {
     },
     put: (id, obj, token) => {
         const url = `/productposts/${id}`;
-
-        return put(url, obj, {}, { Authorization: 'Bearer ' + token });
+        console.log(obj);
+        return put(
+            url,
+            obj,
+            {},
+            {
+                'Content-Type': 'multiple/form-data',
+                Authorization: 'Bearer ' + token,
+            }
+        );
     },
     post: () => {},
     delete: (id, token) => {
         const url = `/productposts/${id}`;
-
         return remove(url, {}, {}, { Authorization: 'Bearer ' + token });
     },
 };

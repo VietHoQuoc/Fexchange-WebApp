@@ -22,6 +22,8 @@ const ProfileDescriptionTab = ({
     layout,
     postsSold,
     addToWishlist,
+    getRate,
+    getTotalOrders
 }) => {
     const pageLimit = 100;
     const { addToast } = useToasts();
@@ -29,15 +31,18 @@ const ProfileDescriptionTab = ({
     const [wishlistItem, setWishlistItem] = useState(0);
     const auth=useSelector((state)=>state.authData);
     const [orders,setOrders]=useState([])
+    const [total,setTotal]=useState(0)
     useEffect(() => {
         axios.get(`https://fbuyexchange.azurewebsites.net/api/orders/1/200?all=true`,{headers: {
             Authorization: 'Bearer ' + auth.user.tokenId,
         },})
         .then(res => {
             setOrders(res.data);
+            
         })
         .catch(error => console.log(error));
     }, []);
+    
     return (
         <div className={`description-review-area ${spaceBottomClass}`}>
             <div className="container">
@@ -268,8 +273,16 @@ const ProfileDescriptionTab = ({
                             </Tab.Pane>
                             <Tab.Pane eventKey="productDescription">
                                 <h4 className="text-secondary text-right">
+                                {getRate(orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map((item) => item.rate).reduce((acc, value) => acc + value, 0)
+                                /orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length
+                                )}
+                                
+                                {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).map((item) => item.rate).reduce((acc, value) => acc + value, 0)/10}
                                     {orders&&orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length>0 ? (
-                                        <span>Sold: {orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length} </span>
+                                        <span>Sold: {orders.filter(o=>o.status==="Accepted"&&posts.map(p=>p.id===o.productId)).length} 
+                                        
+                                        </span>
+                                        
                                     ) : (
                                         <span>Sold nothing</span>
                                     )}
@@ -314,13 +327,13 @@ const ProfileDescriptionTab = ({
                                                                 <i className="fa fa-star" />
                                                             </div>
                                                         </div>
-                                                        <div className="review-left ml-3">
+                                                        <div className="review-left ml-2">
                                                             {o.rate}
                                                         </div>
                                                     </div>
                                                     <div className="review-bottom">
                                                         <p>
-                                                            {o.feedback}
+                                                            {o.feedback!==''?o.feedback:'not yet'}
                                                         </p>
                                                     </div>
                                                 </div>

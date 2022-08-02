@@ -13,6 +13,7 @@ import adminProduct from '../../utils/api/adminProduct';
 
 import './admin.css';
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
+import productApi from './../../utils/api/productApi';
 
 const Admin = ({ location }) => {
     const { pathname } = location;
@@ -43,7 +44,10 @@ const Admin = ({ location }) => {
     };
 
     const changeProductInfo = async (obj) => {
-        const success = await adminProduct.put(obj.id, obj, user.tokenId);
+        console.log(obj);
+        const success = await productApi.put(obj, user.tokenId).then((res) => {
+            console.log(success);
+        });
         const response = await adminProduct.getAll(user.tokenId);
         setProductList(response.data);
     };

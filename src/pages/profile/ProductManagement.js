@@ -17,6 +17,7 @@ import categoryApi from '../../utils/api/categoryApi';
 import ImageUploader from '../../components/input/ImageUploader';
 import productApi from '../../utils/api/productApi';
 import { useToasts } from 'react-toast-notifications';
+import { useHistory } from 'react-router-dom';
 
 const TabLink = ({ tabIndex, onClick, children, active }) => {
     return (
@@ -491,10 +492,10 @@ const ProductManagement = ({ location }) => {
     const [accountId] = useState(tempId);
     const { addToast } = useToasts();
     const userData = useSelector((state) => state.authData);
-
-    const onChange = (data) => {
+    const history = useHistory();
+    const onChange = async (data) => {
         console.log('day la product', products);
-        updateProduct(data);
+        await updateProduct({ ...data, goodsStatus: 1 });
     };
     const onDelete = (data) => {
         deleteProduct(data);
@@ -521,18 +522,20 @@ const ProductManagement = ({ location }) => {
             });
     };
     const updateProduct = async (data) => {
+        console.log(data);
         productApi
             .put(data, userData.tokenId)
             .then((res) => {
+                setProducts(
+                    products.map((item) => {
+                        if (item.id === data.id) {
+                            return data;
+                        }
+                        return item;
+                    })
+                );
+                // history.go(0);
                 addToast('Success', { appearance: 'success' });
-                let tempProduct = products.map((item) => {
-                    if (item.id === data.id) {
-                        return data;
-                    }
-                    return item;
-                });
-
-                setProducts(tempProduct);
             })
 
             .catch((err) => {
@@ -556,7 +559,6 @@ const ProductManagement = ({ location }) => {
                             );
                         })
                         .then((res) => {
-                            console.log('is data loaded', res);
                             setIsDataLoaded(true);
                             return res;
                         })
@@ -582,7 +584,7 @@ const ProductManagement = ({ location }) => {
             <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
                 Product Management
             </BreadcrumbsItem>
-            <LayoutOne headerTop="visible">
+            <LayoutOne>
                 <Breadcrumb />
 
                 <div className="shop-area pt-95 pb-100">

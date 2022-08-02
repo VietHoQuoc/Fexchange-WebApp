@@ -30,7 +30,7 @@ const Rating = (props) => {
             .rating(orderId, ratingDescription, star, userData.tokenId)
             .then((res) => {
                 toast.addToast('Success', { appearance: 'success' });
-                history.push('/');
+                history.push('/order-management');
             })
             .catch((err) => {
                 toast.addToast('SomeThing went wrong', { appearance: 'error' });

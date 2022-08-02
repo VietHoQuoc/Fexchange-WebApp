@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import orderApi from './../../utils/api/orderApi';
 import Order from './Order/index';
 import productApi from './../../utils/api/productApi';
+import { post } from './../../utils/api/notificationApi';
 
 const OrderManagement = ({ location, history }) => {
     const { pathname } = location;
@@ -50,7 +51,9 @@ const OrderManagement = ({ location, history }) => {
                     const syncResFilter = await asyncFilter(
                         tmp,
                         async (item) => {
-                            const seller = getSeller(item);
+                            const seller = await getSeller(item)
+                                .then((res) => res)
+                                .catch((err) => err);
                             if (
                                 seller.id === accountId ||
                                 accountId === item.buyerId
@@ -60,13 +63,13 @@ const OrderManagement = ({ location, history }) => {
                                 return false;
                             }
                         }
-                    );
+                    ).catch((err) => console.error(err));
                     setOrder(syncResFilter);
                 }
             }
         };
         fetchPost();
-    }, [accountId, isDataLoaded, userData]);
+    }, [accountId, isDataLoaded, userData, orders]);
     return (
         <Fragment>
             <MetaTags>
@@ -82,12 +85,12 @@ const OrderManagement = ({ location, history }) => {
             <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
                 Orders Management
             </BreadcrumbsItem>
-            <LayoutOne headerTop="visible">
+            <LayoutOne>
                 <Breadcrumb />
                 <div className="shop-area pt-95 pb-100">
                     <div className="container">
                         <div className="row d-flex flex-column">
-                            <Tab orders={orders} />
+                            <Tab orders={orders} setOrder={setOrder} />
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 import axiosClient from './axiosClient';
 import { capitalizeFirstLetter } from '../helper';
 import { convertToString } from './../helper';
+import { remove } from './apiCaller';
 
 const productApi = {
     getAll: (params) => {
@@ -15,18 +16,21 @@ const productApi = {
     post: (product, token) => {
         const url = '/productposts';
         let formData = new FormData();
+        console.log(product);
         Object.keys(product).map((key) => {
-            formData.append(
-                key === 'files' || key === 'id'
-                    ? key
-                    : capitalizeFirstLetter(key),
-                product[key]
-            );
+            if (key !== 'files')
+                formData.append(
+                    key === 'id' ? key : capitalizeFirstLetter(key),
+                    product[key]
+                );
+        });
+        product.files.forEach((item) => {
+            formData.append('files', item);
         });
         formData.set('BoughtDate', convertToString(product.boughtDate));
         return axiosClient.post(url, formData, {
             headers: {
-                'Content-type': 'multipart/form-data',
+                'Content-Type': 'multipart/form-data',
                 Authorization: 'Bearer ' + token,
             },
         });
@@ -36,34 +40,15 @@ const productApi = {
         let formData = new FormData();
         Object.keys(product).map((key) => {
             formData.append(
-                key === 'files' || key === 'id'
-                    ? key
-                    : capitalizeFirstLetter(key),
+                key === 'id' ? key : capitalizeFirstLetter(key),
                 product[key]
             );
         });
-        formData.set(
-            'BoughtDate',
-            convertToString(new Date(product.boughtDate))
-        );
-        return axiosClient.put(url, formData, {
-            headers: {
-                'Content-type': 'multipart/form-data',
-                Authorization: 'Bearer ' + token,
-            },
-        });
-    },
-    put: (product, token) => {
-        const url = `/productposts/${product.id}`;
-        let formData = new FormData();
-        Object.keys(product).map((key) => {
-            formData.append(
-                key === 'files' || key === 'id'
-                    ? key
-                    : capitalizeFirstLetter(key),
-                product[key]
-            );
-        });
+        if (product.files) {
+            product.files.forEach((item) => {
+                formData.append('files', item);
+            });
+        }
         formData.set(
             'BoughtDate',
             convertToString(new Date(product.boughtDate))
@@ -78,14 +63,12 @@ const productApi = {
     delete: (product, token) => {
         const url = `/productposts/${product.id}`;
 
-        return axiosClient.delete(
+        return remove(
             url,
             {},
+            {},
             {
-                headers: {
-                    'Content-type': 'multipart/form-data',
-                    Authorization: 'Bearer ' + token,
-                },
+                Authorization: 'Bearer ' + token,
             }
         );
     },

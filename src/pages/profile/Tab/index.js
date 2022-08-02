@@ -24,7 +24,7 @@ const TabLink = ({ tabIndex, onClick, children, active }) => {
     );
 };
 
-const TabContent = ({ orders }) => {
+const TabContent = ({ orders, setOrder }) => {
     return (
         <div class="tab-content" id="ex2-content">
             <div
@@ -34,14 +34,20 @@ const TabContent = ({ orders }) => {
                 aria-labelledby="ex3-tab-1"
             >
                 {orders.map((order, index) => {
-                    return <Order key={index + 'order'} order={order}></Order>;
+                    return (
+                        <Order
+                            setOrder={setOrder}
+                            key={index + 'order'}
+                            order={order}
+                        ></Order>
+                    );
                 })}
             </div>
         </div>
     );
 };
 
-const Tab = ({ orders }) => {
+const Tab = ({ orders, setOrder }) => {
     const TABS_FILTER = [
         {
             type: function (order) {
@@ -57,9 +63,9 @@ const Tab = ({ orders }) => {
         },
         {
             type: function (order) {
-                return order?.status.toLowerCase() === 'decline';
+                return order?.status.toLowerCase() === 'declined';
             },
-            status: 'Decline',
+            status: 'Declined',
         },
     ];
     const currentTabDataReducer = (state, action) => {
@@ -105,7 +111,7 @@ const Tab = ({ orders }) => {
                     );
                 })}
             </ul>
-            <TabContent orders={currentTabData} />
+            <TabContent orders={currentTabData} setOrder={setOrder} />
         </div>
     );
 };
