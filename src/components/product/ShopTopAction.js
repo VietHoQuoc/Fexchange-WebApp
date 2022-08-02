@@ -20,20 +20,21 @@ const ShopTopAction = ({
             <option value="priceLowToHigh">Price - Low to High</option>
           </select>
         </div>
-        <p>
-          Showing {sortedProductCount} of {productCount} result
+        <p>Showing {productCount}
+          {productCount>1?" results":" result"}
+           
         </p>
       </div>
 
       <div className="shop-tab">
-        <button
+        {/* <button
           onClick={e => {
             getLayout("grid two-column");
             setActiveLayout(e);
           }}
         >
           <i className="fa fa-th-large" />
-        </button>
+        </button> */}
         <button
           onClick={e => {
             getLayout("grid three-column");

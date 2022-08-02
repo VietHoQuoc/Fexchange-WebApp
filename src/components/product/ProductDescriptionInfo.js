@@ -40,6 +40,7 @@ const ProductDescriptionInfo = ({
     const [showModal, setShowModal] = useState(false);
     const [message, setMessage] = useState(false);
 
+    
     const productCartQty = getProductCartQuantity(
         cartItems,
         product,
@@ -340,21 +341,6 @@ const ProductDescriptionInfo = ({
             </Modal>
         </div>
     );
-};
-
-ProductDescriptionInfo.propTypes = {
-    addToCart: PropTypes.func,
-    addToCompare: PropTypes.func,
-    addToWishlist: PropTypes.func,
-    addToast: PropTypes.func,
-    cartItems: PropTypes.array,
-    compareItem: PropTypes.array,
-    currency: PropTypes.object,
-    discountedPrice: PropTypes.number,
-    finalDiscountedPrice: PropTypes.number,
-    finalProductPrice: PropTypes.number,
-    product: PropTypes.object,
-    wishlistItem: PropTypes.object,
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -140,7 +140,7 @@ function ProductModal(props) {
               <div className="product-details-content quickview-content">
                 <h2>{product.name}</h2>
                 <div className="product-details-price">
-                <span>{currency.currencySymbol}<NumberFormat value={product.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} /></span>
+                <span><NumberFormat value={product.price} displayType={'text'} thousandSeparator={true} suffix={' đ'} /></span>
 
                 </div>
                 {product.rating && product.rating > 0 ? (
@@ -300,7 +300,7 @@ function ProductModal(props) {
                     <div className="pro-details-wishlist">
                       <button
                         className={wishlistItem !== undefined ? "active" : ""}
-                        disabled={wishlistItem !== undefined}
+                        disabled={wishlistItem !== undefined || product.status==="Inactive"}
                         title={
                           wishlistItem !== undefined
                             ? "Added to wishlist"
@@ -311,20 +311,7 @@ function ProductModal(props) {
                         <i className="pe-7s-like" />
                       </button>
                     </div>
-                    <div className="pro-details-compare">
-                      <button
-                        className={compareItem !== undefined ? "active" : ""}
-                        disabled={compareItem !== undefined}
-                        title={
-                          compareItem !== undefined
-                            ? "Added to compare"
-                            : "Add to compare"
-                        }
-                        onClick={() => addToCompare(product, addToast)}
-                      >
-                        <i className="pe-7s-shuffle" />
-                      </button>
-                    </div>
+                    
                   </div>
                 )}
               </div>
