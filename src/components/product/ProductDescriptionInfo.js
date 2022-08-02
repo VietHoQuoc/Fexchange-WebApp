@@ -9,6 +9,7 @@ import { addToCompare } from '../../redux/actions/compareActions';
 import Rating from './sub-components/ProductRating';
 import NumberFormat from 'react-number-format';
 import { useSelector } from 'react-redux';
+import { Modal, Button } from 'react-bootstrap';
 
 import buyApi from '../../utils/api/buyApi';
 
@@ -36,7 +37,8 @@ const ProductDescriptionInfo = ({
         product.variation ? product.variation[0].size[0].stock : product.stock
     );
     const [quantityCount, setQuantityCount] = useState(1);
-    const [notification, setNotification] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [message, setMessage] = useState(false);
 
     const productCartQty = getProductCartQuantity(
         cartItems,
@@ -48,15 +50,15 @@ const ProductDescriptionInfo = ({
     const user = useSelector((state) => state.authData.user);
 
     const handleBuy = async () => {
-        // const createOrder = await buyApi.createOrder(
-        //     {
-        //         buyerId: user.id,
-        //         price: product.price,
-        //         productId: product.id,
-        //     },
-        //     user.tokenId
-        // );
-        if (true) {
+        const createOrder = await buyApi.createOrder(
+            {
+                buyerId: user.id,
+                price: product.price,
+                productId: product.id,
+            },
+            user.tokenId
+        );
+        if (createOrder.status === 200) {
             const orders = await buyApi.getAllOrder(user.tokenId);
             const notis = await buyApi.getAllNotifications(
                 product.accountId,
@@ -88,10 +90,14 @@ const ProductDescriptionInfo = ({
                     }
                 }
             }
+            setMessage(true);
+            setShowModal(true);
+            return;
+        } else {
+            setMessage(false);
+            setShowModal(true);
         }
     };
-
-    console.log(product);
 
     return (
         <div className="product-details-content ml-70">
@@ -298,6 +304,40 @@ const ProductDescriptionInfo = ({
                     </li>
                 </ul>
             </div>
+            <Modal
+                show={showModal}
+                onHide={() => {
+                    setMessage(false);
+                    setShowModal(false);
+                }}
+                size="sm"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="buy-success">
+                        {message ? (
+                            <h3>
+                                SUCCESSFULLY ORDER <span>{product.name}</span>
+                            </h3>
+                        ) : (
+                            <h3>SOMETHING WRONG HAPPENED</h3>
+                        )}
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setMessage(false);
+                            setShowModal(false);
+                        }}
+                    >
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
