@@ -69,11 +69,11 @@ const ProductDescriptionInfo = ({
                     order.buyerId === user.id && product.id === order.productId
             );
             console.log(filteredOrders);
-            for (let i = 0; i < filteredOrders.length; i++) {
-                for (let j = 0; j < notis.data.length; i++) {
+            for (let i = 0; i < filteredOrders?.length; i++) {
+                for (let j = 0; j < notis?.data.length; j++) {
                     if (filteredOrders[i]?.id === notis.data[j]?.orderId) {
                         break;
-                    } else if (j === notis.data.length - 1) {
+                    } else if (j === notis?.data.length - 1) {
                         const createNotification =
                             await buyApi.createNotification(
                                 {
@@ -98,7 +98,6 @@ const ProductDescriptionInfo = ({
             setShowModal(true);
         }
     };
-    console.log(product);
     return (
         <div className="product-details-content ml-70">
             <h2>{product.name}</h2>

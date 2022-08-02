@@ -84,7 +84,7 @@ const OrderManagement = ({ location, history }) => {
             <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
                 Orders Management
             </BreadcrumbsItem>
-            <LayoutOne headerTop="visible">
+            <LayoutOne>
                 <Breadcrumb />
                 <div className="shop-area pt-95 pb-100">
                     <div className="container">

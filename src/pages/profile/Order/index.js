@@ -32,7 +32,7 @@ const Order = (props) => {
             <Card.Title className="row p-3">
                 <div className="col-12 col-md-6 mb-3">
                     <p className="h4 text-capitalize"> {order.product1Name} </p>
-                    <span>Your rate: </span>
+                    <span>Rate: </span>
                     <div className="h5 product-rating d-sm-inline">
                         <ProductRating ratingValue={order.rate} />
                     </div>
@@ -42,6 +42,11 @@ const Order = (props) => {
             <Card.Body className="row">
                 <div className="col-12 col-md-6 mb-3">
                     <p className="h6">Price: {order.price} VNĐ</p>
+                    {order.buyerId !== userData.user.id ? (
+                        <p className="h6">Buyer name: {order.buyerName}</p>
+                    ) : (
+                        <></>
+                    )}
                     <p>
                         <span className="h6">Feedback: </span>
                         {order.feedback === '' || order.feedback === 'string'
