@@ -145,7 +145,7 @@ const Post = (props) => {
                                     required
                                 />
                             </div>
-                            <div className="col-3">
+                            <div className="col-6">
                                 <label className="form-label">Price</label>
                                 <input
                                     className="form-control"
@@ -156,26 +156,6 @@ const Post = (props) => {
                                         setData({
                                             ...data,
                                             price: parseInt(e.target.value),
-                                        })
-                                    }
-                                    required
-                                />
-                            </div>
-                            <div className="col-3">
-                                <label className="form-label">
-                                    Exchange desires
-                                </label>
-                                <input
-                                    className="form-control"
-                                    type="number"
-                                    name="exchangeDesires"
-                                    value={data.numberOfExchangeDesires}
-                                    onChange={(e) =>
-                                        setData({
-                                            ...data,
-                                            numberOfExchangeDesires: parseInt(
-                                                e.target.value
-                                            ),
                                         })
                                     }
                                     required

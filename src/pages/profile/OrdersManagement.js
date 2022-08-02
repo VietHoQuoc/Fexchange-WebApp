@@ -50,7 +50,9 @@ const OrderManagement = ({ location, history }) => {
                     const syncResFilter = await asyncFilter(
                         tmp,
                         async (item) => {
-                            const seller = getSeller(item);
+                            const seller = await getSeller(item)
+                                .then((res) => res)
+                                .catch((err) => err);
                             if (
                                 seller.id === accountId ||
                                 accountId === item.buyerId

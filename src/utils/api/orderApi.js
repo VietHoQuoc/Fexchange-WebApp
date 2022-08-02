@@ -4,15 +4,24 @@ import axiosClient from './axiosClient';
 const ordersApi = {
     rating: (orderId, feedback, rate, token) => {
         const url = '/orders/feedback/' + orderId;
-        const order = {
-            feedback: feedback,
-            rate: rate,
-        };
         return put(
             url,
             {
                 rate,
                 feedback,
+            },
+            {},
+            {
+                Authorization: `Bearer ${token}`,
+            }
+        );
+    },
+    changeStatus: (orderid, status, token) => {
+        const url = '/orders/' + orderid;
+        return put(
+            url,
+            {
+                status,
             },
             {},
             {

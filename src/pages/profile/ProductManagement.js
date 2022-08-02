@@ -582,7 +582,7 @@ const ProductManagement = ({ location }) => {
             <BreadcrumbsItem to={process.env.PUBLIC_URL + pathname}>
                 Product Management
             </BreadcrumbsItem>
-            <LayoutOne headerTop="visible">
+            <LayoutOne>
                 <Breadcrumb />
 
                 <div className="shop-area pt-95 pb-100">

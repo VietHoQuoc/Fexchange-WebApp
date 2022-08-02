@@ -5,7 +5,6 @@ import NavMenu from '../../components/header/NavMenu';
 import IconGroup from '../../components/header/IconGroup';
 import MobileMenu from '../../components/header/MobileMenu';
 import HeaderTop from '../../components/header/HeaderTop';
-
 const HeaderOne = ({
     layout,
     top,
@@ -68,10 +67,11 @@ const HeaderOne = ({
                     <div className="row">
                         <div className="col-xl-2 col-lg-2 col-md-6 col-4">
                             {/* header logo */}
-                            <Logo
-                                imageUrl="/assets/img/logo/logo.png"
-                                logoClass="logo"
-                            />
+                            <div className="container pt-3">
+                                <a href="/" className="h3">
+                                    FExchange
+                                </a>
+                            </div>
                         </div>
                         <div className="col-xl-8 col-lg-8 d-none d-lg-block">
                             {/* Nav menu */}

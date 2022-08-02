@@ -6,6 +6,7 @@ import { connect, useDispatch } from 'react-redux';
 import { useHistory, withRouter } from 'react-router-dom';
 import { setOrderId } from '../../../redux/actions/orderAction';
 import { useSelector } from 'react-redux';
+import ordersApi from './../../../utils/api/orderApi';
 const Order = (props) => {
     const { order } = props;
     const userData = useSelector((state) => state.authData);
@@ -16,8 +17,22 @@ const Order = (props) => {
         history.push(`/rating?id=${order.id}`);
     };
     console.log(order);
-    const onAccept = () => {};
-    const onDecline = () => {};
+    const onAccept = async () => {
+        await ordersApi
+            .changeStatus(order.id, 'Accepted', userData.tokenId)
+            .then((res) => {
+                console.log(res);
+            })
+            .then((err) => console.log(err));
+    };
+    const onDecline = async () => {
+        await ordersApi
+            .changeStatus(order.id, 'Declined', userData.tokenId)
+            .then((res) => {
+                console.log(res);
+            })
+            .then((err) => console.log(err));
+    };
     return (
         <Card className="w-100 mb-3">
             <Card.Title className="row p-3">
