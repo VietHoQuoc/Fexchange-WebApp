@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import ScrollToTop from './helpers/scroll-top';
 import {
     BrowserRouter as Router,
@@ -14,7 +14,9 @@ import { BreadcrumbsProvider } from 'react-breadcrumbs-dynamic';
 import { gapi } from 'gapi-script';
 import Logout from './pages/other/Logout';
 import Admin from './pages/admin';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { addToWishlist } from './redux/actions/wishlistActions';
+import wishlistApi from './utils/api/wishlistApi';
 
 // home pages
 const HomeFashion = lazy(() => import('./pages/home/HomeFashion'));
@@ -42,28 +44,21 @@ const OrderManagement = lazy(() => import('./pages/profile/OrdersManagement'));
 const ProductManagement = lazy(() =>
     import('./pages/profile/ProductManagement')
 );
-
 const App = (props) => {
+    const [wishlist, setWishlist] = useState([]);
+    const dispatch = useDispatch();
     useEffect(() => {
-        props.dispatch(
-            loadLanguages({
-                languages: {
-                    en: require('./translations/english.json'),
-                    fn: require('./translations/french.json'),
-                    de: require('./translations/germany.json'),
-                },
-            })
-        );
-    });
+        const getData = async () => {
+            const response = await wishlistApi.get(
+                userData.user.id,
+                userData.tokenId
+            );
+            dispatch(addToWishlist(response.data));
+            setWishlist(response.data);
+        };
+        getData();
+    }, [setWishlist]);
 
-    //       console.log("Logged in user: ", user.displayName);
-
-    //       const token = await user.getIdToken();
-    //       console.log("Logged in user token: ", token);
-    //     });
-
-    //   return () => unregisterAuthObserver();
-    // }, []);
     const userData = useSelector((state) => state.authData);
     return (
         <ToastProvider
