@@ -12,7 +12,7 @@ const adminProduct = {
     },
     put: (id, obj, token) => {
         const url = `/productposts/${id}`;
-
+        console.log(obj);
         return put(
             url,
             obj,
@@ -26,7 +26,6 @@ const adminProduct = {
     post: () => {},
     delete: (id, token) => {
         const url = `/productposts/${id}`;
-
         return remove(url, {}, {}, { Authorization: 'Bearer ' + token });
     },
 };

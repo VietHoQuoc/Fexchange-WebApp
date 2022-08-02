@@ -54,23 +54,6 @@ const IconGroup = ({
                     <NotificationCenter isOpen={isNotificationOpen} />
                 </div>
             </div>
-
-            <div className="same-style header-search d-none d-lg-block">
-                <button
-                    className="search-active"
-                    onClick={(e) => handleClick(e)}
-                >
-                    <i className="pe-7s-search" />
-                </button>
-                <div className="search-content">
-                    <form action="#">
-                        <input type="text" placeholder="Search" />
-                        <button className="button-search">
-                            <i className="pe-7s-search" />
-                        </button>
-                    </form>
-                </div>
-            </div>
             <div className="same-style account-setting d-none d-lg-block">
                 <button
                     className="account-setting-active"

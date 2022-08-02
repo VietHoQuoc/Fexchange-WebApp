@@ -28,48 +28,23 @@ const NavMenu = ({ strings, menuWhiteClass, sidebarMenu }) => {
                         </Link>
                     </li>
                     <li>
-                        <Link to={process.env.PUBLIC_URL + '/'}>
-                            {strings['pages']}
-                            {sidebarMenu ? (
-                                <span>
-                                    <i className="fa fa-angle-right"></i>
-                                </span>
-                            ) : (
-                                <i className="fa fa-angle-down" />
-                            )}
+                        <Link to={process.env.PUBLIC_URL + '/post'}>
+                            {strings['post']}
                         </Link>
-                        <ul className="submenu">
-                            <li>
-                                <Link to={process.env.PUBLIC_URL + '/wishlist'}>
-                                    {strings['wishlist']}
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to={process.env.PUBLIC_URL + '/post'}>
-                                    {strings['post']}
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    to={
-                                        process.env.PUBLIC_URL +
-                                        '/product-management'
-                                    }
-                                >
-                                    {strings['product_management']}
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    to={
-                                        process.env.PUBLIC_URL +
-                                        '/orders-management'
-                                    }
-                                >
-                                    {strings['orders-management']}
-                                </Link>
-                            </li>
-                        </ul>
+                    </li>
+                    <li>
+                        <Link
+                            to={process.env.PUBLIC_URL + '/product-management'}
+                        >
+                            {strings['product_management']}
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to={process.env.PUBLIC_URL + '/orders-management'}
+                        >
+                            {strings['orders-management']}
+                        </Link>
                     </li>
                 </ul>
             </nav>

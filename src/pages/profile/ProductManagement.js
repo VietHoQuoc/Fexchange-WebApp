@@ -45,7 +45,7 @@ const TabContent = ({ products, onChange, onDelete }) => {
     const [form, setForm] = useState();
     const [categoriesDataShow, setCategoriesDataShow] = useState([]);
     const [images, setImages] = useState();
-
+    const [currentProduct, setCurrentProduct] = useState();
     useEffect(() => {
         const getCategories = async () => {
             let tmpShowCategories = [];
@@ -88,12 +88,14 @@ const TabContent = ({ products, onChange, onDelete }) => {
         });
     };
 
-    const showModal = () => {
+    const showModal = (product) => {
+        setCurrentProduct(product);
         setIsShowModal(true);
     };
 
     const hideModal = () => {
         setIsShowModal(false);
+        setCurrentProduct();
     };
 
     const submitChange = () => {
@@ -244,7 +246,7 @@ const TabContent = ({ products, onChange, onDelete }) => {
                                                             addImageFromDB(
                                                                 product
                                                             );
-                                                            showModal();
+                                                            showModal(product);
                                                         }}
                                                     >
                                                         Edit
@@ -387,10 +389,16 @@ const TabContent = ({ products, onChange, onDelete }) => {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={submitChange}>Update</Button>
-                    <Button variant="danger" onClick={confirmDelete}>
-                        Delete
-                    </Button>
+                    {currentProduct?.goodsStatus <= 2 ? (
+                        <>
+                            <Button onClick={submitChange}>Update</Button>
+                            <Button variant="danger" onClick={confirmDelete}>
+                                Delete
+                            </Button>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                     <Button variant="secondary" onClick={hideModal}>
                         Cancel
                     </Button>
@@ -493,10 +501,9 @@ const ProductManagement = ({ location }) => {
     const { addToast } = useToasts();
     const userData = useSelector((state) => state.authData);
     const history = useHistory();
-    const onChange = (data) => {
-        data = { ...data, goodsStatus: 1 };
+    const onChange = async (data) => {
         console.log('day la product', products);
-        updateProduct(data);
+        await updateProduct({ ...data, goodsStatus: 1 });
     };
     const onDelete = (data) => {
         deleteProduct(data);
@@ -505,15 +512,14 @@ const ProductManagement = ({ location }) => {
         productApi
             .delete(data, userData.tokenId)
             .then((res) => {
-                addToast('Success', { appearance: 'Delete success' });
+                addToast('Success', { appearance: 'success' });
                 let tempProduct = products.map((item) => {
                     if (item.id === data.id) {
                         return data;
                     }
                     return item;
                 });
-
-                setProducts(tempProduct);
+                setProducts(tempProduct.filter((item) => item.id !== data.id));
             })
             .catch((err) => {
                 console.log(err);
@@ -523,6 +529,7 @@ const ProductManagement = ({ location }) => {
             });
     };
     const updateProduct = async (data) => {
+        console.log(data);
         productApi
             .put(data, userData.tokenId)
             .then((res) => {
@@ -534,6 +541,7 @@ const ProductManagement = ({ location }) => {
                         return item;
                     })
                 );
+                // history.go(0);
                 addToast('Success', { appearance: 'success' });
             })
 

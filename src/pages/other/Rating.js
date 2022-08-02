@@ -21,7 +21,6 @@ const Rating = (props) => {
     const [ratingDescription, setRatingDescription] = new useState('');
     const toast = useToasts();
     const changeRating = (newRating, name) => {
-        console.log(name);
         setStar(newRating);
     };
     const onSubmit = async (e) => {
@@ -30,7 +29,7 @@ const Rating = (props) => {
             .rating(orderId, ratingDescription, star, userData.tokenId)
             .then((res) => {
                 toast.addToast('Success', { appearance: 'success' });
-                history.push('/order-management');
+                history.push('/orders-management');
             })
             .catch((err) => {
                 toast.addToast('SomeThing went wrong', { appearance: 'error' });

@@ -55,8 +55,7 @@ const ShopGridStandard = ({ location, products }) => {
                 setPosts(res.data);
             })
             .catch((error) => console.log(error));
-        //làm sao để hàm getSortedProducts trả về sortedProducts đúng theo database
-        // let sortedProducts = getSortedProducts(posts, sortType, sortValue);
+
         let searchedProducts = getSortedProducts(
             posts,
             searchType,
@@ -117,7 +116,7 @@ const ShopGridStandard = ({ location, products }) => {
                                 {/* shop sidebar */}
                                 <ShopSidebar
                                     getSearchParams={getSearchParams}
-                                    products={posts}
+                                    products={posts.filter(p=>p.goodsStatus===2)}
                                     getSortParams={getSortParams}
                                     sideSpaceClass="mr-30"
                                 />
@@ -128,24 +127,24 @@ const ShopGridStandard = ({ location, products }) => {
                                     getLayout={getLayout}
                                     getFilterSortParams={getFilterSortParams}
                                     productCount={
-                                        sortedProducts.length == 0 &&
+                                        sortedProducts.filter(p=>p.goodsStatus===2).length == 0 &&
                                         searchValue == ''
-                                            ? posts.length
-                                            : sortedProducts.length
+                                            ? posts.filter(p=>p.goodsStatus===2).length
+                                            : sortedProducts.filter(p=>p.goodsStatus===2).length
                                     }
                                 />
 
                                 {/* shop page content default */}
-                                {sortedProducts.length !== 0 ||
-                                searchValue !== '' ? (
+                                {sortedProducts.filter(p=>p.goodsStatus===2).length !== 0 ||
+                                searchValue !== '' ||sortValue!==''? (
                                     <ShopProducts
                                         layout={layout}
-                                        products={sortedProducts}
+                                        products={sortedProducts.filter(p=>p.goodsStatus===2)}
                                     />
                                 ) : (
                                     <ShopProducts
                                         layout={layout}
-                                        products={posts}
+                                        products={posts.filter(p=>p.goodsStatus===2)}
                                     />
                                 )}
 

@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import orderApi from './../../utils/api/orderApi';
 import Order from './Order/index';
 import productApi from './../../utils/api/productApi';
+import { post } from './../../utils/api/notificationApi';
 
 const OrderManagement = ({ location, history }) => {
     const { pathname } = location;
@@ -62,7 +63,7 @@ const OrderManagement = ({ location, history }) => {
                                 return false;
                             }
                         }
-                    );
+                    ).catch((err) => console.error(err));
                     setOrder(syncResFilter);
                 }
             }

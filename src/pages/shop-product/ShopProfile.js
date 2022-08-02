@@ -7,12 +7,16 @@ import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import axios from 'axios';
 import ProfileDescriptionTab from '../../wrappers/product/ProfileDescriptionTab';
+import { useSelector } from 'react-redux';
 function ShopProfile({ location, products }) {
     const [layout, setLayout] = useState('list');
     const { pathname } = location;
     const [account, setAccount] = useState({});
     const [posts, setPosts] = useState([]);
     const [rate, setRate] = useState(0);
+    const [totalOrders, setTotalOrders]=useState(0);
+    const [orders,setOrders]=useState([])
+    const auth=useSelector((state)=>state.authData);
 
     useEffect(() => {
         axios
@@ -34,7 +38,15 @@ function ShopProfile({ location, products }) {
                 console.log(posts);
             })
             .catch((error) => console.log(error));
-    }, []);
+        axios.get(`https://fbuyexchange.azurewebsites.net/api/orders/1/200?all=true`,{headers: {
+            Authorization: 'Bearer ' + auth.user.tokenId,
+        },})
+        .then(res => {
+            setOrders(res.data);
+            
+        })
+        .catch(error => console.log(error));
+    }, [rate]);
 
     return (
         <Fragment>
@@ -108,7 +120,8 @@ function ShopProfile({ location, products }) {
                                             <div className="row">
                                                 <div className="col-6">
                                                     <div className="mt-3">
-                                                        <h4>{rate}</h4>
+                                                        
+                                                        <h4>{isNaN(rate)?0:rate.toFixed(2)}</h4>
                                                         <p className="mb-0 text-muted">
                                                             Rating
                                                         </p>
@@ -117,9 +130,11 @@ function ShopProfile({ location, products }) {
                                                 <div className="col-6">
                                                     <div className="mt-3">
                                                         <h4>
-                                                            {
-                                                                account.numberOfOrders
-                                                            }
+                                                            
+                                                            {orders.filter(o=>o.status==="Accepted"&&posts.filter(p=>p.id===o.productId&&p.accountId ==
+                                                parseInt(
+                                                    location.pathname.substr(14)
+                                                ) && p.goodsStatus===2).length==1).map(o=><div>{o.id}</div>).length}
                                                         </h4>
                                                         <p className="mb-0 text-muted">
                                                             Total of orders
@@ -145,17 +160,19 @@ function ShopProfile({ location, products }) {
                                             i.accountId ==
                                                 parseInt(
                                                     location.pathname.substr(14)
-                                                ) && i.status === 'Active'
+                                                ) && i.goodsStatus===2
                                     )}
                                     postsSold={posts.filter(
                                         (i) =>
                                             i.accountId ==
                                                 parseInt(
                                                     location.pathname.substr(14)
-                                                ) && i.status === 'Inactive'
+                                                )
                                     )}
                                     layout={layout}
                                     getRate={setRate}
+                                    getTotalOrders={setTotalOrders}
+                                    location={location}
                                 />
                             </div>
                         </div>
